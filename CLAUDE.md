@@ -58,7 +58,7 @@ on mattress retail; general to packaged goods.
   one class, one fixture under `tests/fixtures/sources/`, one `source_templates` row — never a change to the worker.
 - **Secrets**: a source's credential is sealed with libsodium under `INV_SECRETS_KEY` (config/.env) and decrypted in exactly one
   file (`app/sources/credentials.php`); the screen shows a label and the last four characters; never logged, exported, or
-  returned by a tool. The marketplaces' keys may also come from env (design §14) — same rule.
+  returned by a tool. The keyed marketplace connectors are Extended (D7); when added, their keys are source credentials, never env.
 - **Agents propose; people commit money** (design §5): an agent drafts quotes, purchase orders, transfers and matches, runs
   pulls, sets watches; **sending or placing a purchase order pauses as `money_out`**, reaching a customer or supplier as
   `external_send`, confirming an order, recording money and authorizing a return as `other` (pause by default), deleting and
@@ -77,7 +77,8 @@ on mattress retail; general to packaged goods.
   `inv_availability()`, `inv_atp()`, `inv_offer_history()`, `inv_reorder_candidates()`, `inv_stock_value()`, `inv_feed_answer()`.
 - Email is MaluMail (the application's own optional key, written by the installer's `mail` step); texts only through the
   kernel (K6, to members); no model is ever called from PHP: "who ships this fastest", "draft a PO" are the expert's, through
-  the kernel's chat endpoint; a watch naming an agent is a dispatch the worker turns into one chat turn.
+  the kernel's chat endpoint; a watch naming an agent is a dispatch the worker turns into one chat turn. **The Buyer the morning note
+  goes to is set in the configuration** (`INV_BUYER_EMAIL` in `config/.env` seeds the setting; the settings screen changes it — D12).
 - **Every port env (`APP_INTERNAL_PORT`, `MCP_RECORDS_PORT`, `MCP_ACTIVITY_PORT`) is in `maludb-os.json` `env.required`** and
   pinned in `config/.env` before the installer's `apply` (8188 / 8837 / 8838 — design §13.16). **Never put a `config/.env` here
   before `apply`** except that three-line port pin (`deploy/ROOT_STEPS.sh` step 0); proofs read `$INV_DEV_ENV`.
@@ -90,22 +91,22 @@ on mattress retail; general to packaged goods.
   and never pull a live source without a person's say (fixtures by default; the live survey is its own proof); the installer's
   `plan` (`php /var/www/bin/app_install.php plan /srv/apps/inventory`) runs at the end of every phase.
 
-## Build order and the handoff (proposed — design §13.16, awaiting the owner)
+## Build order and the handoff (decided 2026-10-05 — design D16)
 
 The division Spaces used: a **planning-class model** builds what the database enforces, the specs and the exemplar; a **worker
 model (Sonnet 5.5)** replicates every other slice from a spec, stopping and escalating on any ambiguity rather than improvising.
 The handoff is a clean checkpoint with everything a worker needs in this repository — never mid-slice.
 
 **Before the handoff (planning-class model):**
-1. **K27** in the kernel (`/var/www`): a migration seeding the `inventory` catalog row (Operations / `other` or a widened
-   `inventory` / `feather-package` / `medium`), on the pattern of db/170.
+1. **K27** in the kernel (`/var/www`): a migration seeding the `inventory` catalog row (Operations / `inventory` — the category
+   check widened — / `feather-package` / `medium`), on the pattern of db/170 — **built as db/172, 2026-10-05**.
 2. **Phase 0, second half**: **the live survey of the candidate stores** from the build server (design §0.2 — recorded in §16,
    seeded as `source_templates`); `db/001`–`0NN` — the mirror and roles (copied from Consultant Tracking, prefix `inv_`),
    settings, sequences and tax rates, the catalog, locations and the transaction ledger, suppliers and sources, listings and
    snapshots, matching, watches, customers and orders, purchasing and the supplier's events, returns, notifications, files,
    dispatches, feed keys — with the referee rules as triggers; the read functions; `inv_has_right()` and `inv_sees_cost()`; the
    `mcp_*` views; `db/proof/phase0_proof.sql` on a scratch database; the connector interface and the normalizer proven against
-   fixtures for every v1 connector; the kit copied from Consultant Tracking and proven without a kernel (`tests/phase0/run.sh`);
+   fixtures for the five v1 connectors (`shopify`, `woocommerce`, `jsonld`, `feed`, `manual` — D7); the kit copied from Consultant Tracking and proven without a kernel (`tests/phase0/run.sh`);
    `maludb-os.json`; `os/{expert,buyer}.md`; the skills; `deploy/` with the vhost allow-list and `ROOT_STEPS.sh` pinning
    8188/8837/8838; the installer's `plan` clean.
 3. **Phase 1**: `docs/inventory-mcp-tool-surface.md`, `docs/inventory-action-manifest.md`, `mcp/action_registry.json`,
@@ -126,7 +127,7 @@ the spec's "Built and proven" and design §16 updated, one commit per slice. The
 query functions — `mcp/records_server.py`, `mcp/activity_server.py`, tool modules `mcp/inv_*.py`, own `mcp/venv`; `app_roles` and
 the five `shares[]` admitted to the kernel's token; the registry wrapper `deploy/kernel-registry-inventory.json`; the agents'
 grants and the Buyer's duty — Help Desk's `tests/phase4/run.sh` is the pattern), and **Phase 5** with the owner (ports pinned,
-`apply` — root, the owner runs it —, DNS and TLS for `inventory.<domain>`, the MaluMail key, the owner's marketplace keys, the
+`apply` — root, the owner runs it —, DNS and TLS for `inventory.<domain>`, the MaluMail key, the
 hires, the first sources from the templates, the first catalog, the end-to-end proof of design §10).
 
 **A worker's rules:** read this file, design §3 (rights — cost is the wall), §5 (what pauses), §6 (the tables, the connector

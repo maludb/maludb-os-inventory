@@ -12,9 +12,9 @@ weekly, sizes that make one mattress six SKUs); general to anything sold by the 
   balances by trigger; floor models; allocation at the sale, issue at shipment.
 - **Sources** — where the business can sell from without holding anything: other websites read politely (a Shopify store's
   public `products.json`, a WooCommerce store's Store API, any site's schema.org product markup), suppliers' inventory
-  feeds (CSV or XLSX over HTTPS or SFTP, mapped once), price sheets typed in, the marketplaces as a reference (eBay's Browse
-  API, Amazon's PA-API, Walmart's affiliate API — the owner's keys), and **another installation of this application** through
-  the availability feed every installation publishes. Every pull writes what changed as a **snapshot**, so "when did it go out
+  feeds (CSV or XLSX over HTTPS or SFTP, mapped once), and price sheets typed in — five connectors in version 1 on one interface, so the marketplaces as a reference (eBay's
+  Browse API, Amazon's PA-API, Walmart's affiliate API) and **another installation of this application** (through the availability
+  feed every installation publishes) are each one class and one fixture to add. Every pull writes what changed as a **snapshot**, so "when did it go out
   of stock and what did it cost that week" is a question with an answer. Listings are **matched** to the catalog by
   identifier, by a person, or by a proposal a person accepts — never across sizes.
 - **Find** — one screen, one query: own stock by location, every supplier's offer ranked by cost and lead time, the reference
@@ -33,7 +33,7 @@ An optional application installed beside [maludb-os-core](https://github.com/mal
 reads its sales, purchases and stock value through K7. Built with `htmx-php-builder`, fitted to `maludb-os-integration`
 0.7.0, served as `inventory.<domain>`; catalog key `inventory`.
 
-- **The plan:** `docs/inventory-design.md` (Phase 0, 2026-10-05 — **awaiting the owner's sixteen decisions, §13**).
+- **The plan:** `docs/inventory-design.md` (Phase 0, 2026-10-05 — **approved**; the owner's sixteen decisions are §15, D1–D16).
 - **The build:** `CLAUDE.md` — the order, the rules, the handoff to the worker model.
-- Status: **planned 2026-10-05**; nothing built. Next: the owner's answers, then K27 in the kernel and Phase 0's second half
-  (the live survey of the candidate stores, the schema and its proof, the connector fixtures, the kit, the manifest).
+- Status: **planned and approved 2026-10-05**; K27 (the kernel's catalog row, db/172) built. Next: Phase 0's second half
+  (the live survey of the candidate stores, the schema and its proof, the five connectors' fixtures, the kit, the manifest).
