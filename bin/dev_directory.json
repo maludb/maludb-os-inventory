@@ -1,0 +1,519 @@
+{
+  "_note": "A directory fixture in the kernel's format (testing-without-a-kernel.md): `claims` are what a hand-off carries per member (bin/dev_handoff.php); `feed` is one full os.directory-changes/1 document (bin/directory_sync.php --from-file). Members: 1 the super-admin (Inventory admin), 40 Nora the Buyer (buyer + user + warehouse — Buyer's rights include Sales' and Warehouse's), 41 Sam a salesperson (user), 42 Wes a warehouse hand (warehouse), 43 Vera a viewer, 44 Ann an external viewer (a partner store, is_external), 45 the Inventory expert (an agent, user), 46 Omar — in the directory but holding NO grant here (no access[] row: capability stays NULL). Omar has no claims: a hand-off for him is refused as `capability`. Every name is SMOKE. The application id 60 is a stand-in.",
+  "claims": {
+    "1": {
+      "display_name": "SMOKE Owner",
+      "email": "owner@example.invalid",
+      "business_role": "super_admin",
+      "is_external": false,
+      "status": "active",
+      "departments": [
+        {
+          "id": 5,
+          "name": "IT",
+          "is_admin": true
+        }
+      ],
+      "capability": "admin",
+      "role": "admin",
+      "roles": [
+        "admin"
+      ],
+      "rights": [],
+      "scopes": [],
+      "scope": null
+    },
+    "40": {
+      "display_name": "SMOKE Nora",
+      "email": "nora@example.invalid",
+      "business_role": "user",
+      "is_external": false,
+      "status": "active",
+      "departments": [
+        {
+          "id": 9,
+          "name": "Operations",
+          "is_admin": true
+        }
+      ],
+      "capability": "write",
+      "role": "buyer",
+      "roles": [
+        "buyer",
+        "user",
+        "warehouse"
+      ],
+      "rights": [],
+      "scopes": [],
+      "scope": null
+    },
+    "41": {
+      "display_name": "SMOKE Sam",
+      "email": "sam@example.invalid",
+      "business_role": "user",
+      "is_external": false,
+      "status": "active",
+      "departments": [
+        {
+          "id": 10,
+          "name": "Sales floor",
+          "is_admin": false
+        }
+      ],
+      "capability": "write",
+      "role": "user",
+      "roles": [
+        "user"
+      ],
+      "rights": [],
+      "scopes": [],
+      "scope": null
+    },
+    "42": {
+      "display_name": "SMOKE Wes",
+      "email": "wes@example.invalid",
+      "business_role": "user",
+      "is_external": false,
+      "status": "active",
+      "departments": [
+        {
+          "id": 9,
+          "name": "Operations",
+          "is_admin": false
+        }
+      ],
+      "capability": "write",
+      "role": "warehouse",
+      "roles": [
+        "warehouse"
+      ],
+      "rights": [],
+      "scopes": [],
+      "scope": null
+    },
+    "43": {
+      "display_name": "SMOKE Vera",
+      "email": "vera@example.invalid",
+      "business_role": "user",
+      "is_external": false,
+      "status": "active",
+      "departments": [
+        {
+          "id": 10,
+          "name": "Sales floor",
+          "is_admin": false
+        }
+      ],
+      "capability": "read",
+      "role": "viewer",
+      "roles": [
+        "viewer"
+      ],
+      "rights": [],
+      "scopes": [],
+      "scope": null
+    },
+    "44": {
+      "display_name": "SMOKE Ann",
+      "email": "ann@partner.invalid",
+      "business_role": "user",
+      "is_external": true,
+      "status": "active",
+      "departments": [],
+      "capability": "read",
+      "role": "viewer",
+      "roles": [
+        "viewer"
+      ],
+      "rights": [],
+      "scopes": [],
+      "scope": null
+    }
+  },
+  "feed": {
+    "schema": "os.directory-changes/1",
+    "since": null,
+    "next": "2026-01-01T00:00:00.000000Z",
+    "full": true,
+    "members": [
+      {
+        "id": 1,
+        "display_name": "SMOKE Owner",
+        "email": "owner@example.invalid",
+        "member_kind": "human",
+        "business_role": "super_admin",
+        "is_external": false,
+        "status": "active",
+        "job_title": "Owner",
+        "phone": null,
+        "timezone": "UTC",
+        "departments": [
+          {
+            "id": 5,
+            "name": "IT",
+            "is_admin": true,
+            "is_primary": true
+          }
+        ],
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 40,
+        "display_name": "SMOKE Nora",
+        "email": "nora@example.invalid",
+        "member_kind": "human",
+        "business_role": "user",
+        "is_external": false,
+        "status": "active",
+        "job_title": "Buyer",
+        "phone": null,
+        "timezone": "UTC",
+        "departments": [
+          {
+            "id": 9,
+            "name": "Operations",
+            "is_admin": true,
+            "is_primary": true
+          }
+        ],
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 41,
+        "display_name": "SMOKE Sam",
+        "email": "sam@example.invalid",
+        "member_kind": "human",
+        "business_role": "user",
+        "is_external": false,
+        "status": "active",
+        "job_title": "Salesperson",
+        "phone": null,
+        "timezone": "UTC",
+        "departments": [
+          {
+            "id": 10,
+            "name": "Sales floor",
+            "is_admin": false,
+            "is_primary": true
+          }
+        ],
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 42,
+        "display_name": "SMOKE Wes",
+        "email": "wes@example.invalid",
+        "member_kind": "human",
+        "business_role": "user",
+        "is_external": false,
+        "status": "active",
+        "job_title": "Warehouse",
+        "phone": null,
+        "timezone": "UTC",
+        "departments": [
+          {
+            "id": 9,
+            "name": "Operations",
+            "is_admin": false,
+            "is_primary": true
+          }
+        ],
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 43,
+        "display_name": "SMOKE Vera",
+        "email": "vera@example.invalid",
+        "member_kind": "human",
+        "business_role": "user",
+        "is_external": false,
+        "status": "active",
+        "job_title": "Showroom host",
+        "phone": null,
+        "timezone": "UTC",
+        "departments": [
+          {
+            "id": 10,
+            "name": "Sales floor",
+            "is_admin": false,
+            "is_primary": true
+          }
+        ],
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 44,
+        "display_name": "SMOKE Ann",
+        "email": "ann@partner.invalid",
+        "member_kind": "human",
+        "business_role": "user",
+        "is_external": true,
+        "status": "active",
+        "job_title": "Partner store",
+        "phone": null,
+        "timezone": "UTC",
+        "departments": [],
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 45,
+        "display_name": "SMOKE Inventory expert",
+        "email": null,
+        "member_kind": "agent",
+        "business_role": "user",
+        "is_external": false,
+        "status": "active",
+        "job_title": "Inventory expert",
+        "phone": null,
+        "timezone": "UTC",
+        "departments": [
+          {
+            "id": 9,
+            "name": "Operations",
+            "is_admin": false,
+            "is_primary": true
+          }
+        ],
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 46,
+        "display_name": "SMOKE Omar",
+        "email": "omar@example.invalid",
+        "member_kind": "human",
+        "business_role": "user",
+        "is_external": false,
+        "status": "active",
+        "job_title": "Sysadmin",
+        "phone": null,
+        "timezone": "UTC",
+        "departments": [
+          {
+            "id": 5,
+            "name": "IT",
+            "is_admin": true,
+            "is_primary": true
+          }
+        ],
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ],
+    "departments": [
+      {
+        "id": 1,
+        "name": "Front Office",
+        "description": null,
+        "parent_id": null,
+        "manager_member_id": 1,
+        "is_system": true,
+        "system_key": "front_office",
+        "archived_at": null,
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 5,
+        "name": "IT",
+        "description": null,
+        "parent_id": 1,
+        "manager_member_id": 1,
+        "is_system": true,
+        "system_key": "it",
+        "archived_at": null,
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 9,
+        "name": "Operations",
+        "description": "The warehouse and buying",
+        "parent_id": 1,
+        "manager_member_id": 40,
+        "is_system": false,
+        "system_key": null,
+        "archived_at": null,
+        "updated_at": "2026-01-01T00:00:00Z"
+      },
+      {
+        "id": 10,
+        "name": "Sales floor",
+        "description": "The showroom",
+        "parent_id": 1,
+        "manager_member_id": null,
+        "is_system": false,
+        "system_key": null,
+        "archived_at": null,
+        "updated_at": "2026-01-01T00:00:00Z"
+      }
+    ],
+    "memberships": [
+      {
+        "member_id": 1,
+        "department_id": 5,
+        "is_admin": true,
+        "is_primary": true,
+        "joined_at": "2026-01-01T00:00:00Z",
+        "left_at": null
+      },
+      {
+        "member_id": 40,
+        "department_id": 9,
+        "is_admin": true,
+        "is_primary": true,
+        "joined_at": "2026-01-01T00:00:00Z",
+        "left_at": null
+      },
+      {
+        "member_id": 41,
+        "department_id": 10,
+        "is_admin": false,
+        "is_primary": true,
+        "joined_at": "2026-01-01T00:00:00Z",
+        "left_at": null
+      },
+      {
+        "member_id": 42,
+        "department_id": 9,
+        "is_admin": false,
+        "is_primary": true,
+        "joined_at": "2026-01-01T00:00:00Z",
+        "left_at": null
+      },
+      {
+        "member_id": 43,
+        "department_id": 10,
+        "is_admin": false,
+        "is_primary": true,
+        "joined_at": "2026-01-01T00:00:00Z",
+        "left_at": null
+      },
+      {
+        "member_id": 45,
+        "department_id": 9,
+        "is_admin": false,
+        "is_primary": true,
+        "joined_at": "2026-01-01T00:00:00Z",
+        "left_at": null
+      },
+      {
+        "member_id": 46,
+        "department_id": 5,
+        "is_admin": true,
+        "is_primary": true,
+        "joined_at": "2026-01-01T00:00:00Z",
+        "left_at": null
+      }
+    ],
+    "deleted_departments": [],
+    "scopes": [],
+    "access": [
+      {
+        "member_id": 1,
+        "application_id": 60,
+        "capability": "admin",
+        "role_key": "admin",
+        "roles": [
+          "admin"
+        ],
+        "rights": [],
+        "scope_id": null,
+        "scopes": []
+      },
+      {
+        "member_id": 40,
+        "application_id": 60,
+        "capability": "write",
+        "role_key": "buyer",
+        "roles": [
+          "buyer",
+          "user",
+          "warehouse"
+        ],
+        "rights": [],
+        "scope_id": null,
+        "scopes": []
+      },
+      {
+        "member_id": 41,
+        "application_id": 60,
+        "capability": "write",
+        "role_key": "user",
+        "roles": [
+          "user"
+        ],
+        "rights": [],
+        "scope_id": null,
+        "scopes": []
+      },
+      {
+        "member_id": 42,
+        "application_id": 60,
+        "capability": "write",
+        "role_key": "warehouse",
+        "roles": [
+          "warehouse"
+        ],
+        "rights": [],
+        "scope_id": null,
+        "scopes": []
+      },
+      {
+        "member_id": 43,
+        "application_id": 60,
+        "capability": "read",
+        "role_key": "viewer",
+        "roles": [
+          "viewer"
+        ],
+        "rights": [],
+        "scope_id": null,
+        "scopes": []
+      },
+      {
+        "member_id": 44,
+        "application_id": 60,
+        "capability": "read",
+        "role_key": "viewer",
+        "roles": [
+          "viewer"
+        ],
+        "rights": [],
+        "scope_id": null,
+        "scopes": []
+      },
+      {
+        "member_id": 45,
+        "application_id": 60,
+        "capability": "write",
+        "role_key": "user",
+        "roles": [
+          "user"
+        ],
+        "rights": [],
+        "scope_id": null,
+        "scopes": []
+      }
+    ]
+  },
+  "incremental": {
+    "schema": "os.directory-changes/1",
+    "since": "2026-01-01T00:00:00.000000Z",
+    "next": "2026-01-02T00:00:00.000000Z",
+    "full": false,
+    "members": [],
+    "departments": [],
+    "memberships": [],
+    "deleted_departments": [],
+    "scopes": [],
+    "access": [
+      {
+        "member_id": 43,
+        "application_id": 60,
+        "capability": null,
+        "role_key": null,
+        "roles": [],
+        "rights": [],
+        "scope_id": null,
+        "scopes": []
+      }
+    ]
+  }
+}

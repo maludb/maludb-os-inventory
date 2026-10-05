@@ -35,5 +35,7 @@ reads its sales, purchases and stock value through K7. Built with `htmx-php-buil
 
 - **The plan:** `docs/inventory-design.md` (Phase 0, 2026-10-05 — **approved**; the owner's sixteen decisions are §15, D1–D16).
 - **The build:** `CLAUDE.md` — the order, the rules, the handoff to the worker model.
-- Status: **planned and approved 2026-10-05**; K27 (the kernel's catalog row, db/172) built. Next: Phase 0's second half
-  (the live survey of the candidate stores, the schema and its proof, the five connectors' fixtures, the kit, the manifest).
+- Status: **Phase 0 complete 2026-10-05** — the schema (db/001–015, 69 tables, 422 proof checks), the kit (42 checks), the five connectors
+  with their fixtures (511 checks), `maludb-os.json`, the two agents' job descriptions, ten skills, the deploy templates; the kernel's
+  installer plan reads the repository clean; the live survey of fourteen brand sites recorded (design §0.2, §16). **Next: Phase 1** (the tool
+  surface, the action manifest, the registry, the connector spec, the slice specs) for the owner's checkpoint; no PHP until it is approved.

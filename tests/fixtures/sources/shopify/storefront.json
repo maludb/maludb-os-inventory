@@ -1,0 +1,13 @@
+{"data":{"products":{"pageInfo":{"hasNextPage":false,"endCursor":"eyJsYXN0X2lkIjo4MDAyfQ=="},"edges":[
+ {"node":{"id":"gid://shopify/Product/8001","handle":"cloudrest-hybrid-mattress","title":"CloudRest Hybrid Mattress","vendor":"Northwind Sleep","productType":"Mattress","tags":["hybrid","medium-firm"],"onlineStoreUrl":"https://fixture.example.test/products/cloudrest-hybrid-mattress","updatedAt":"2026-10-01T12:30:00Z",
+  "options":[{"name":"Size","values":["Twin","Queen","King"]}],
+  "images":{"edges":[{"node":{"url":"https://cdn.example.test/s/files/1/cloudrest-front.jpg"}}]},
+  "variants":{"edges":[
+   {"node":{"id":"gid://shopify/ProductVariant/41001","title":"Twin","sku":"NW-CR-T","barcode":"850123450004","availableForSale":true,"quantityAvailable":7,"price":{"amount":"699.0","currencyCode":"USD"},"compareAtPrice":{"amount":"899.0","currencyCode":"USD"},"selectedOptions":[{"name":"Size","value":"Twin"}],"weight":27.0,"weightUnit":"KILOGRAMS"}},
+   {"node":{"id":"gid://shopify/ProductVariant/41004","title":"Queen","sku":"NW-CR-Q","barcode":"850123450035","availableForSale":true,"quantityAvailable":0,"price":{"amount":"999.0","currencyCode":"USD"},"compareAtPrice":null,"selectedOptions":[{"name":"Size","value":"Queen"}],"weight":41.0,"weightUnit":"KILOGRAMS"}},
+   {"node":{"id":"gid://shopify/ProductVariant/41005","title":"King","sku":"NW-CR-K","barcode":"850123450042","availableForSale":false,"quantityAvailable":0,"price":{"amount":"1299.0","currencyCode":"USD"},"compareAtPrice":{"amount":"1599.0","currencyCode":"USD"},"selectedOptions":[{"name":"Size","value":"King"}],"weight":52.0,"weightUnit":"KILOGRAMS"}}
+  ]}}},
+ {"node":{"id":"gid://shopify/Product/8003","handle":"northwind-down-alternative-pillow","title":"Northwind Down-Alternative Pillow","vendor":"Northwind Sleep","productType":"Pillow","tags":[],"onlineStoreUrl":null,"updatedAt":"2026-09-28T12:30:00Z",
+  "options":[{"name":"Title","values":["Default Title"]}],"images":{"edges":[]},
+  "variants":{"edges":[{"node":{"id":"gid://shopify/ProductVariant/41021","title":"Default Title","sku":"NW-PIL-STD","barcode":null,"availableForSale":true,"quantityAvailable":null,"price":{"amount":"59.0","currencyCode":"USD"},"compareAtPrice":null,"selectedOptions":[{"name":"Title","value":"Default Title"}],"weight":1.2,"weightUnit":"KILOGRAMS"}}]}}}
+]}}}

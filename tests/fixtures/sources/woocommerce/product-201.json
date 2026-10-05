@@ -1,0 +1,5 @@
+{"id":201,"name":"Meadowlark Organic Latex Mattress - Twin XL","slug":"meadowlark-organic-latex-mattress-twin-xl","parent":200,"type":"variation","variation":"Size: Twin XL","permalink":"http://127.0.0.1:8606/product/meadowlark-organic-latex-mattress/?attribute_pa_size=twin-xl","sku":"ML-ORG-TXL","short_description":"","description":"","on_sale":true,
+ "prices":{"price":"149900","regular_price":"179900","sale_price":"149900","price_range":null,"currency_code":"USD","currency_symbol":"$","currency_minor_unit":2,"currency_decimal_separator":".","currency_thousand_separator":",","currency_prefix":"$","currency_suffix":""},
+ "price_html":"","average_rating":"0","review_count":0,"images":[],"categories":[],"tags":[],
+ "attributes":[{"id":1,"name":"Size","taxonomy":"pa_size","has_variations":true,"terms":[{"id":0,"name":"Twin XL","slug":"twin-xl"}]}],"variations":[],
+ "has_options":false,"is_purchasable":true,"is_in_stock":true,"is_on_backorder":false,"low_stock_remaining":null,"sold_individually":false,"add_to_cart":{"text":"Add to cart","description":"","url":"","minimum":1,"maximum":9999,"multiple_of":1},"extensions":{},"global_unique_id":"5901234123457"}

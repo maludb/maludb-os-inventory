@@ -76,13 +76,16 @@ captcha page marks the source **blocked** and the worker backs off (an hour, a d
 never a login, never a session cookie from a person's browser, never a proxy pool. A source's terms of use are the
 owner's to read; the application records the URL and the policy it followed in every pull.
 
-**What the planning sandbox could prove today:** its outbound fetches are rate-limited by the sandbox itself (the probes
-of a dozen brand sites returned the sandbox's own `local_rate_limited`, not the sites' answers), so the live survey of
-which brands expose `products.json` or the Store API is **Phase 0's first proof** (§10): the connectors are built against
-fixtures taken from the platforms' documented shapes and then run against a list of candidate stores (Casper, Brooklyn
-Bedding, Tuft & Needle, Avocado, Bear, Malouf Home, Zinus, Lucid, Nolah, Nest Bedding, PlushBeds, Naturepedic,
-WinkBeds, Layla) from the build server, where no such limit applies; the result (open, blocked, not that platform) is
-recorded in §16 and seeds the shipped source templates.
+**What the survey found (Phase 0, 2026-10-05, `bin/source_survey.php` from the build server — the planning sandbox's own
+rate limit let it through on the third run; verdicts vary by run and by IP, so the owner re-runs it from a shell before Phase 5):**
+of fourteen candidate brand sites, **thirteen run on Shopify and every one of them answers `products.json` with Shopify's own 429
+("too many requests") to a non-browser user-agent** — the storefront throttle, not a bot wall; Naturepedic answered with products on
+one run and 429 on the next. **Every one of the fourteen has an open product sitemap** (five or six children). **Layla runs
+WooCommerce with the Store API open** (twenty products on the first page, JSON-LD on the home page, a sitemap of 247 URLs).
+The consequence for the trade: for a Shopify brand the realistic door is the **`jsonld` connector over its product sitemap at the
+daily cadence** (one page a second, robots honoured, the price and availability in the page's markup), or a **dealer's Storefront
+token** through the `shopify` connector; bare `products.json` is the exception, not the rule. The shipped `source_templates` are
+seeded from the documented shapes and marked unverified; the survey's JSON fills `survey_result` at Phase 5.
 
 ### 0.3 The vocabulary this design adopts (so feeds and marketplaces transcribe)
 
@@ -753,6 +756,43 @@ Rules, not questions.
 | D16 | **Ports `APP_INTERNAL_PORT=8188`, `MCP_RECORDS_PORT=8837`, `MCP_ACTIVITY_PORT=8838`** pinned before `apply`, scratch 8601–8607; **the Spaces division** (agreed by name): the planning model builds K27, Phase 0's second half with the live survey, Phase 1 for approval, Phase 2, slices 1–2, **the exemplar slice 3 (sources, connectors, listings, matching)** and slice 4 (Find); Sonnet 5.5 builds slices 5–9, Phase 4 and Phase 5 | §14; `CLAUDE.md` "Build order and the handoff" |
 
 ## 16. State
+
+**PHASE 0, SECOND HALF — BUILT and proven 2026-10-05**, by four builders in parallel on the planning model and every proof re-run by the
+lead. **The schema** `db/001`–`015` (the kernel contract copied from Knowledge's shape with Inventory's appended audit keys; the five
+roles and thirty rights; settings with the sizes and their synonyms, sequences and tax rates on GL's shapes; attachments and notes;
+the catalog with GTIN-14 normalization, `size_key` by trigger and price history; locations and the transaction ledger with balances
+by trigger, receipts, transfers, adjustments, counts and reversals; suppliers on the Cidery's shape, sources with sealed credentials,
+pulls with the back-off ladder, listings, offer snapshots on change plus the daily heartbeat, the matcher's six rules, watches;
+customers on GL's shape, orders with per-line fulfilment, confirmation allocating stock and drafting one purchase order per supplier,
+shipments, payments recorded, the customer's link; purchasing with the supplier's events and link; returns with dispositions;
+notifications, dispatches, feed keys with partner price lists and key usage; every read function of §6; 62 `mcp_*` views with cost
+nulled by `inv_sees_cost()` and credentials never shown — 69 tables) and `db/proof/phase0_proof.sql`: **422 checks green** on a scratch
+database (rights 20, settings 25, catalog 28, suppliers and sources 18, the ledger 50, pulls and snapshots 61, availability and ATP 26,
+orders 34, purchasing and the supplier door 33, shipping 15, returns 14, watches 17, the Buyer's lists 24, the feed 20, views and the
+read roles 36). **The kit** copied from Spaces (`app/`, `html/`, `bin/`, `tests/`, `deploy/`, `mcp/` common files; `sp_` → `inv_`; the
+gates rewritten to rights with cost as the wall; a worker skeleton with its passes named) proven without a kernel by
+`tests/phase0/run.sh`: **42 checks green** (the fixture of eight members, roles from `access[]`, a hand-off, replay, audience, unknown
+member, no grant, tampering, the refusals logged, the sign-out notice, the worker's pass). **The connectors** (`app/sources/`: the
+interface, the one HTTP client with the crawl policy — robots, one request a second per host, an honest user-agent, ETag caching, login
+redirects and bot walls as `blocked` —, credentials sealed with libsodium, the normalizer with the seven availability states and the
+twelve sizes, and the five of D7: `shopify` with the optional Storefront token, `woocommerce`, `jsonld` over sitemaps, `feed` CSV and
+XLSX over HTTPS or SFTP with a column mapping and a preview, `manual`) proven against fixtures by `tests/phase0/connectors.sh`: **511
+checks green**. `maludb-os.json` (seven endpoints, five shares, two agents hired on install, 26 approvals, `grant_standing_departments:
+false`), `os/{expert,buyer}.md`, ten skills (five runbooks), `deploy/` templates and `ROOT_STEPS.sh` (the port pin, `INV_SECRETS_KEY`
+generated, `INV_BUYER_EMAIL`); **the installer's `plan` reads the repository clean** (36 steps, 10 notes; the catalog row K27 found). The
+live survey ran (§0.2): thirteen Shopify brands throttle `products.json` for a non-browser agent, every one has an open sitemap, Layla's
+Store API is open.
+
+**Found on the way** (recorded, not fixed here): the kernel's `application_endpoints.auth_kind` admits no `token` — the two doors are
+declared `none` with the token in the path and the feed `api_key`; **Spaces' manifest declares `token` and will be refused at its
+`apply`** (told to the owner); the installer takes an approval's log event from the registry, so the 26 approvals bind only once Phase 1's
+`mcp/action_registry.json` exists; `bin/hire_application_agent.php` grants a shipped agent by capability (`write` → Sales), so the
+super-admin widens the two agents to Buyer after the hire, and sets the Buyer's duty in Agent HR (as the siblings); an SFTP feed with a
+password needs `php-ssh2` or an sftp-capable curl on the server (a key works today); the PHP and SQL `size_key` agree on every seeded
+size, and an unknown word is a slug in SQL and `NULL` in PHP (one side unknown never blocks a match). Decisions the builders took are
+marked `-- DECISION:` / `// DECISION:` in the files. **Next: Phase 1** — the tool surface, the action manifest, the registry, the
+connector spec and the slice specs, for the owner's checkpoint.
+
 
 **2026-10-05 — the sixteen decisions given (§15, D1–D16): the minimum set of connectors (D7), no invoice document (D10), the Buyer
 set in the configuration (D12), the Spaces division (D16), every other recommendation taken. K27 built in the kernel as db/172 (the

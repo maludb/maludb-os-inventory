@@ -1,0 +1,4 @@
+{"resources":{"results":{"products":[
+ {"available":true,"body":"<p>A medium-firm hybrid.</p>","compare_at_price_max":"1599.00","compare_at_price_min":"899.00","handle":"cloudrest-hybrid-mattress","id":8001,"image":"https://cdn.example.test/s/files/1/cloudrest-front.jpg","price":"699.00","price_max":"1299.00","price_min":"699.00","tags":["hybrid","medium-firm"],"title":"CloudRest Hybrid Mattress","type":"Mattress","url":"/products/cloudrest-hybrid-mattress","variants":[],"vendor":"Northwind Sleep"},
+ {"available":true,"body":"","compare_at_price_max":"0.00","compare_at_price_min":"0.00","handle":"cloudrest-foundation","id":8009,"image":null,"price":"249.00","price_max":"349.00","price_min":"249.00","tags":[],"title":"CloudRest Foundation","type":"Foundation","url":"/products/cloudrest-foundation","variants":[],"vendor":"Northwind Sleep"}
+]}}}

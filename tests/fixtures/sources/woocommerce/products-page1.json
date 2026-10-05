@@ -1,0 +1,23 @@
+[
+{"id":200,"name":"Meadowlark Organic Latex Mattress","slug":"meadowlark-organic-latex-mattress","parent":0,"type":"variable","variation":"","permalink":"http://127.0.0.1:8606/product/meadowlark-organic-latex-mattress/","sku":"ML-ORG","short_description":"<p>GOLS latex, GOTS cotton.</p>","description":"","on_sale":true,
+ "prices":{"price":"149900","regular_price":"179900","sale_price":"149900","price_range":{"min_amount":"149900","max_amount":"229900"},"currency_code":"USD","currency_symbol":"$","currency_minor_unit":2,"currency_decimal_separator":".","currency_thousand_separator":",","currency_prefix":"$","currency_suffix":""},
+ "price_html":"<span class=\"price\">$1,499.00 &ndash; $2,299.00</span>","average_rating":"4.80","review_count":31,
+ "images":[{"id":501,"src":"https://cdn.example.test/wp-content/uploads/meadowlark.jpg","thumbnail":"https://cdn.example.test/wp-content/uploads/meadowlark-300x300.jpg","srcset":"","sizes":"","name":"meadowlark","alt":"Meadowlark mattress"}],
+ "categories":[{"id":11,"name":"Mattresses","slug":"mattresses","link":"http://127.0.0.1:8606/product-category/mattresses/"}],
+ "tags":[{"id":21,"name":"latex","slug":"latex","link":""},{"id":22,"name":"organic","slug":"organic","link":""}],
+ "brands":[{"id":31,"name":"Meadowlark Bedding","slug":"meadowlark-bedding","link":""}],
+ "attributes":[{"id":1,"name":"Size","taxonomy":"pa_size","has_variations":true,"terms":[{"id":41,"name":"Twin XL","slug":"twin-xl"},{"id":42,"name":"Queen","slug":"queen"},{"id":43,"name":"California King","slug":"california-king"}]}],
+ "variations":[{"id":201,"attributes":[{"name":"Size","value":"twin-xl"}]},{"id":202,"attributes":[{"name":"Size","value":"queen"}]},{"id":203,"attributes":[{"name":"Size","value":"california-king"}]}],
+ "has_options":true,"is_purchasable":true,"is_in_stock":true,"is_on_backorder":false,"low_stock_remaining":null,"sold_individually":false,"add_to_cart":{"text":"Select options","description":"","url":"","minimum":1,"maximum":9999,"multiple_of":1},"extensions":{}},
+{"id":210,"name":"Meadowlark Wool Protector &#8211; Queen","slug":"meadowlark-wool-protector-queen","parent":0,"type":"simple","variation":"","permalink":"http://127.0.0.1:8606/product/meadowlark-wool-protector-queen/","sku":"ML-WP-Q","short_description":"","description":"","on_sale":false,
+ "prices":{"price":"12900","regular_price":"12900","sale_price":"12900","price_range":null,"currency_code":"USD","currency_symbol":"$","currency_minor_unit":2,"currency_decimal_separator":".","currency_thousand_separator":",","currency_prefix":"$","currency_suffix":""},
+ "price_html":"","average_rating":"0","review_count":0,"images":[],
+ "categories":[{"id":12,"name":"Protectors","slug":"protectors","link":""}],"tags":[],
+ "attributes":[{"id":1,"name":"Size","taxonomy":"pa_size","has_variations":false,"terms":[{"id":42,"name":"Queen","slug":"queen"}]}],
+ "variations":[],"has_options":false,"is_purchasable":true,"is_in_stock":true,"is_on_backorder":false,"low_stock_remaining":3,"sold_individually":false,"add_to_cart":{"text":"Add to cart","description":"","url":"?add-to-cart=210","minimum":1,"maximum":9999,"multiple_of":1},"extensions":{},"global_unique_id":"4006381333931"},
+{"id":220,"name":"Meadowlark Adjustable Base &#8211; Split King","slug":"meadowlark-adjustable-base-split-king","parent":0,"type":"simple","variation":"","permalink":"http://127.0.0.1:8606/product/meadowlark-adjustable-base-split-king/","sku":"ML-AB-SK","short_description":"","description":"","on_sale":false,
+ "prices":{"price":"189900","regular_price":"189900","sale_price":"189900","price_range":null,"currency_code":"USD","currency_symbol":"$","currency_minor_unit":2,"currency_decimal_separator":".","currency_thousand_separator":",","currency_prefix":"$","currency_suffix":""},
+ "price_html":"","average_rating":"0","review_count":0,"images":[],
+ "categories":[{"id":13,"name":"Adjustable bases","slug":"adjustable-bases","link":""}],"tags":[],"attributes":[],"variations":[],
+ "has_options":false,"is_purchasable":false,"is_in_stock":false,"is_on_backorder":true,"low_stock_remaining":null,"sold_individually":true,"stock_availability":{"text":"Available on backorder","class":"available-on-backorder"},"add_to_cart":{"text":"Read more","description":"","url":"","minimum":1,"maximum":1,"multiple_of":1},"extensions":{}}
+]

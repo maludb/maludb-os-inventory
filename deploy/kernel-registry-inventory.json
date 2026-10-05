@@ -1,0 +1,19 @@
+{
+  "schema": "maludb-os.registry/1",
+  "app_key": "inventory",
+  "name": "Inventory",
+  "note": "The installer (bin/app_install.php, step 'registry') writes mcp/registries/inventory.json in the kernel from this file's `resolve` block plus mcp/action_registry.json. Each resolve tool answers a plain LIST of rows carrying id_field and label_field when given `q` alone. The tools are the Phase 1 tool surface's names (docs/inventory-mcp-tool-surface.md); Phase 4 builds them (mcp/records_server.py). Every record is bigint-keyed. A repeated param (lines, variants) is a list of ids, never resolved by name.",
+  "resolve": {
+    "product":        {"tool": "find_products",        "query_param": "q", "id_field": "product_id",         "label_field": "name",         "params": ["product"]},
+    "variant":        {"tool": "inv_find",             "query_param": "q", "id_field": "variant_id",         "label_field": "sku",          "params": ["variant", "component", "bundle"]},
+    "location":       {"tool": "find_locations",       "query_param": "q", "id_field": "location_id",        "label_field": "name",         "params": ["location", "from_location", "to_location"]},
+    "supplier":       {"tool": "find_suppliers",       "query_param": "q", "id_field": "supplier_id",        "label_field": "name",         "params": ["supplier"]},
+    "source":         {"tool": "find_sources",         "query_param": "q", "id_field": "source_id",          "label_field": "name",         "params": ["source"]},
+    "listing":        {"tool": "find_listings",        "query_param": "q", "id_field": "listing_variant_id", "label_field": "title",        "params": ["listing_variant", "listing"]},
+    "customer":       {"tool": "find_customers",       "query_param": "q", "id_field": "customer_id",        "label_field": "name",         "params": ["customer"]},
+    "sales_order":    {"tool": "find_orders",          "query_param": "q", "id_field": "sales_order_id",     "label_field": "number",       "params": ["order", "sales_order"]},
+    "purchase_order": {"tool": "find_purchase_orders", "query_param": "q", "id_field": "purchase_order_id",  "label_field": "number",       "params": ["purchase_order", "po"]},
+    "member":         {"tool": "find_members",         "query_param": "q", "id_field": "member_id",          "label_field": "display_name", "params": ["member", "salesperson", "agent", "owner"]},
+    "department":     {"tool": "find_departments",     "query_param": "q", "id_field": "department_id",      "label_field": "name",         "params": ["department"]}
+  }
+}

@@ -1,0 +1,8 @@
+Item Number,UPC,Description,Size,Dealer Cost,MAP,Qty Available,Lead Time (days),Brand,Model
+NW-CR-T,850123450004,CloudRest Hybrid Mattress Twin,Twin,"$349.50","699.00",24,3,Northwind Sleep,CloudRest Hybrid
+NW-CR-Q,850123450035,CloudRest Hybrid Mattress Queen,Queen,"$499.00","999.00",0,10,Northwind Sleep,CloudRest Hybrid
+NW-CR-K,850123450042,CloudRest Hybrid Mattress King,King,"$649.00","1,299.00",5,,Northwind Sleep,CloudRest Hybrid
+NW-CR-CK,850123450001,CloudRest Hybrid Mattress Cal King,Cal King,"$649.00","1299",2,,Northwind Sleep,CloudRest Hybrid
+NW-PIL-STD,850123450202,Northwind Down-Alternative Pillow,,"$22.10","59.00",140,2,Northwind Sleep,
+,,A row with no identifiers,,,,,,,
+HP-LT-Q-3,850123450110,Harbor Latex Topper Queen 3in,Queen,"$199.00","449.00",8,5,Harbor & Pine,Harbor Latex Topper

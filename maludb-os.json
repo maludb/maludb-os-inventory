@@ -1,0 +1,466 @@
+{
+    "schema": "maludb-os.application/1",
+    "catalog_key": "inventory",
+    "name": "Inventory",
+    "description": "Sales inventory for a retailer of packaged goods who holds some stock and drop-ships the rest. A catalog in Shopify's and GS1's words (products, options, variants, every identifier a seller uses, bundles, retail/MAP/cost with history); own stock by location kept by a transaction ledger; sources the business can sell from without holding anything (other websites read politely, suppliers' feeds, price sheets typed in), every offer remembered as a snapshot and every listing matched to the catalog; Find, one screen answering own stock, every supplier's offer ranked by cost and lead time, the reference prices and the best lead time; orders filled from a location or drop-shipped from a source's offer, a secure link for the customer and one for the supplier, payments recorded never processed, returns with dispositions; an availability feed with keys. Two shipped agents, the expert and the Stock Buyer, propose; placing an order with a supplier pauses for a person. Modelled on mattress retail.",
+    "business_area": "Operations",
+    "category": "inventory",
+    "icon": "feather-package",
+    "version": "0.1.0",
+    "criticality": "medium",
+    "vhost": {
+        "label": "inventory",
+        "document_root": "html",
+        "internal_port_env": "APP_INTERNAL_PORT"
+    },
+    "database": {
+        "suffix": "inventory",
+        "migrations": "db",
+        "roles": {
+            "rw": "inventory_rw",
+            "records_ro": "inventory_records_ro",
+            "activity_ro": "inventory_activity_ro"
+        }
+    },
+    "env": {
+        "required": [
+            "APP_NAME",
+            "APP_URL",
+            "DB_HOST",
+            "DB_PORT",
+            "DB_NAME",
+            "DB_USER",
+            "DB_PASSWORD",
+            "MCP_RECORDS_DB_USER",
+            "MCP_RECORDS_DB_PASSWORD",
+            "MCP_ACTIVITY_DB_USER",
+            "MCP_ACTIVITY_DB_PASSWORD",
+            "APP_INTERNAL_PORT",
+            "MCP_RECORDS_PORT",
+            "MCP_ACTIVITY_PORT",
+            "ACTION_TOKEN_KEY",
+            "ACTIONS_RELAY_KEY",
+            "OS_APPLICATION_TOKEN",
+            "OS_INTERNAL_URL",
+            "OS_LAUNCHER_URL",
+            "APP_KEY",
+            "MALUDB_API_URL",
+            "MALUDB_API_TOKEN",
+            "INV_SECRETS_KEY"
+        ],
+        "optional": [
+            "MALUMAIL_API_KEY",
+            "MALUMAIL_API_URL",
+            "MAIL_FROM",
+            "MAIL_FROM_NAME",
+            "ATTACHMENT_MAX_BYTES",
+            "INV_PUBLIC_BASE_URL",
+            "INV_CRAWL_USER_AGENT",
+            "INV_HTTP_PROXY",
+            "INV_BUYER_EMAIL",
+            "API_CORS_ORIGINS"
+        ]
+    },
+    "services": [
+        "deploy/inventory-records-mcp.service",
+        "deploy/inventory-activity-mcp.service",
+        "deploy/inventory-activity-ingest.service",
+        "deploy/inventory-activity-ingest.timer",
+        "deploy/inventory-directory-sync.service",
+        "deploy/inventory-directory-sync.timer",
+        "deploy/inventory-worker.service",
+        "deploy/inventory-worker.timer"
+    ],
+    "endpoints": [
+        {
+            "name": "Web UI",
+            "kind": "ui",
+            "path": "/",
+            "auth_kind": "none",
+            "agent_reachable": false
+        },
+        {
+            "name": "Health",
+            "kind": "http_api",
+            "path": "/api/v1/health",
+            "auth_kind": "none",
+            "agent_reachable": false
+        },
+        {
+            "name": "Customer order page",
+            "kind": "ui",
+            "path": "/o/",
+            "auth_kind": "none",
+            "agent_reachable": false
+        },
+        {
+            "name": "Supplier order page",
+            "kind": "ui",
+            "path": "/s/",
+            "auth_kind": "none",
+            "agent_reachable": false
+        },
+        {
+            "name": "Availability feed",
+            "kind": "http_api",
+            "path": "/api/v1/availability",
+            "auth_kind": "api_key",
+            "agent_reachable": false
+        },
+        {
+            "name": "Records MCP",
+            "kind": "mcp",
+            "path": "/mcp/records",
+            "port_env": "MCP_RECORDS_PORT",
+            "auth_kind": "bearer",
+            "agent_reachable": true,
+            "mcp_surface_version": "1.0"
+        },
+        {
+            "name": "Activity MCP",
+            "kind": "mcp",
+            "path": "/mcp/activity",
+            "port_env": "MCP_ACTIVITY_PORT",
+            "auth_kind": "bearer",
+            "agent_reachable": true,
+            "mcp_surface_version": "1.0"
+        }
+    ],
+    "actions": {
+        "manifest": "docs/inventory-action-manifest.md",
+        "registry": "mcp/action_registry.json",
+        "base_url_env": "APP_INTERNAL_PORT"
+    },
+    "skills": [
+        "skills/inventory-basics",
+        "skills/finding-stock",
+        "skills/matching-listings",
+        "skills/buying",
+        "skills/talking-to-customers",
+        "skills/morning-note",
+        "skills/draft-a-dropship",
+        "skills/reorder-run",
+        "skills/price-check",
+        "skills/match-queue"
+    ],
+    "sso": {
+        "path": "/sso",
+        "logout_path": "/sso/logout"
+    },
+    "directory": {
+        "reads": true,
+        "writes": false
+    },
+    "assistant": {
+        "command_bar": true,
+        "agent": "expert"
+    },
+    "grant_standing_departments": false,
+    "shares": [
+        {
+            "tool": "sales_closed",
+            "description": "Orders closed in a period for the General Ledger: number, date, customer (name and the ledger's id when filled), lines at retail, tax, shipping, payments recorded by method (os.inventory-sales/1)",
+            "scoped": false
+        },
+        {
+            "tool": "purchases_received",
+            "description": "Goods receipts and delivered drop-ships in a period, at cost, by supplier, for the General Ledger's bills (os.inventory-purchases/1)",
+            "scoped": false
+        },
+        {
+            "tool": "stock_valuation",
+            "description": "Stock at cost as of a date, by location and brand, for the General Ledger's period close (os.inventory-valuation/1)",
+            "scoped": false
+        },
+        {
+            "tool": "availability_index",
+            "description": "Per variant: our retail, own availability state and the best lead time, without quantities or cost, for any sibling asking whether something can be sold (os.inventory-availability/1)",
+            "scoped": false
+        },
+        {
+            "tool": "customer_orders",
+            "description": "A customer's open orders and their status by the customer's email, for a Help Desk ticket (os.inventory-orders/1)",
+            "scoped": false
+        }
+    ],
+    "reads": [],
+    "agents": [
+        {
+            "key": "expert",
+            "name": "Inventory Expert",
+            "job_description": "os/expert.md",
+            "access_capability": "write",
+            "hired_on_install": true,
+            "roles": [
+                "buyer"
+            ],
+            "tool_grants": {
+                "Records MCP": [
+                    "find_products",
+                    "get_product",
+                    "product_variants",
+                    "get_variant",
+                    "variant_by_identifier",
+                    "bundle_components",
+                    "bundle_availability",
+                    "price_history",
+                    "catalog_gaps",
+                    "stock_levels",
+                    "stock_by_location",
+                    "stock_movements",
+                    "transfers_open",
+                    "receipts_open",
+                    "counts",
+                    "count_lines",
+                    "stock_value",
+                    "sell_through",
+                    "reorder_candidates",
+                    "availability",
+                    "find",
+                    "atp",
+                    "find_sources",
+                    "get_source",
+                    "source_health",
+                    "source_listings",
+                    "get_listing",
+                    "offers_for_variant",
+                    "offer_history",
+                    "availability_timeline",
+                    "unmatched_listings",
+                    "match_proposals",
+                    "source_search",
+                    "source_pulls",
+                    "get_pull",
+                    "price_exceptions",
+                    "lines_at_risk",
+                    "my_watches",
+                    "watch_events",
+                    "supplier_items",
+                    "lead_time_actuals",
+                    "find_orders",
+                    "orders_late",
+                    "get_order",
+                    "order_timeline",
+                    "find_customers",
+                    "get_customer",
+                    "customer_orders",
+                    "payments_due",
+                    "fulfilment_today",
+                    "shipments_open",
+                    "dropships_untracked",
+                    "sales_summary",
+                    "find_purchase_orders",
+                    "purchase_orders_open",
+                    "get_purchase_order",
+                    "purchase_order_events",
+                    "supplier_open_orders",
+                    "order_dropships",
+                    "find_returns",
+                    "get_return",
+                    "returns_open",
+                    "morning_note",
+                    "buyer_proposals",
+                    "feed_keys",
+                    "key_usage",
+                    "agents_here",
+                    "agent_dispatches",
+                    "records_search"
+                ],
+                "Activity MCP": [
+                    "record_history",
+                    "actor_timeline"
+                ],
+                "Actions MCP": [
+                    "quote_create",
+                    "order_line_add",
+                    "order_line_fulfilment_set",
+                    "purchase_order_draft",
+                    "transfer_draft",
+                    "match_propose",
+                    "listing_match",
+                    "source_pull",
+                    "watch_set",
+                    "note_add",
+                    "order_confirm",
+                    "purchase_order_send",
+                    "order_send",
+                    "price_set"
+                ]
+            },
+            "skills": [
+                "skills/inventory-basics",
+                "skills/finding-stock",
+                "skills/matching-listings",
+                "skills/buying",
+                "skills/talking-to-customers",
+                "skills/draft-a-dropship",
+                "skills/price-check"
+            ]
+        },
+        {
+            "key": "buyer",
+            "name": "Stock Buyer",
+            "job_description": "os/buyer.md",
+            "access_capability": "write",
+            "hired_on_install": true,
+            "roles": [
+                "buyer"
+            ],
+            "duty": {
+                "name": "The morning note",
+                "schedule_cron": "30 6 * * *",
+                "runbook": "skills/morning-note"
+            },
+            "tool_grants": {
+                "Records MCP": [
+                    "reorder_candidates",
+                    "lines_at_risk",
+                    "price_exceptions",
+                    "unmatched_listings",
+                    "match_proposals",
+                    "source_health",
+                    "purchase_orders_open",
+                    "dropships_untracked",
+                    "returns_open",
+                    "find",
+                    "availability",
+                    "get_product",
+                    "get_variant",
+                    "get_source",
+                    "get_listing",
+                    "get_pull",
+                    "get_order",
+                    "get_customer",
+                    "get_purchase_order",
+                    "get_return",
+                    "buyer_proposals",
+                    "records_search"
+                ],
+                "Activity MCP": [
+                    "record_history"
+                ],
+                "Actions MCP": [
+                    "purchase_order_draft",
+                    "match_propose",
+                    "watch_set",
+                    "note_add"
+                ]
+            },
+            "skills": [
+                "skills/inventory-basics",
+                "skills/matching-listings",
+                "skills/buying",
+                "skills/morning-note",
+                "skills/reorder-run",
+                "skills/price-check",
+                "skills/match-queue"
+            ]
+        }
+    ],
+    "approvals": [
+        {
+            "action": "purchase_order_send",
+            "category": "money_out"
+        },
+        {
+            "action": "purchase_order_place",
+            "category": "money_out"
+        },
+        {
+            "action": "order_send",
+            "category": "external_send"
+        },
+        {
+            "action": "order_notify",
+            "category": "external_send"
+        },
+        {
+            "action": "supplier_message",
+            "category": "external_send"
+        },
+        {
+            "action": "feed_key_mint",
+            "category": "external_send"
+        },
+        {
+            "action": "order_confirm",
+            "category": "other"
+        },
+        {
+            "action": "payment_record",
+            "category": "other"
+        },
+        {
+            "action": "refund_record",
+            "category": "other"
+        },
+        {
+            "action": "return_authorize",
+            "category": "other"
+        },
+        {
+            "action": "product_delete",
+            "category": "deletion"
+        },
+        {
+            "action": "variant_delete",
+            "category": "deletion"
+        },
+        {
+            "action": "source_delete",
+            "category": "deletion"
+        },
+        {
+            "action": "listing_forget",
+            "category": "deletion"
+        },
+        {
+            "action": "order_cancel",
+            "category": "deletion"
+        },
+        {
+            "action": "purchase_order_cancel",
+            "category": "deletion"
+        },
+        {
+            "action": "customer_delete",
+            "category": "deletion"
+        },
+        {
+            "action": "stock_adjust",
+            "category": "deletion"
+        },
+        {
+            "action": "count_post",
+            "category": "deletion"
+        },
+        {
+            "action": "price_set",
+            "category": "other"
+        },
+        {
+            "action": "source_create",
+            "category": "other"
+        },
+        {
+            "action": "source_credential_set",
+            "category": "other"
+        },
+        {
+            "action": "source_schedule_set",
+            "category": "other"
+        },
+        {
+            "action": "settings_save",
+            "category": "other"
+        },
+        {
+            "action": "sequence_set",
+            "category": "other"
+        },
+        {
+            "action": "tax_rate_save",
+            "category": "other"
+        }
+    ]
+}

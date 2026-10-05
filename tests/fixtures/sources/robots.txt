@@ -1,0 +1,11 @@
+# Fixture robots.txt for the connectors proof (tests/phase0/connectors.sh)
+User-agent: *
+Disallow: /private/
+Disallow: /cart
+Allow: /private/public-note.html
+
+User-agent: SlowBot
+Crawl-delay: 2
+Disallow: /private/
+
+Sitemap: http://127.0.0.1:8606/sitemap.xml

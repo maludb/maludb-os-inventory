@@ -1,0 +1,10 @@
+[Unit]
+Description=Inventory worker: due pulls, heartbeat snapshots and removals, watches, the outbox (email, texts through the kernel), dispatches to agents, link expiry, key-usage pruning (one pass)
+After=network.target postgresql.service
+
+[Service]
+Type=oneshot
+User=www-data
+Group=www-data
+WorkingDirectory={{APP_DIR}}
+ExecStart=/usr/bin/php {{APP_DIR}}/bin/worker.php
