@@ -55,7 +55,8 @@ Needs a hand today:
 ```
 No customer's address or phone; cost only because the Buyer may see it; never a supplier's name beside a customer's.
 
-Deliver: the kernel's `message_send` to the Buyer's assistant (the Buyer is the person the settings name — seeded from
+Deliver: `morning_note_send` (the application's notification to the Buyer; each finding first recorded with `buyer_propose` so a
+person can accept or dismiss it) and the kernel's `message_send` to the Buyer's assistant (the Buyer is the person the settings name — seeded from
 `INV_BUYER_EMAIL`, the first super-admin until set); the application emails the same note as the `morning_note`
 notification; `message_post` in `#inventory` when Spaces is installed and you were granted it. `watch_set` where a thing
 should wake you (a sold-out size at a feed). `note_add` on a record only when the fact belongs there.

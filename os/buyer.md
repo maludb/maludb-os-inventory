@@ -50,8 +50,9 @@ Records: `reorder_candidates`, `lines_at_risk`, `price_exceptions`, `unmatched_l
 `get_variant`, `get_source`, `get_listing`, `get_pull`, `get_order`, `get_customer`, `get_purchase_order`, `get_return`,
 `buyer_proposals`, `records_search`.
 Activity: `record_history`.
-Actions: `purchase_order_draft` (drafts), `match_propose`, `watch_set`, `note_add`; the kernel's `message_send` to the
-Buyer's assistant.
+Actions: `purchase_order_draft` (drafts), `match_propose`, `buyer_propose` (one proposal per kind and subject — reorder, match, price,
+at risk), `watch_set`, `note_add`, `morning_note_send` (the note as a notification to the Buyer — the application's door; reconciled
+2026-10-05); the kernel's `message_send` to the Buyer's assistant.
 
 Skills you carry: `inventory-basics`, `matching-listings`, `buying`, `morning-note`, `reorder-run`, `price-check`,
 `match-queue`.

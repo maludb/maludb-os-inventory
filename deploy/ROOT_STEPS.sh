@@ -32,6 +32,14 @@ fi
 #    See that it worked:  php $KERNEL/bin/app_install.php plan $APP --domain subello.com | grep -E '^(todo|done) +(ports|vhost)'   -> ports done, no {{…}} unfilled
 
 # ------------------------------------------------------------------------------------------------------------------
+# 0b. STORAGE (ROOT) — storage/ and its three directories www-data-owned, mode 0770, before apply (connectors.md §6.7): the HTTP
+#     client creates storage/http-cache on first use and keeps the per-host rate lock there, shared by the worker (www-data) and
+#     Apache's probes and searches; attachments and exports are the kit's. Without this the worker's first client cannot create the
+#     cache and the rate lock falls back to "no lock". Idempotent: an existing directory is left in place, its owner and mode set.
+echo "== 0b. storage/ (ROOT) — www-data-owned, 0770"
+run bash -c "mkdir -p '$APP/storage/http-cache' '$APP/storage/attachments' '$APP/storage/exports' && chown -R www-data:www-data '$APP/storage' && chmod 0770 '$APP/storage' '$APP/storage/http-cache' '$APP/storage/attachments' '$APP/storage/exports'"
+
+# ------------------------------------------------------------------------------------------------------------------
 # 1. Look (read-only, any user): what the installer would do.
 echo "== 1. The installer's plan (read-only)"
 echo "   php $KERNEL/bin/app_install.php plan $APP --by <super-admin email> --domain subello.com"

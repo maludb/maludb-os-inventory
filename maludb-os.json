@@ -343,7 +343,9 @@
                     "purchase_order_draft",
                     "match_propose",
                     "watch_set",
-                    "note_add"
+                    "note_add",
+                    "buyer_propose",
+                    "morning_note_send"
                 ]
             },
             "skills": [
@@ -359,56 +361,16 @@
     ],
     "approvals": [
         {
-            "action": "purchase_order_send",
-            "category": "money_out"
+            "action": "count_post",
+            "category": "deletion"
         },
         {
-            "action": "purchase_order_place",
-            "category": "money_out"
-        },
-        {
-            "action": "order_send",
-            "category": "external_send"
-        },
-        {
-            "action": "order_notify",
-            "category": "external_send"
-        },
-        {
-            "action": "supplier_message",
-            "category": "external_send"
+            "action": "customer_delete",
+            "category": "deletion"
         },
         {
             "action": "feed_key_mint",
             "category": "external_send"
-        },
-        {
-            "action": "order_confirm",
-            "category": "other"
-        },
-        {
-            "action": "payment_record",
-            "category": "other"
-        },
-        {
-            "action": "refund_record",
-            "category": "other"
-        },
-        {
-            "action": "return_authorize",
-            "category": "other"
-        },
-        {
-            "action": "product_delete",
-            "category": "deletion"
-        },
-        {
-            "action": "variant_delete",
-            "category": "deletion"
-        },
-        {
-            "action": "source_delete",
-            "category": "deletion"
         },
         {
             "action": "listing_forget",
@@ -419,23 +381,55 @@
             "category": "deletion"
         },
         {
+            "action": "order_confirm",
+            "category": "other"
+        },
+        {
+            "action": "order_notify",
+            "category": "external_send"
+        },
+        {
+            "action": "order_send",
+            "category": "external_send"
+        },
+        {
+            "action": "payment_record",
+            "category": "other"
+        },
+        {
+            "action": "price_set",
+            "category": "other"
+        },
+        {
+            "action": "product_delete",
+            "category": "deletion"
+        },
+        {
             "action": "purchase_order_cancel",
             "category": "deletion"
         },
         {
-            "action": "customer_delete",
-            "category": "deletion"
+            "action": "purchase_order_place",
+            "category": "money_out"
         },
         {
-            "action": "stock_adjust",
-            "category": "deletion"
+            "action": "purchase_order_send",
+            "category": "money_out"
         },
         {
-            "action": "count_post",
-            "category": "deletion"
+            "action": "refund_record",
+            "category": "other"
         },
         {
-            "action": "price_set",
+            "action": "return_authorize",
+            "category": "other"
+        },
+        {
+            "action": "sequence_set",
+            "category": "other"
+        },
+        {
+            "action": "settings_save",
             "category": "other"
         },
         {
@@ -447,20 +441,28 @@
             "category": "other"
         },
         {
+            "action": "source_delete",
+            "category": "deletion"
+        },
+        {
             "action": "source_schedule_set",
             "category": "other"
         },
         {
-            "action": "settings_save",
-            "category": "other"
+            "action": "stock_adjust",
+            "category": "deletion"
         },
         {
-            "action": "sequence_set",
-            "category": "other"
+            "action": "supplier_message",
+            "category": "external_send"
         },
         {
             "action": "tax_rate_save",
             "category": "other"
+        },
+        {
+            "action": "variant_delete",
+            "category": "deletion"
         }
     ]
 }

@@ -12,9 +12,9 @@ declare(strict_types=1);
  * settings once its slice builds it). INV_WORKER_NOW (ISO 8601) replaces the clock a pass selects by; honoured only when APP_ENV is
  * not prod. Exits 1 when a pass failed.
  *
- * PHASE 0: every pass is a STUB that changes nothing and answers 0 — the slice that owns it fills it in (design §10): `pulls` is
- * slice 3's (the connectors under app/sources/ — another builder's), `snapshots_heartbeat` and `watches` slice 4's, `outbox` and
- * `dispatches` slice 8's, `links_expire` slices 5 and 6's, `key_usage_prune` slice 9's.
+ * PHASE 0: every pass is a STUB that changes nothing and answers 0 — the slice whose data it touches fills it in (design §10; the
+ * division reconciled 2026-10-05): `pulls` is slice 3's (the connectors under app/sources/), `snapshots_heartbeat` and `watches`
+ * slice 4's, `links_expire` slice 5's (one function for both doors), `outbox`, `dispatches` and `key_usage_prune` slice 8's.
  */
 if (PHP_SAPI !== 'cli') { fwrite(STDERR, "CLI only.\n"); exit(1); }
 require_once dirname(__DIR__) . '/app/bootstrap.php';
