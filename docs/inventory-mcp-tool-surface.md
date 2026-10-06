@@ -79,7 +79,7 @@ functions (owed, below) are the one place cost crosses unnulled: to the General 
    of `maludb-os.json`, nothing else (`server_common.py` is updated in Phase 4; `KERNEL_ONLY` stays empty: every share also answers a
    person or an agent holding the role, as its own tool). No member identity is set, so every view answers nothing; the shares
    answer through the **share functions** (owed, below), people-free. The kernel sends a share's arguments flat; the middleware wraps
-   them in `params`. **The kernel passes no consumer today (Knowledge's K26)** — Inventory needs none: nothing a share answers depends
+   them in `params`. **The kernel names the consumer in the headers `X-OS-Consumer` / `X-OS-Consumer-Agent` since K26 (2026-10-06)** — Inventory needs it for nothing: nothing a share answers depends
    on who asks; the super-admin's approved connection is the gate.
 
 **Identity on every query.** `app.member_id` = the resolved member, `app.role` = `members.business_role`. The server never filters rows
