@@ -137,3 +137,15 @@ html.app-skin-dark .viz-root { --viz-series-1: #3987e5; --viz-series-2: #d95926;
 .viz-tooltip[hidden] { display: none; }
 .viz-root:focus { outline: 2px solid var(--bs-primary, #3454d1); outline-offset: 2px; }
 @media print, (forced-colors: active) { .viz-root .viz-series-2.viz-line { stroke-dasharray: 6 2; } .viz-root .viz-series-3.viz-line { stroke-dasharray: 2 2; } }
+
+/* Slice 2 — the scan field (stock.md "Mobile rule"): first and sticky under the header on the receiving and counting screens. */
+.scan-sticky { position: sticky; top: 80px; z-index: 4; }            /* under the fixed 80 px header */
+.main-content:has(.scan-sticky) { overflow: visible; }               /* the theme clips .main-content, which would make it the sticky's scroller */
+.scan-sticky .scan-card { box-shadow: 0 2px 6px rgba(0,0,0,.08); scroll-margin-top: 90px; }
+[id$="-line-row-"], tr[id*="-line-row-"] { scroll-margin-top: 200px; }      /* a landed row clears the header and the sticky scan field */
+.doc-actions { display: flex; flex-wrap: wrap; gap: .25rem; justify-content: flex-end; }
+.scan-input { font-family: var(--bs-font-monospace, monospace); letter-spacing: .02em; }
+details.card > summary { list-style: none; cursor: pointer; }
+details.card > summary::-webkit-details-marker { display: none; }
+details.card > summary::after { content: "\25BE"; margin-left: auto; opacity: .6; }
+details.card[open] > summary::after { content: "\25B4"; }

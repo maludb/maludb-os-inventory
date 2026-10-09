@@ -238,6 +238,7 @@ $groups    = nav_groups();
     <script src="/assets/js/common-init.min.js"></script>
     <script src="/assets/js/record-picker.js"></script>
     <script src="/assets/js/series-chart.js"></script>
+    <script src="/assets/js/stock-scan.js"></script>
     <script src="/assets/js/theme-customizer-init.min.js"></script>
 </body>
 </html>

@@ -135,6 +135,13 @@ function sees_cost(): bool
     return $v ??= db_bool(db(), 'SELECT inv_sees_cost()');
 }
 
+/** Cost on the receiving paperwork (inv_sees_receipt_cost(), db/005): the cost wall, or Warehouse (stock.receive) on receipts. */
+function sees_receipt_cost(): bool
+{
+    static $v = null;
+    return $v ??= db_bool(db(), 'SELECT inv_sees_receipt_cost()');
+}
+
 function is_super_admin(): bool
 {
     static $v = null;

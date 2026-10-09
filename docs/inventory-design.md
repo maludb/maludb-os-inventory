@@ -757,6 +757,16 @@ Rules, not questions.
 
 ## 16. State
 
+**2026-10-09 — SLICE 2, LOCATIONS AND STOCK (the ledger's screens), BUILT and proven** by the planning model: `tests/phase3/slice2/run.sh` 325 checks
+green under php -S and under Apache (locations as cards with the archive rule; receipts scanned on a phone — the scan rule, GTIN / UPC / SKU, put-away,
+the cost following the receipt, a PO received; adjustments with reasons and the cost wall; transfers sent and received short with the difference left on
+the document; counts with the running count and the schema's "counted − on hand now"; floor models as `floor_model` adjustments; reversals once; levels
+with filters and CSV; the movement ledger with its documents; JSON mode under action and run tokens; the browser at 375 and 1280 and without
+JavaScript); 43 screens and 45 actions built. **Found and fixed:** `db/018` — `inv_transfer_receive()` refused every transfer of two lines or more (the
+writer flag fell after the first posting); the kit's `db_message()` now speaks a ledger CHECK's sentence instead of its raw text; the sticky scan field
+needed the theme's `.main-content` clip lifted. The record and the decisions: `docs/build-specs/stock.md` "Built and proven". **Next: slice 3 (sources,
+connectors, listings, matching — THE EXEMPLAR) with slice 4 (Find) — then the handoff to workers.**
+
 **2026-10-09 — SLICE 1, THE CATALOG (the CRUD exemplar for workers), BUILT and proven** by the planning model: `tests/phase3/slice1/run.sh` 310 checks
 green under php -S and under Apache (brands and types, products with typed attributes and options, variants with GTIN-14 / size keys / imperial units /
 prices on the create, identifiers, bundles with replace semantics, images through the gated door, prices with reasons and the inline-SVG chart, the gaps,

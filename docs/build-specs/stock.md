@@ -241,3 +241,42 @@ the Queen set); the owner makes "SMOKE Warehouse" (warehouse, allows negative of
 (none)
 
 ## Built and proven
+**2026-10-09 — BUILT and proven by the planning model** (`tests/phase3/slice2/run.sh` on the scratch database `inv_dev2b`: **325 checks green under php
+-S and under a real Apache** — world 5, locations 22, receipts 46, adjustments 25, transfers 36, counts 28, floor 16, reverse 16, levels and movements 27,
+visibility 27, json 34, browser 41 at 375 × 740, 1280 × 800 and JavaScript off; the registry — **43 screens and 45 actions built**, 25 placeholders — and
+the approvals in step). Phase 2 and slice 1 re-run green, Phase 0 green (42 + 517 + 511), the Phase 1 claim checks green (52), the installer's plan
+clean. Every file of "Files" is built, plus `app/views/stock/partials/{levels-table,movements-table}.php` (the two tables the location view, the levels,
+the movements and the documents share), `app/views/receipts/partials/po-options.php` (Pattern A's fragment) and **`db/018_transfer_receive_flag.sql`**.
+
+**Found and fixed (not questions):**
+- **A transfer of two lines or more could never be received** (`db/008` `inv_transfer_receive()`): it raised the writer flag once before its loop, but
+  every posting lowers it (`inv_transactions_after()`), so the second line's `qty_received` met `inv_transfer_lines_guard()` and the whole receive was
+  refused in the guard's words. `db/018` raises the flag before every line's UPDATE, as `inv_ship()` and the returns already do. Additive; the schema
+  proof stays 517.
+- **A table's CHECK can speak before the trigger's sentence**: taking off more floor models than are flagged trips `inventory_balances`'s
+  `qty_floor_model >= 0` CHECK before `inv_transactions_after()` can say "There are not that many floor models to take off the floor", and the kit
+  answered the raw "new row … violates check constraint". `db_message()` now maps the ledger's CHECK names to their sentences (`DB_CHECK_SENTENCES`)
+  and never shows a raw constraint text; an unmapped one answers the fallback.
+- **The theme clips `.main-content`** (`overflow: hidden auto`), which makes it the sticky scan field's scroller: `.main-content:has(.scan-sticky)` lifts
+  it, and the field sticks at 80 px, under the fixed header.
+
+**Decisions taken while building (not questions):**
+- **The running count is the server's**: a count scan that carries no quantity adds one to the line's counted quantity inside the handler's transaction
+  (the count row locked), so two fast scans never race; a typed or Pattern C quantity sets it. `stock-scan.js` queues every Enter and posts them in order,
+  clears the field at once and refreshes the page region from the last landing when the queue is empty — the spec's "the script keeps the running
+  count" is kept by the server instead, which is the same count and cannot lose a scan.
+- **The scan field posts `barcode`**; `variant` from the picker is an id, and an agent may pass a SKU or a code as `variant` (a number of eight digits or
+  more, or any non-number, is resolved as a code). The scan rule (increment the line) applies only to a resolved code.
+- **An adjustment's scan stops at the delta**: the field carries a "Change" input; Enter with no change typed moves the focus there, Enter there sends.
+- **A scan lands on the scan form, a typed line on its row** (no-JavaScript landing): repeated scans keep the field in view.
+- **`unit_cost` on a receipt line from a caller without `inv_sees_receipt_cost()` is refused in words**, as the spec says — but that sentence cannot be
+  reached today: `stock.receive`, the right every receipt handler needs, is itself what `inv_sees_receipt_cost()` admits. The proof shows Sam refused at
+  the door ("You may not receive goods.") instead; the adjustment's refusal (Wes, `stock.adjust` without `cost.read`) is reached and proven.
+- **A receipt line against a PO line with no cost given takes the PO line's cost**; the PO prefill posts `po_lines[]` + `po_qty[<line>]` from the form
+  (an agent sends `lines` JSON with `purchase_order_line`); the supplier is taken from the PO when the form leaves it empty.
+- **A location's Active box on the edit form obeys the archive rule** (refused while anything is held there), not only the Archive button.
+- **The levels screen is titled "Stock levels"** (the menu says Levels, the tab says Stock); the totals row shows when filtered to one variant or one
+  location; Phase 2's browser proof now opens the built levels from the Stock tab.
+- Header actions (Post, Cancel, Send, Receive) sit in one wrapping row (`.doc-actions`); the receive form's button is in the header through `form=`.
+- The proof clicks three no-JavaScript buttons with `force` — under the theme's smooth scrolling and a sticky field Playwright never reads them as
+  "stable"; a person's tap is unaffected (the JavaScript-on taps are not forced).

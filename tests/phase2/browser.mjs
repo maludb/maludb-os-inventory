@@ -99,9 +99,9 @@ const smallControls = (page, scope) => page.evaluate((s) => [...document.querySe
   await page.screenshot({ path: `${SHOTS}/phone-settings.png` });
   await page.click('#tab-stock-levels');
   await page.waitForURL(BASE + '/stock/');
-  await page.waitForSelector('#stock-levels-coming');
-  ok((await page.title()).startsWith('Levels'), 'the Stock tab opens its placeholder (slice 2), title "' + (await page.title()) + '"');
-  ok((await overflow(page)).sw === 375, 'no sideways scroll on a placeholder');
+  await page.waitForSelector('#levels-table');
+  ok((await page.title()).startsWith('Stock levels'), 'the Stock tab opens the levels (built by slice 2), title "' + (await page.title()) + '"');
+  ok((await overflow(page)).sw === 375, 'no sideways scroll on the levels');
   await page.goto(BASE + '/trail', { waitUntil: 'networkidle' });
   ok((await overflow(page)).sw === 375, 'no sideways scroll on My trail');
   await page.goto(BASE + '/notifications', { waitUntil: 'networkidle' });

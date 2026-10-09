@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/inventory-action-manifest.md",
-    "generated_at": "2026-10-09T19:51:42+00:00",
+    "generated_at": "2026-10-09T21:03:25+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -229,8 +229,8 @@
                 "q",
                 "below_reorder"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "movement-list": {
             "screen": "movement-list",
@@ -244,8 +244,8 @@
                 "from",
                 "to"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "floor-model-list": {
             "screen": "floor-model-list",
@@ -255,8 +255,8 @@
             "params": [
                 "location"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "location-list": {
             "screen": "location-list",
@@ -264,8 +264,8 @@
             "section": "Locations and stock (slice 2)",
             "when": "the locations as cards: kind, department, sellable, allows negative, on-hand count",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "location-add": {
             "screen": "location-add",
@@ -273,7 +273,7 @@
             "section": "Locations and stock (slice 2)",
             "when": "to add a location: name, kind (warehouse or showroom or store or in_transit or returns or offsite), address, department, sellable, allow negative",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "location-view": {
@@ -284,7 +284,7 @@
             "params": [
                 "tab"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "location-edit": {
@@ -293,7 +293,7 @@
             "section": "Locations and stock (slice 2)",
             "when": "to change a location's name, kind, address, department, sellable, allow negative, active",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "receipt-list": {
@@ -306,8 +306,8 @@
                 "supplier",
                 "location"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "receipt-add": {
             "screen": "receipt-add",
@@ -319,7 +319,7 @@
                 "supplier",
                 "location"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "receipt-view": {
@@ -328,7 +328,7 @@
             "section": "Locations and stock (slice 2)",
             "when": "one receipt: lines, discrepancies, the movements it posted, attachments (a delivery note)",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "receipt-edit": {
@@ -337,7 +337,7 @@
             "section": "Locations and stock (slice 2)",
             "when": "to change a draft receipt's lines, costs, put-away and delivery-note reference",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "adjustment-list": {
@@ -350,8 +350,8 @@
                 "location",
                 "reason"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "adjustment-add": {
             "screen": "adjustment-add",
@@ -363,7 +363,7 @@
                 "reason",
                 "variant"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "adjustment-view": {
@@ -372,7 +372,7 @@
             "section": "Locations and stock (slice 2)",
             "when": "one adjustment: its lines and the movements it posted",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "adjustment-edit": {
@@ -381,7 +381,7 @@
             "section": "Locations and stock (slice 2)",
             "when": "to change a draft adjustment's reason, lines and notes",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "transfer-list": {
@@ -393,8 +393,8 @@
                 "status",
                 "location"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "transfer-add": {
             "screen": "transfer-add",
@@ -406,7 +406,7 @@
                 "to_location",
                 "variant"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "transfer-view": {
@@ -415,7 +415,7 @@
             "section": "Locations and stock (slice 2)",
             "when": "one transfer: lines with sent and received quantities; Send, Receive",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "transfer-edit": {
@@ -424,7 +424,7 @@
             "section": "Locations and stock (slice 2)",
             "when": "to change a draft transfer's locations, lines and notes",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "count-list": {
@@ -436,8 +436,8 @@
                 "status",
                 "location"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "count-add": {
             "screen": "count-add",
@@ -447,7 +447,7 @@
             "params": [
                 "location"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "count-view": {
@@ -456,7 +456,7 @@
             "section": "Locations and stock (slice 2)",
             "when": "the counting screen: the location's variants with the system quantity, type or scan the counted quantity; the differences; Post with corrections",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "source-list": {
@@ -2058,7 +2058,7 @@
             "approval": null,
             "log_event": "location.create",
             "who": "settings.manage",
-            "built": false
+            "built": true
         },
         "location_update": {
             "action": "location_update",
@@ -2113,7 +2113,7 @@
             "approval": null,
             "log_event": "location.update",
             "who": "settings.manage",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "location_archive": {
@@ -2139,7 +2139,7 @@
             "approval": null,
             "log_event": "location.archive",
             "who": "settings.manage",
-            "built": false
+            "built": true
         },
         "receipt_draft": {
             "action": "receipt_draft",
@@ -2194,7 +2194,7 @@
             "approval": null,
             "log_event": "stock.receipt_draft",
             "who": "stock.receive",
-            "built": false
+            "built": true
         },
         "receipt_line_add": {
             "action": "receipt_line_add",
@@ -2261,7 +2261,7 @@
             "approval": null,
             "log_event": "stock.receipt_line",
             "who": "stock.receive",
-            "built": false
+            "built": true
         },
         "receipt_line_remove": {
             "action": "receipt_line_remove",
@@ -2280,7 +2280,7 @@
             "approval": null,
             "log_event": "stock.receipt_line_remove",
             "who": "stock.receive",
-            "built": false
+            "built": true
         },
         "receipt_post": {
             "action": "receipt_post",
@@ -2299,7 +2299,7 @@
             "approval": null,
             "log_event": "stock.receive",
             "who": "stock.receive",
-            "built": false
+            "built": true
         },
         "receipt_cancel": {
             "action": "receipt_cancel",
@@ -2318,7 +2318,7 @@
             "approval": null,
             "log_event": "stock.receipt_cancel",
             "who": "stock.receive",
-            "built": false
+            "built": true
         },
         "adjustment_draft": {
             "action": "adjustment_draft",
@@ -2355,7 +2355,7 @@
             "approval": null,
             "log_event": "stock.adjustment_draft",
             "who": "stock.adjust",
-            "built": false
+            "built": true
         },
         "adjustment_line_add": {
             "action": "adjustment_line_add",
@@ -2404,7 +2404,7 @@
             "approval": null,
             "log_event": "stock.adjustment_line",
             "who": "stock.adjust",
-            "built": false
+            "built": true
         },
         "adjustment_line_remove": {
             "action": "adjustment_line_remove",
@@ -2423,7 +2423,7 @@
             "approval": null,
             "log_event": "stock.adjustment_line_remove",
             "who": "stock.adjust",
-            "built": false
+            "built": true
         },
         "stock_adjust": {
             "action": "stock_adjust",
@@ -2442,7 +2442,7 @@
             "approval": "deletion",
             "log_event": "stock.adjust",
             "who": "stock.adjust",
-            "built": false
+            "built": true
         },
         "adjustment_cancel": {
             "action": "adjustment_cancel",
@@ -2461,7 +2461,7 @@
             "approval": null,
             "log_event": "stock.adjustment_cancel",
             "who": "stock.adjust",
-            "built": false
+            "built": true
         },
         "transfer_draft": {
             "action": "transfer_draft",
@@ -2498,7 +2498,7 @@
             "approval": null,
             "log_event": "stock.transfer_draft",
             "who": "stock.transfer",
-            "built": false
+            "built": true
         },
         "transfer_line_add": {
             "action": "transfer_line_add",
@@ -2535,7 +2535,7 @@
             "approval": null,
             "log_event": "stock.transfer_line",
             "who": "stock.transfer",
-            "built": false
+            "built": true
         },
         "transfer_line_remove": {
             "action": "transfer_line_remove",
@@ -2554,7 +2554,7 @@
             "approval": null,
             "log_event": "stock.transfer_line_remove",
             "who": "stock.transfer",
-            "built": false
+            "built": true
         },
         "transfer_send": {
             "action": "transfer_send",
@@ -2573,7 +2573,7 @@
             "approval": null,
             "log_event": "stock.transfer_send",
             "who": "stock.transfer",
-            "built": false
+            "built": true
         },
         "transfer_receive": {
             "action": "transfer_receive",
@@ -2598,7 +2598,7 @@
             "approval": null,
             "log_event": "stock.transfer_receive",
             "who": "stock.transfer",
-            "built": false
+            "built": true
         },
         "transfer_cancel": {
             "action": "transfer_cancel",
@@ -2617,7 +2617,7 @@
             "approval": null,
             "log_event": "stock.transfer_cancel",
             "who": "stock.transfer",
-            "built": false
+            "built": true
         },
         "count_start": {
             "action": "count_start",
@@ -2642,7 +2642,7 @@
             "approval": null,
             "log_event": "stock.count_start",
             "who": "stock.count",
-            "built": false
+            "built": true
         },
         "count_line_set": {
             "action": "count_line_set",
@@ -2673,7 +2673,7 @@
             "approval": null,
             "log_event": "stock.count_line",
             "who": "stock.count",
-            "built": false
+            "built": true
         },
         "count_post": {
             "action": "count_post",
@@ -2692,7 +2692,7 @@
             "approval": "deletion",
             "log_event": "stock.count_post",
             "who": "stock.count",
-            "built": false
+            "built": true
         },
         "count_cancel": {
             "action": "count_cancel",
@@ -2711,7 +2711,7 @@
             "approval": null,
             "log_event": "stock.count_cancel",
             "who": "stock.count",
-            "built": false
+            "built": true
         },
         "floor_model_set": {
             "action": "floor_model_set",
@@ -2754,7 +2754,7 @@
             "approval": null,
             "log_event": "stock.floor_model",
             "who": "stock.adjust",
-            "built": false
+            "built": true
         },
         "stock_reverse": {
             "action": "stock_reverse",
@@ -2779,7 +2779,7 @@
             "approval": null,
             "log_event": "stock.reverse",
             "who": "stock.adjust",
-            "built": false
+            "built": true
         },
         "source_create": {
             "action": "source_create",

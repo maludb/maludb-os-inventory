@@ -48,8 +48,20 @@ function db_message(Throwable $e, string $fallback): string
         return $fallback;
     }
     $text = trim((string) (preg_split('/\R|CONTEXT:/', substr($text, $at + 6))[0] ?? ''));
+    if (preg_match('/violates check constraint "([a-z0-9_]+)"/', $text, $m) === 1) {      // a table's CHECK, not a RAISE: its sentence, never the raw text
+        return DB_CHECK_SENTENCES[$m[1]] ?? $fallback;
+    }
     return $text === '' ? $fallback : $text;
 }
+
+/** The sentences of the CHECK constraints a person can meet before a trigger's own sentence does (slice 2: a balance's CHECK fires first). */
+const DB_CHECK_SENTENCES = [
+    'inventory_balances_qty_floor_model_check' => 'There are not that many floor models to take off the floor',
+    'inventory_balances_qty_allocated_check' => 'There is not that much allocated to release',
+    'inventory_adjustment_lines_qty_delta_check' => 'The quantity change is never zero.',
+    'inventory_transfers_check' => 'A transfer goes from one location to another — choose two different ones.',
+    'inventory_transactions_qty_check' => 'A movement never has a quantity of zero.',
+];
 
 /** The first column of the first row, or null. */
 function one_value(PDO $pdo, string $sql, array $args = []): mixed
