@@ -1,5 +1,14 @@
 <?php
 declare(strict_types=1);
-/** /brands/ — screen `brand-list`, built by its slice (NAV_SLICES); until then the shell's placeholder: 200 after the right (inventory.read), 403 in its words, 501 to JSON and a POST. */
-require_once dirname(__DIR__, 2) . '/app/bootstrap.php';
-render_nav_stub('brand-list', NAV_SLICES['brand-list'], 'inventory.read');
+/** /brands/?q= — the brands with their product counts and dealer program (screen `brand-list`). */
+require_once dirname(__DIR__, 2) . '/app/features/catalog/handler.php';
+require_right('inventory.read');
+$pdo = db();
+$q = request_string('q');
+$brands = find_brands($pdo, $q, true, 500);
+log_screen_view($pdo, 'brand-list');
+if (wants_json()) {
+    respond_screen(['q' => $q, 'brands' => array_map('present_brand', $brands)]);
+}
+render_screen('Brands', view('catalog/brands.php', ['brands' => $brands, 'q' => $q, 'mayWrite' => has_right('catalog.write'), 'here' => here_url(), 'notice' => inv_notice($_GET['notice'] ?? null, ['created' => ['success', 'The brand is made.'], 'saved' => ['success', 'Saved.']])]),
+    ['activeNav' => 'brand-list', 'screen' => 'brand-list', 'entity' => 'brand']);

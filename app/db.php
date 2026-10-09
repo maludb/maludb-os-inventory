@@ -35,11 +35,11 @@ function db_bool(PDO $pdo, string $sql, array $args = []): bool
     return (bool) $st->fetchColumn();
 }
 
-/** A database error in words a person can act on: only our own RAISE (P0001) is shown. */
+/** A database error in words a person can act on: only our own RAISE (P0001, or a trigger's check_violation 23514 — the referee's sentences) is shown. */
 function db_message(Throwable $e, string $fallback): string
 {
     error_log('db error: ' . $e->getMessage());
-    if (!($e instanceof PDOException) || (string) $e->getCode() !== 'P0001') {
+    if (!($e instanceof PDOException) || !in_array((string) $e->getCode(), ['P0001', '23514'], true)) {
         return $fallback;
     }
     $text = $e->getMessage();

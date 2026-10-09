@@ -250,3 +250,30 @@ set" (mattress Queen + foundation Queen); Sam (Sales), Vera (Viewer), Wes (Wareh
 (none)
 
 ## Built and proven
+**2026-10-09 — BUILT and proven by the planning model** (`tests/phase3/slice1/run.sh`: **310 checks green under php -S and under a real Apache** —
+world 9, brands 25, products 40, variants 29, identifiers 20, bundles 21, images 26, prices 22, gaps 12, import 25, visibility 21, json 25, browser 33 at
+375 × 740, 1280 × 800 and JavaScript off; the registry — 21 screens and 20 actions built, 33 placeholders — and the 26 approvals in step). Phase 2 re-run
+green (327; its placeholder checks moved from Products to Orders), Phase 0 green (42 + 517 + 511), the Phase 1 claim checks green (52), the installer's
+plan clean (57 steps). Every file of "Files" is built, plus the record picker (plugin 0.8.0) the spec's shell decision left to this slice:
+`app/picker.php`, `app/pickers.php` (sources `brand`, `supplier`, `variant` with `single=1`, `product`), `html/pick/index.php`,
+`app/views/shared/picker-rows.php`, `html/assets/js/record-picker.js`, the `#record-picker` modal in the layout and the CSS section — copied from Spaces
+with the UUID branches taken out (every Inventory key is a bigint).
+
+**Decisions taken while building (not questions):**
+- **The picker replaces two selects the spec named**: the product form's brand and the brand form's supplier are pickers (a table with its own list
+  screen — the plugin's rule); the bundle editor's component is the picker over `variant` with `single=1` instead of select2 over `/variants/pick`
+  (which stays, as the JSON rows a tool or a script may read). Brand, type, status and kind filters on the product list stay selects (filters).
+- **A trigger's `check_violation` (23514) is the referee's sentence**: the kit's `inv_guard()` and `db_message()` turned only `P0001` into a 422; the
+  catalog's triggers raise `check_violation` ("The barcode … is not a GTIN", "A supplier SKU belongs to a source", "A bundle does not contain a bundle"),
+  which answered 500. Both now admit 23514 — a kit fix every later slice inherits.
+- **`inv_int()` was declared twice** once the catalog loaded the connectors (the kit's form reader in `app/handler.php`, the normalizer's in
+  `app/sources/normalize.php`): the normalizer's is renamed `inv_norm_int()` (three files); the connector proof stays at 511.
+- **The CSV import loads `app/sources/registry.php`**, not `connectors/feed.php` alone (the interface and the HTTP client come first). A product made
+  in a row that rolls back is forgotten, so the next row makes it again; the product count is taken on commit.
+- **A search that hits an identifier, a SKU or a SKU prefix keeps only that tier** (`find_products()`): `inv_find()`'s trigram floor of 0.25 let every
+  "SMOKE …" name ride along with an exact SKU.
+- **A refused image leaves no file**: the type is sniffed after `attachment_store()`; a non-image's file is removed before the row rolls back.
+- **The identifier index is unique on (kind, value, source)**: the "MPN shared by two sizes → ambiguous" check puts the second size's MPN on its own
+  `mpn` column (as a business would), which `variant_by_identifier()` reads — two rows answer.
+- `image_add` with `image` and no `file` updates alt text, primary and order (the spec's DECISION); the manifest already names `image` (Phase 1).
+- Weights show as pounds with two decimals and lengths as inches with one (`80.0`), stored g / mm (453.592, 25.4 — the spec's DECISION).

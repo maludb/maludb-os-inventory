@@ -42,4 +42,4 @@ reads its sales, purchases and stock value through K7. Built with `htmx-php-buil
   517) — **approved by the owner 2026-10-09.** **Phase 2 — the shell — built and proven 2026-10-09**: sign-on into a finished-looking home, the
   menu of nine groups gated by rights, the tab bar, the bell, the command bar through the kernel, My settings, Notifications, Tokens, My trail, the
   attachment door, 38 placeholders naming their slices; `tests/phase2/run.sh` 327 checks green under php -S and 330 under Apache; the installer's plan
-  clean (57 steps). Next: slices 1–4 by the planning model, then the handoff.
+  clean (57 steps). **Slice 1 — the catalog — built and proven 2026-10-09** (310 checks under php -S and Apache; brands, products, variants, identifiers, bundles, images, prices with the chart, gaps, the CSV import, the record picker). Next: slice 2, then slices 3–4 and the handoff.

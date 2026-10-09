@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/inventory-action-manifest.md",
-    "generated_at": "2026-10-09T18:59:01+00:00",
+    "generated_at": "2026-10-09T19:51:42+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -66,8 +66,8 @@
                 "status",
                 "kind"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "product-add": {
             "screen": "product-add",
@@ -78,7 +78,7 @@
                 "brand",
                 "type"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "product-view": {
@@ -89,7 +89,7 @@
             "params": [
                 "tab"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "product-edit": {
@@ -98,7 +98,7 @@
             "section": "The catalog (slice 1 — the CRUD pattern)",
             "when": "to change a product's brand, type, name, description, attributes, options, how it ships, reorder default, status",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "product-images": {
@@ -107,7 +107,7 @@
             "section": "The catalog (slice 1 — the CRUD pattern)",
             "when": "the product's images: upload, order, the primary one, alt text; per variant when a size looks different",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "variant-add": {
@@ -118,7 +118,7 @@
             "params": [
                 "product"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "variant-view": {
@@ -129,7 +129,7 @@
             "params": [
                 "tab"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "variant-edit": {
@@ -138,7 +138,7 @@
             "section": "The catalog (slice 1 — the CRUD pattern)",
             "when": "to change a variant's SKU, options, barcode, MPN, dimensions, how it ships, reorder point; the prices are set on the variant with a reason",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "variant-identifiers": {
@@ -147,7 +147,7 @@
             "section": "The catalog (slice 1 — the CRUD pattern)",
             "when": "the codes sellers use for this variant (GTIN, UPC, EAN, MPN, ASIN, eBay EPID, Walmart item id, a supplier's SKU per source); add one, remove one",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "variant-bundle": {
@@ -156,7 +156,7 @@
             "section": "The catalog (slice 1 — the CRUD pattern)",
             "when": "the bundle editor: the component variants and their counts (resolved by size), the availability the components give",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "brand-list": {
@@ -167,8 +167,8 @@
             "params": [
                 "q"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "brand-add": {
             "screen": "brand-add",
@@ -176,7 +176,7 @@
             "section": "The catalog (slice 1 — the CRUD pattern)",
             "when": "to add a brand: name, website, the supplier that is its dealer program",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "brand-edit": {
@@ -185,7 +185,7 @@
             "section": "The catalog (slice 1 — the CRUD pattern)",
             "when": "to change a brand's name, website, supplier, active",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "product-type-list": {
@@ -194,8 +194,8 @@
             "section": "The catalog (slice 1 — the CRUD pattern)",
             "when": "the product types (Mattress, Foundation, …) in order; add or rename one",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "catalog-gaps": {
             "screen": "catalog-gaps",
@@ -205,8 +205,8 @@
             "params": [
                 "gap"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "catalog-import": {
             "screen": "catalog-import",
@@ -214,8 +214,8 @@
             "section": "The catalog (slice 1 — the CRUD pattern)",
             "when": "to import the business's SKUs from a CSV (name, brand, type, size, SKU, GTIN, MPN, prices): a preview of the first rows, the column mapping, the result",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "stock-levels": {
             "screen": "stock-levels",
@@ -1338,7 +1338,7 @@
             "approval": null,
             "log_event": "product.create",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "product_update": {
             "action": "product_update",
@@ -1423,7 +1423,7 @@
             "approval": null,
             "log_event": "product.update",
             "who": "catalog.write",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "product_discontinue": {
@@ -1449,7 +1449,7 @@
             "approval": null,
             "log_event": "product.discontinue",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "product_delete": {
             "action": "product_delete",
@@ -1468,7 +1468,7 @@
             "approval": "deletion",
             "log_event": "product.delete",
             "who": "records.delete",
-            "built": false
+            "built": true
         },
         "catalog_import": {
             "action": "catalog_import",
@@ -1499,7 +1499,7 @@
             "approval": null,
             "log_event": "product.import",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "variant_create": {
             "action": "variant_create",
@@ -1602,7 +1602,7 @@
             "approval": null,
             "log_event": "variant.create",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "variant_update": {
             "action": "variant_update",
@@ -1711,7 +1711,7 @@
             "approval": null,
             "log_event": "variant.update",
             "who": "catalog.write",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "variant_delete": {
@@ -1731,7 +1731,7 @@
             "approval": "deletion",
             "log_event": "variant.delete",
             "who": "records.delete",
-            "built": false
+            "built": true
         },
         "identifier_add": {
             "action": "identifier_add",
@@ -1768,7 +1768,7 @@
             "approval": null,
             "log_event": "variant.identifier_add",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "identifier_remove": {
             "action": "identifier_remove",
@@ -1787,7 +1787,7 @@
             "approval": null,
             "log_event": "variant.identifier_remove",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "bundle_set": {
             "action": "bundle_set",
@@ -1812,7 +1812,7 @@
             "approval": null,
             "log_event": "variant.bundle_set",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "image_add": {
             "action": "image_add",
@@ -1867,7 +1867,7 @@
             "approval": null,
             "log_event": "product.image_add",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "image_remove": {
             "action": "image_remove",
@@ -1886,7 +1886,7 @@
             "approval": null,
             "log_event": "product.image_remove",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "price_set": {
             "action": "price_set",
@@ -1923,7 +1923,7 @@
             "approval": "other",
             "log_event": "variant.price_set",
             "who": "prices.write",
-            "built": false
+            "built": true
         },
         "brand_save": {
             "action": "brand_save",
@@ -1966,7 +1966,7 @@
             "approval": null,
             "log_event": "brand.save",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "product_type_save": {
             "action": "product_type_save",
@@ -2009,7 +2009,7 @@
             "approval": null,
             "log_event": "product_type.save",
             "who": "catalog.write",
-            "built": false
+            "built": true
         },
         "location_create": {
             "action": "location_create",

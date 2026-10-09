@@ -79,7 +79,7 @@ final class InvConnectorManual implements InvConnector
                 continue;
             }
             $vsku = inv_str($v['sku'] ?? null, 100) ?? ($given === [] ? $sku : null);
-            $qty = inv_int($v['qty'] ?? null);
+            $qty = inv_norm_int($v['qty'] ?? null);
             $variants[] = [
                 'external_variant_id' => $vsku ?? inv_gtin_normalize($v['gtin'] ?? ($v['barcode'] ?? null)) ?? ($external . ':' . ($j + 1)),
                 'title' => inv_str($v['title'] ?? null, 300) ?? (isset($v['size']) ? ($e['title'] ?? '') . ' - ' . $v['size'] : ($e['title'] ?? '')),

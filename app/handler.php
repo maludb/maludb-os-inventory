@@ -123,8 +123,8 @@ function inv_guard(PDO $pdo, callable $step): mixed
             }
             refuse($m === 'Not found.' ? 404 : 422, $m);
         }
-        if ($e instanceof PDOException && (string) $e->getCode() === 'P0001') {
-            refuse(422, db_message($e, 'That could not be done.'));
+        if ($e instanceof PDOException && in_array((string) $e->getCode(), ['P0001', '23514'], true)) {
+            refuse(422, db_message($e, 'That could not be done.'));     // our own RAISE, or a trigger's check_violation (the referee's sentence)
         }
         if ($e instanceof PDOException && (string) $e->getCode() === '23505') {
             refuse(422, 'That name is already taken.');

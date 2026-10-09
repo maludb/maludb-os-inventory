@@ -288,7 +288,8 @@ function inv_str(mixed $v, int $max = 500): ?string
 }
 
 /** A non-negative integer or null. */
-function inv_int(mixed $v): ?int
+/** A connector value as an integer, or null (named apart from the kit's inv_int() form reader — the two load together since slice 1). */
+function inv_norm_int(mixed $v): ?int
 {
     if ($v === null || $v === '' || is_bool($v) || is_array($v)) {
         return null;
@@ -360,7 +361,7 @@ function inv_normalize_variant(array $v, array $listing, int $index): array
     if ($compare !== null && $price !== null && (float) $compare <= (float) $price) {
         $compare = null;
     }
-    $qty = inv_int($v['qty'] ?? null);
+    $qty = inv_norm_int($v['qty'] ?? null);
     $available = $v['available'] ?? null;
     $available = is_bool($available) ? $available : (is_string($available) && $available !== '' ? inv_availability_state($available) === 'in_stock' : null);
     $title = inv_str($v['title'] ?? null, 300) ?? ($options !== [] ? implode(' / ', $options) : (string) $listing['title']);
@@ -378,7 +379,7 @@ function inv_normalize_variant(array $v, array $listing, int $index): array
         'cost_price' => inv_money($v['cost_price'] ?? null),
         'availability' => inv_availability_state($v['availability'] ?? null, $available, $qty),
         'qty' => $qty,
-        'lead_time_days' => inv_int($v['lead_time_days'] ?? null),
+        'lead_time_days' => inv_norm_int($v['lead_time_days'] ?? null),
         'ships_how' => inv_ships_how($v['ships_how'] ?? null),
         'url' => inv_str($v['url'] ?? null, 1000) ?? $listing['url'],
     ];

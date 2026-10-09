@@ -179,7 +179,7 @@ function back_link(): ?array
             }
         }
     }
-    foreach (['products' => 'the product', 'variants' => 'the variant', 'brands' => 'the brand', 'locations' => 'the location', 'sources' => 'the source', 'listings' => 'the listing',
+    foreach (['products' => 'the product', 'variants' => 'the variant', 'brands' => 'the brand', 'product-types' => 'the product types', 'catalog' => 'the catalog', 'locations' => 'the location', 'sources' => 'the source', 'listings' => 'the listing',
               'suppliers' => 'the supplier', 'customers' => 'the customer', 'orders' => 'the order', 'purchasing' => 'the purchase order', 'returns' => 'the return',
               'receipts' => 'the receipt', 'transfers' => 'the transfer', 'adjustments' => 'the adjustment', 'counts' => 'the count', 'shipments' => 'the shipment', 'watches' => 'the watch'] as $dir => $label) {
         if (preg_match('#^/' . $dir . '/\d+(/[a-z_-]+)?$#', $path)) {

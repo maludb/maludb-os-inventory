@@ -80,3 +80,60 @@ html.app-skin-dark .app-tabbar { background: #1b2431; border-top-color: rgba(255
 .header-apps-menu { min-width: 260px; }
 .header-apps-menu .header-apps-list { max-height: calc(100vh - 260px); overflow-y: auto; }
 .header-apps-menu .dropdown-item.active { background: var(--bs-primary-bg-subtle, rgba(59, 130, 246, .12)); color: inherit; cursor: default; }
+
+/* RECORD PICKER (app/picker.php, shared/picker-rows.php, assets/js/record-picker.js — slice 1, 2026-10-09): the one modal that chooses a
+   record. The field's button reads as a form control and truncates; the modal keeps its search box pinned, holds a steady height on a
+   desktop and fills the screen on a phone; rows are touch targets with a visible scrollbar. */
+.record-picker-field .record-picker-open { display: flex; align-items: center; min-width: 0; cursor: pointer; min-height: 44px; }
+.record-picker-field .record-picker-open .record-picker-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.record-picker-field .record-picker-open:disabled { cursor: default; opacity: 1; }
+.record-picker-field .btn { min-height: 44px; }
+#record-picker .record-picker-search { position: sticky; top: 0; z-index: 2; background: var(--bs-modal-bg, #fff); }
+html.app-skin-dark #record-picker .record-picker-search { background: #0f172a; }
+#record-picker .record-picker-row { min-height: 44px; padding-top: .625rem; padding-bottom: .625rem; }
+#record-picker .record-picker-row.active .record-picker-detail, #record-picker .record-picker-row.active .badge { color: inherit !important; }
+#record-picker .record-picker-detail { color: var(--bs-secondary-color); }
+#record-picker-results { min-height: 160px; }
+@media (min-width: 768px) {
+    #record-picker .modal-dialog { max-width: 560px; }
+    #record-picker .modal-content { height: 70vh; }
+}
+
+/* THE CATALOG (slice 1, 2026-10-09): product cards, the variants table, the images grid, the bundle editor's rows. */
+.product-card .product-card-image { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: .5rem .5rem 0 0; background: var(--bs-light, #f5f6fa); }
+.product-card .product-card-icon { width: 100%; aspect-ratio: 4 / 3; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: var(--bs-secondary-color, #6c757d); background: var(--bs-light, #f5f6fa); border-radius: .5rem .5rem 0 0; }
+.product-image-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: .5rem .5rem 0 0; }
+.product-header-image { max-width: 160px; max-height: 120px; object-fit: cover; border-radius: .5rem; }
+.chip-row { display: flex; flex-wrap: wrap; gap: .25rem; }
+.chip-row .btn { min-height: 44px; }
+.price-inline-form .form-control { min-height: 44px; }
+.bundle-row .record-picker-field { flex: 1 1 auto; }
+
+/* THE CHART COMPONENT (shared/series-chart.php, assets/js/series-chart.js — the dataviz rules; born in slice 1 for the price history,
+   extended by slice 3 with the availability band). The three series values are the dataviz reference palette's first three categorical
+   slots in its fixed order (validated adjacent and all-pairs in both modes); nobody changes them without scripts/validate_palette.js. */
+.viz-root { --viz-series-1: #2a78d6; --viz-series-2: #eb6834; --viz-series-3: #1baf7a; --viz-good: #0ca30c; --viz-warning: #fab219; --viz-serious: #ec835a; --viz-critical: #d03b3b; --viz-neutral: #9a9893; --viz-surface: #fcfcfb;
+    position: relative; margin: 0; color: var(--bs-body-color, #1f2937); }
+html.app-skin-dark .viz-root { --viz-series-1: #3987e5; --viz-series-2: #d95926; --viz-series-3: #199e70; --viz-surface: #1a1a19; }
+.viz-root svg { display: block; width: 100%; height: auto; font-family: inherit; }
+.viz-root .viz-grid { stroke: currentColor; stroke-opacity: .15; }
+.viz-root .viz-axis text { font-size: 11px; fill: currentColor; }
+.viz-root .viz-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.viz-root .viz-marker { stroke: var(--viz-surface); stroke-width: 2; }
+.viz-root .viz-label { font-size: 11px; font-weight: 600; fill: currentColor; }
+.viz-root .viz-series-1 { stroke: var(--viz-series-1); } .viz-root .viz-series-1.viz-marker, .viz-root .viz-swatch-1 { fill: var(--viz-series-1); background: var(--viz-series-1); }
+.viz-root .viz-series-2 { stroke: var(--viz-series-2); } .viz-root .viz-series-2.viz-marker, .viz-root .viz-swatch-2 { fill: var(--viz-series-2); background: var(--viz-series-2); }
+.viz-root .viz-series-3 { stroke: var(--viz-series-3); } .viz-root .viz-series-3.viz-marker, .viz-root .viz-swatch-3 { fill: var(--viz-series-3); background: var(--viz-series-3); }
+.viz-root .viz-band-in_stock { fill: var(--viz-good); } .viz-root .viz-band-limited, .viz-root .viz-band-pre_order, .viz-root .viz-band-back_order { fill: var(--viz-warning); }
+.viz-root .viz-band-out_of_stock, .viz-root .viz-band-discontinued { fill: var(--viz-serious); } .viz-root .viz-band-unknown { fill: var(--viz-neutral); }
+.viz-root .viz-crosshair { stroke: currentColor; stroke-opacity: .4; stroke-dasharray: 3 3; pointer-events: none; }
+.viz-root .viz-hit { fill: transparent; cursor: crosshair; }
+.viz-root figcaption { font-size: 12px; color: var(--bs-secondary-color, #6c757d); margin-bottom: .25rem; }
+.viz-legend { list-style: none; display: flex; flex-wrap: wrap; gap: .25rem 1rem; padding: 0; margin: .25rem 0 0; font-size: 12px; }
+.viz-legend li { display: flex; align-items: center; gap: .4rem; }
+.viz-legend .viz-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 2px; }
+.viz-legend .viz-swatch-band { border-radius: 50%; }
+.viz-tooltip { position: absolute; z-index: 5; pointer-events: none; background: var(--bs-body-bg, #fff); color: var(--bs-body-color, #1f2937); border: 1px solid rgba(0,0,0,.15); border-radius: .375rem; padding: .35rem .5rem; font-size: 12px; box-shadow: 0 2px 8px rgba(0,0,0,.12); white-space: nowrap; }
+.viz-tooltip[hidden] { display: none; }
+.viz-root:focus { outline: 2px solid var(--bs-primary, #3454d1); outline-offset: 2px; }
+@media print, (forced-colors: active) { .viz-root .viz-series-2.viz-line { stroke-dasharray: 6 2; } .viz-root .viz-series-3.viz-line { stroke-dasharray: 2 2; } }

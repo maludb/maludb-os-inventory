@@ -207,7 +207,7 @@ const smallControls = (page, scope) => page.evaluate((s) => [...document.querySe
   await page.fill('#assistant-input', 'open the products');
   await page.click('#assistant-send');
   await page.waitForURL(BASE + '/products/');
-  await page.waitForSelector('#product-list-coming');
+  await page.waitForSelector('#product-list-content');
   ok(page.url() === BASE + '/products/', 'a navigate answer from the command bar opened /products/');
   kernelState((s) => { delete s.chat; return s; });
   const kpid = Number(fs.readFileSync(STATE_DIR + '/kernel.pid', 'utf8').trim());

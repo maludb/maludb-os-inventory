@@ -172,7 +172,7 @@ final class InvConnectorFeed implements InvConnector
     {
         $currency = inv_currency($settings['currency'] ?? null) ?? 'USD';
         $vendor = inv_str($settings['vendor'] ?? null);
-        $leadDefault = inv_int($settings['lead_time_days'] ?? null);
+        $leadDefault = inv_norm_int($settings['lead_time_days'] ?? null);
         $groups = [];
         $order = [];
         foreach ($rows as $n => $row) {
@@ -186,7 +186,7 @@ final class InvConnectorFeed implements InvConnector
             $name = inv_str($m['name'] ?? null, 300) ?? $sku ?? $gtin;
             $product = inv_str($m['product'] ?? null, 300);
             $key = $product ?? ($sku ?? $gtin);
-            $qty = inv_int($m['qty'] ?? null);
+            $qty = inv_norm_int($m['qty'] ?? null);
             $inStock = $m['in_stock'] ?? null;
             $variant = [
                 'external_variant_id' => $sku ?? $gtin,
@@ -200,7 +200,7 @@ final class InvConnectorFeed implements InvConnector
                 'currency' => inv_currency($m['currency'] ?? null) ?? $currency,
                 'availability' => $inStock !== null && $inStock !== '' ? inv_availability_state($inStock, null, $qty) : null,
                 'qty' => $qty,
-                'lead_time_days' => inv_int($m['lead_time_days'] ?? null) ?? $leadDefault,
+                'lead_time_days' => inv_norm_int($m['lead_time_days'] ?? null) ?? $leadDefault,
                 'url' => $m['url'] ?? null,
             ];
             if (!isset($groups[$key])) {

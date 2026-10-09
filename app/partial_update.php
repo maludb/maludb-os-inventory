@@ -10,7 +10,11 @@ declare(strict_types=1);
 /** endpoint → [table, the form's id field, read view, the view's id column]. Each slice adds its save endpoints here (the manifest's
  * `any field of`). Every record of Inventory is bigint-keyed. Empty until Phase 2: the first entries are the catalog's (slice 1),
  * e.g. '/products/save.php' => ['products', 'product', 'mcp_products', 'product_id']. */
-const PARTIAL_UPDATE_TARGETS = [];
+const PARTIAL_UPDATE_TARGETS = [
+    '/products/save.php' => ['products', 'product', 'mcp_products', 'product_id'],
+    '/variants/save.php' => ['product_variants', 'variant', 'mcp_product_variants', 'variant_id'],
+    '/brands/save.php' => ['brands', 'brand', 'mcp_brands', 'brand_id'],
+];
 
 function partial_update_prefill(PDO $pdo): void
 {

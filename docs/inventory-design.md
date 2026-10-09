@@ -757,6 +757,14 @@ Rules, not questions.
 
 ## 16. State
 
+**2026-10-09 — SLICE 1, THE CATALOG (the CRUD exemplar for workers), BUILT and proven** by the planning model: `tests/phase3/slice1/run.sh` 310 checks
+green under php -S and under Apache (brands and types, products with typed attributes and options, variants with GTIN-14 / size keys / imperial units /
+prices on the create, identifiers, bundles with replace semantics, images through the gated door, prices with reasons and the inline-SVG chart, the gaps,
+the CSV import in three steps, the cost wall for every role, JSON mode under action and run tokens, the browser at 375 and 1280 and without JavaScript);
+21 screens and 20 actions built. The record picker (plugin 0.8.0) came with it. Kit fixes found on the way: `inv_guard()` now turns a trigger's
+`check_violation` into the 422 it means; the normalizer's `inv_int()` renamed `inv_norm_int()`. The record and the decisions: `docs/build-specs/catalog.md`
+"Built and proven". **Next: slice 2 (locations and stock), then slice 3 the exemplar with slice 4 — the handoff.**
+
 **2026-10-09 — PHASE 1 APPROVED by the owner ("Push it and start Phase 2"); PHASE 2 THE SHELL BUILT and proven the same day.** `tests/phase2/run.sh`:
 **327 checks green under php -S, 330 under a real Apache** (sso 63, gates 104, sync 33, ingest 13, kernel_compat 16, vhost 30/33, browser 68 at 375 × 740
 and 1280 × 800 and with JavaScript off; the registry — 5 screens and 4 actions built, 38 placeholders — and the 26 approvals in step); Phase 0 re-run green

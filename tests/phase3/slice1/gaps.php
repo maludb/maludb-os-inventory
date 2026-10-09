@@ -1,0 +1,31 @@
+<?php
+/** Gaps: the pillow (no image, no GTIN), the empty bundle, a retail under MAP; the counts per chip; no_cost rows for Nora, none for Sam; Vera 403. */
+require __DIR__ . '/lib.php';
+$w = catalog_world();
+$nora = as_member(40); $sam = as_member(41); $vera = as_member(43);
+echo "Catalog gaps\n";
+act($nora, '/products/save.php', ['name' => 'SMOKE Empty set', 'type' => 'mattress', 'kind' => 'bundle', 'status' => 'active']);
+act($nora, '/variants/save.php', ['product' => product_id('SMOKE Empty set'), 'sku' => 'SMOKE-EMPTY-Q', 'option_values' => json_encode(['Size' => 'Queen'])]);
+[$c, $d] = screen($nora, '/catalog/gaps');
+ok($c === 200 && isset($d['counts']['no_gtin']) && count($d['counts']) === 6, 'the screen answers JSON with the six counts');
+$rows = $d['rows'];
+$has = static fn (string $sku, string $gap) => array_filter($rows, static fn ($r) => $r['sku'] === $sku && $r['gap'] === $gap) !== [];
+ok($has('SMOKE-NW-PIL-STD', 'no_gtin') && $has('SMOKE-NW-PIL-STD', 'no_image'), 'the pillow is named for no GTIN and no image');
+ok($has('SMOKE-NW-PIL-STD', 'retail_under_map'), 'the pillow\'s retail (59) under its MAP (69) is named');
+ok($has('SMOKE-EMPTY-Q', 'empty_bundle'), 'the empty set is named');
+ok($has('SMOKE-EMPTY-Q', 'no_retail'), 'and for no retail');
+ok(!$has('SMOKE-SET-Q', 'empty_bundle'), 'the Queen set with its components is not');
+ok($has('SMOKE-NW-PIL-STD', 'no_cost') && $d['counts']['no_cost'] >= 1, 'no_cost rows exist for Nora (she sees cost)');
+[$c, $d2] = screen($nora, '/catalog/gaps?gap=no_image');
+ok($c === 200 && $d2['rows'] !== [] && count(array_unique(array_column($d2['rows'], 'gap'))) === 1 && $d2['counts']['no_image'] === count($d2['rows']), '?gap=no_image filters; its count matches the rows');
+psql_exec("INSERT INTO inv_role_rights (role_key, right_key) VALUES ('user', 'catalog.write') ON CONFLICT DO NOTHING");
+[$c, $d3] = screen($sam, '/catalog/gaps');
+ok($c === 200 && $d3['counts']['no_cost'] === 0 && !in_array('no_cost', array_column($d3['rows'], 'gap'), true), 'Sam (given catalog.write, no cost): no no_cost rows (the function\'s rule)');
+psql_exec("DELETE FROM inv_role_rights WHERE role_key = 'user' AND right_key = 'catalog.write'");
+ok(page($sam, '/catalog/gaps')['code'] === 403 && page($vera, '/catalog/gaps')['code'] === 403, 'Sam (as the fixture has him) and Vera: 403 (catalog.write)');
+$h = page($nora, '/catalog/gaps')['body'];
+ok(str_contains($h, 'id="gaps-table"') && str_contains($h, 'id="catalog-gaps-chips"') && preg_match('/id="gap-row-\d+-no_gtin"/', $h) === 1 && str_contains($h, 'id="catalog-gaps-chip-no_cost"'), 'the table, the chips with counts, the row ids; the no_cost chip for Nora');
+psql_exec("INSERT INTO inv_role_rights (role_key, right_key) VALUES ('user', 'catalog.write') ON CONFLICT DO NOTHING");
+ok(!str_contains(page($sam, '/catalog/gaps')['body'], 'id="catalog-gaps-chip-no_cost"'), 'no no_cost chip for Sam');
+psql_exec("DELETE FROM inv_role_rights WHERE role_key = 'user' AND right_key = 'catalog.write'");
+finish();

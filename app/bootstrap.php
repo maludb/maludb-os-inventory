@@ -89,6 +89,7 @@ require_once __DIR__ . '/api/kernel.php';
 require_once __DIR__ . '/features/shell/nav.php';        // the ONE menu table, the badge, the placeholders (Phase 2)
 require_once __DIR__ . '/features/shell/queries.php';    // the bell, the business name, my roles
 require_once __DIR__ . '/switcher.php';                  // the application switcher (K31)
+require_once __DIR__ . '/picker.php';                    // the record picker (plugin 0.8.0; slice 1 brought it)
 
 // A JSON caller (the kernel's actions server, an approval replay) never receives PHP's own
 // error output — a 500 it can parse instead of an HTML fragment.
