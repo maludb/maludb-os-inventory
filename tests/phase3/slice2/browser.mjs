@@ -222,7 +222,7 @@ const queen = Number(sql("SELECT id FROM product_variants WHERE sku = 'SMOKE-NW-
 }
 const reg = JSON.parse(fs.readFileSync(new URL('../../../mcp/action_registry.json', import.meta.url), 'utf8'));
 const built = (o) => Object.values(o).filter((x) => x.built).length;
-ok(built(reg.screens) === 43 && built(reg.actions) === 45, `the registry reads ${built(reg.screens)} screens and ${built(reg.actions)} actions built (43 and 45)`);
+ok(built(reg.screens) >= 43 && built(reg.actions) >= 45, `the registry reads ${built(reg.screens)} screens and ${built(reg.actions)} actions built (at least slice 2's 43 and 45)`);
 await browser.close();
 console.log(failed === 0 ? `all ${passed} passed` : `${failed} FAILED (${passed} passed)`);
 process.exit(failed === 0 ? 0 : 1);

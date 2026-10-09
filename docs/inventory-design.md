@@ -757,6 +757,19 @@ Rules, not questions.
 
 ## 16. State
 
+**2026-10-09 — SLICE 3, SOURCES, CONNECTORS, LISTINGS AND MATCHING — THE EXEMPLAR — BUILT and proven** by the planning model:
+`tests/phase3/slice3/run.sh` 290 checks green under php -S and under Apache, against the fixture server (six sources made through the handlers and one
+from a template; credentials sealed, rotated and in no view, log or policy; probes ok / blocked / misconfigured with the ladder; the worker's pulls
+pass live — Shopify by GTIN, the dealer feed by supplier SKU with the price sheet kept by the feed, the marked-up site by MPN + size, the Woo store by a
+marketplace id, the manual sheet; snapshots on change only, the ETag cache, a price change written once; Pull now queued; a live search; two full pulls
+remove, a partial removes nothing, blocked × 3 pauses with a notice per rung; the agent's match rule; the queue with Accept, Dismiss, Pick another,
+Score again, Not ours; the listing view's chart with bands and a heartbeat; price sheets; health; the survey's `--record`; JSON mode and an eval run
+that persists nothing; the browser at 1280 and 375 and without JavaScript); 54 screens and 63 actions built. **Found and fixed:** `db/019` — an ok
+probe or search no longer moves `last_ok_at` (a probed source waited a whole schedule for its first pull); the Buyer's notice is keyed per rung of a
+STREAK (the spec's key silenced every later streak); a blocked probe tells the Buyer; `view()`'s `$template` collides with a data key of that name; one
+`availability_chip()`. The record and the decisions: `docs/build-specs/sources.md` "Built and proven". **Next: slice 4 (Find, availability, watches),
+then the handoff to workers (slices 5–9).**
+
 **2026-10-09 — SLICE 2, LOCATIONS AND STOCK (the ledger's screens), BUILT and proven** by the planning model: `tests/phase3/slice2/run.sh` 325 checks
 green under php -S and under Apache (locations as cards with the archive rule; receipts scanned on a phone — the scan rule, GTIN / UPC / SKU, put-away,
 the cost following the receipt, a PO received; adjustments with reasons and the cost wall; transfers sent and received short with the difference left on

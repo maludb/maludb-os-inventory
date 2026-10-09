@@ -1,0 +1,287 @@
+{
+  "products": [
+    {
+      "id": 8001,
+      "title": "CloudRest Hybrid Mattress",
+      "handle": "cloudrest-hybrid-mattress",
+      "body_html": "<p>A medium-firm hybrid: pocketed coils under three inches of gel foam. 120-night trial.</p>",
+      "published_at": "2026-03-01T09:00:00-05:00",
+      "created_at": "2026-02-20T10:00:00-05:00",
+      "updated_at": "2026-10-01T08:30:00-04:00",
+      "vendor": "Northwind Sleep",
+      "product_type": "Mattress",
+      "tags": [
+        "hybrid",
+        "medium-firm",
+        "bed-in-a-box",
+        "CertiPUR-US"
+      ],
+      "variants": [
+        {
+          "id": 41001,
+          "title": "Twin",
+          "option1": "Twin",
+          "option2": null,
+          "option3": null,
+          "sku": "NW-CR-T",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "699.00",
+          "grams": 27000,
+          "compare_at_price": "899.00",
+          "position": 1,
+          "product_id": 8001,
+          "created_at": "2026-02-20T10:00:00-05:00",
+          "updated_at": "2026-10-01T08:30:00-04:00",
+          "barcode": "850123450004"
+        },
+        {
+          "id": 41002,
+          "title": "Twin XL",
+          "option1": "Twin XL",
+          "option2": null,
+          "option3": null,
+          "sku": "NW-CR-TXL",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "749.00",
+          "grams": 29000,
+          "compare_at_price": "949.00",
+          "position": 2,
+          "product_id": 8001,
+          "created_at": "2026-02-20T10:00:00-05:00",
+          "updated_at": "2026-10-01T08:30:00-04:00",
+          "barcode": "850123450011"
+        },
+        {
+          "id": 41003,
+          "title": "Full",
+          "option1": "Full",
+          "option2": null,
+          "option3": null,
+          "sku": "NW-CR-F",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "899.00",
+          "grams": 36000,
+          "compare_at_price": "899.00",
+          "position": 3,
+          "product_id": 8001,
+          "created_at": "2026-02-20T10:00:00-05:00",
+          "updated_at": "2026-10-01T08:30:00-04:00",
+          "barcode": "850123450028"
+        },
+        {
+          "id": 41004,
+          "title": "Queen",
+          "option1": "Queen",
+          "option2": null,
+          "option3": null,
+          "sku": "NW-CR-Q",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "949.00",
+          "grams": 41000,
+          "compare_at_price": "1299.00",
+          "position": 4,
+          "product_id": 8001,
+          "created_at": "2026-02-20T10:00:00-05:00",
+          "updated_at": "2026-10-01T08:30:00-04:00",
+          "barcode": "850123450035"
+        },
+        {
+          "id": 41005,
+          "title": "King",
+          "option1": "King",
+          "option2": null,
+          "option3": null,
+          "sku": "NW-CR-K",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": false,
+          "price": "1299.00",
+          "grams": 52000,
+          "compare_at_price": "1599.00",
+          "position": 5,
+          "product_id": 8001,
+          "created_at": "2026-02-20T10:00:00-05:00",
+          "updated_at": "2026-10-01T08:30:00-04:00",
+          "barcode": "850123450042"
+        },
+        {
+          "id": 41006,
+          "title": "Cal King",
+          "option1": "Cal King",
+          "option2": null,
+          "option3": null,
+          "sku": "NW-CR-CK",
+          "requires_shipping": true,
+          "taxable": true,
+          "featured_image": null,
+          "available": true,
+          "price": "1299.00",
+          "grams": 52000,
+          "compare_at_price": null,
+          "position": 6,
+          "product_id": 8001,
+          "created_at": "2026-02-20T10:00:00-05:00",
+          "updated_at": "2026-10-01T08:30:00-04:00",
+          "barcode": "8-50123-45005-9"
+        }
+      ],
+      "images": [
+        {
+          "id": 90001,
+          "created_at": "2026-02-20T10:00:00-05:00",
+          "position": 1,
+          "updated_at": "2026-02-20T10:00:00-05:00",
+          "product_id": 8001,
+          "variant_ids": [],
+          "src": "https://cdn.example.test/s/files/1/cloudrest-front.jpg",
+          "width": 1600,
+          "height": 1200
+        }
+      ],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "Twin",
+            "Twin XL",
+            "Full",
+            "Queen",
+            "King",
+            "Cal King"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8002,
+      "title": "Harbor Latex Topper",
+      "handle": "harbor-latex-topper",
+      "body_html": "<p>Talalay latex, GOLS certified.</p>",
+      "published_at": "2026-04-01T09:00:00-04:00",
+      "created_at": "2026-03-20T10:00:00-04:00",
+      "updated_at": "2026-09-28T08:30:00-04:00",
+      "vendor": "Harbor & Pine",
+      "product_type": "Topper",
+      "tags": "latex, GOLS, topper",
+      "variants": [
+        {
+          "id": 41011,
+          "title": "Queen / 2 inch",
+          "option1": "Queen",
+          "option2": "2 inch",
+          "option3": null,
+          "sku": "HP-LT-Q-2",
+          "available": true,
+          "price": "349.00",
+          "grams": 9000,
+          "compare_at_price": null,
+          "position": 1,
+          "product_id": 8002,
+          "barcode": "850123450103"
+        },
+        {
+          "id": 41012,
+          "title": "Queen / 3 inch",
+          "option1": "Queen",
+          "option2": "3 inch",
+          "option3": null,
+          "sku": "HP-LT-Q-3",
+          "available": true,
+          "price": "449.00",
+          "grams": 13500,
+          "compare_at_price": null,
+          "position": 2,
+          "product_id": 8002,
+          "barcode": "850123450110"
+        },
+        {
+          "id": 41013,
+          "title": "King / 3 inch",
+          "option1": "King",
+          "option2": "3 inch",
+          "option3": null,
+          "sku": "HP-LT-K-3",
+          "available": true,
+          "price": "549.00",
+          "grams": 17000,
+          "compare_at_price": null,
+          "position": 3,
+          "product_id": 8002,
+          "barcode": "850123450127"
+        }
+      ],
+      "images": [],
+      "options": [
+        {
+          "name": "Size",
+          "position": 1,
+          "values": [
+            "Queen",
+            "King"
+          ]
+        },
+        {
+          "name": "Thickness",
+          "position": 2,
+          "values": [
+            "2 inch",
+            "3 inch"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8003,
+      "title": "Northwind Down-Alternative Pillow",
+      "handle": "northwind-down-alternative-pillow",
+      "body_html": "",
+      "published_at": "2026-04-01T09:00:00-04:00",
+      "created_at": "2026-03-20T10:00:00-04:00",
+      "updated_at": "2026-09-28T08:30:00-04:00",
+      "vendor": "Northwind Sleep",
+      "product_type": "Pillow",
+      "tags": [],
+      "variants": [
+        {
+          "id": 41021,
+          "title": "Default Title",
+          "option1": "Default Title",
+          "option2": null,
+          "option3": null,
+          "sku": "NW-PIL-STD",
+          "available": true,
+          "price": "59.00",
+          "grams": 1200,
+          "compare_at_price": "59.00",
+          "position": 1,
+          "product_id": 8003,
+          "barcode": ""
+        }
+      ],
+      "images": [],
+      "options": [
+        {
+          "name": "Title",
+          "position": 1,
+          "values": [
+            "Default Title"
+          ]
+        }
+      ]
+    }
+  ]
+}

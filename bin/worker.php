@@ -74,7 +74,7 @@ exit($report['errors'] === [] ? 0 : 1);
  */
 function worker_pass_pulls(PDO $pdo, int $limit, DateTimeImmutable $now): array
 {
-    // if (is_file(APP_ROOT . '/app/sources/pulls.php')) { require_once APP_ROOT . '/app/sources/pulls.php'; return sources_run_due_pulls($pdo, $limit, $now); }
+    if (is_file(APP_ROOT . '/app/sources/pulls.php')) { require_once APP_ROOT . '/app/sources/pulls.php'; return sources_run_due_pulls($pdo, $limit, $now); }
     return ['sources' => 0, 'pulls' => 0, 'stub' => true];
 }
 

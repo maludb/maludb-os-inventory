@@ -1,0 +1,51 @@
+<?php
+/** Credentials (sources.md "Proof — Credentials"): sealed, a label and four characters, in no view; rotated; the kind the connector takes; the feed's basic credential opens /feed-protected.csv; the secret in no fact, message, log or policy. */
+require __DIR__ . '/lib.php';
+$w = sources_world();
+$nora = as_member(40);
+$since = last_activity_id();
+$shop = $w['src_shopify'];
+$token = 'shpat_fixture_token';
+echo "1. A Storefront token\n";
+[$c, $d] = screen($nora, '/sources/' . $shop . '/credential');
+ok($c === 200 && $d['kinds'] === ['bearer'] && $d['credential'] === null, 'the credential screen offers the kinds the connector takes (bearer)');
+[$c, $b] = act($nora, '/sources/credential.php', ['source' => $shop, 'kind' => 'basic', 'label' => 'x', 'username' => 'u', 'password' => 'p']);
+ok($c === 422 && fields($b)['kind'] === 'The shopify connector takes a bearer token, not basic.', 'a kind the connector does not take: "' . (fields($b)['kind'] ?? '') . '"');
+[$c, $b] = act($nora, '/sources/credential.php', ['source' => $shop, 'kind' => 'bearer', 'label' => 'Storefront token (dealer)', 'token' => $token]);
+ok($c === 200 && $b['last4'] === 'oken' && $b['rotated'] === false && !str_contains(json_encode($b), $token), 'set: label, last four "oken", and the token in no reply');
+$cred = q('SELECT * FROM source_credentials WHERE source_id = :s', ['s' => $shop])[0];
+ok((int) source_row($shop)['credential_id'] === (int) $cred['id'] && $cred['label'] === 'Storefront token (dealer)' && $cred['last4'] === 'oken', 'a source_credentials row, the source pointed at it');
+$opened = trim((string) shell_exec('php -r ' . escapeshellarg('require "' . dirname(__DIR__, 3) . '/app/bootstrap.php"; require "' . dirname(__DIR__, 3) . '/app/sources/registry.php"; $s = db()->query("SELECT convert_from(ciphertext, \'UTF8\') FROM source_credentials WHERE id = ' . (int) $cred['id'] . '")->fetchColumn(); echo inv_open($s)["token"];')));
+ok($opened === $token, 'the ciphertext opens to the token through inv_open() (the proof\'s own call)');
+ok(!str_contains(json_encode(q('SELECT * FROM mcp_source_credentials')), $token) && !str_contains(json_encode(q('SELECT * FROM mcp_sources')), $token), 'the token is in no mcp_* view');
+ok(!str_contains(implode(',', array_column(q("SELECT column_name FROM information_schema.columns WHERE table_name = 'mcp_source_credentials'"), 'column_name')), 'cipher'), 'mcp_source_credentials has no ciphertext column');
+$l = last_log('source.credential_set', $since);
+ok($l !== null && after_of($l) == ['credential_id' => (int) $cred['id'], 'kind' => 'bearer', 'label' => 'Storefront token (dealer)', 'last4' => 'oken', 'rotated' => false], 'source.credential_set logs the id, kind, label and last four — nothing else');
+$html = page($nora, '/sources/' . $shop)['body'];
+ok(str_contains($html, '…oken') && !str_contains($html, $token), 'the source page shows "…oken" and never the value');
+$form = page($nora, '/sources/' . $shop . '/credential')['body'];
+ok(!str_contains($form, $token) && preg_match('~name="token"[^>]*value=""~', $form) === 1, 'the form\'s token input is never pre-filled');
+echo "2. Rotate\n";
+[$c, $b] = act($nora, '/sources/credential.php', ['source' => $shop, 'kind' => 'bearer', 'label' => 'Storefront token (rotated)', 'token' => 'shpat_fixture_token']);
+$rows = q('SELECT id FROM source_credentials WHERE source_id = :s', ['s' => $shop]);
+ok($c === 200 && $b['rotated'] === true && count($rows) === 1 && (int) $rows[0]['id'] !== (int) $cred['id'], 'rotated: a new row, the old one gone');
+ok(after_of(last_log('source.credential_set', $since))['rotated'] === true, '…logged rotated: true');
+[$c, $b] = act(as_member(41), '/sources/credential.php', ['source' => $shop, 'kind' => 'bearer', 'label' => 'x', 'token' => 'y']);
+ok($c === 403, 'Sam (no sources.credentials) is refused');
+ok(page(as_member(43), '/sources/' . $shop . '/credential')['code'] === 403, 'Vera cannot open the credential form');
+echo "3. A basic credential on a protected feed\n";
+[$c, $b] = act($nora, '/sources/save.php', ['connector' => 'feed', 'name' => 'SMOKE Protected feed', 'role' => 'supplier', 'supplier' => $w['dealer'], 'schedule_minutes' => '0',
+    'settings_feed' => ['_present' => '1', 'url' => FIX . '/feed-protected.csv', 'mapping' => ['supplier_sku' => 'Item Number', 'gtin' => 'UPC']]]);
+$pf = (int) $b['record_id'];
+[$c, $b] = act($nora, '/sources/probe.php', ['source' => $pf]);
+ok($c === 200 && $b['state'] === 'misconfigured' && str_contains($b['message'], '401'), 'the protected file without a credential: misconfigured, HTTP 401');
+[$c, $b] = act($nora, '/sources/credential.php', ['source' => $pf, 'kind' => 'basic', 'label' => 'Dealer portal', 'username' => 'dealer', 'password' => 's3cret-feed']);
+ok($c === 200 && $b['last4'] === 'feed', 'a basic credential set (…feed)');
+[$c, $b] = act($nora, '/sources/probe.php', ['source' => $pf]);
+ok($c === 200 && $b['state'] === 'ok', 'with it the probe reads the file: ' . ($b['message'] ?? ''));
+$dump = json_encode(q("SELECT after, before FROM activity_log")) . json_encode(q('SELECT policy, error FROM source_pulls')) . json_encode($b);
+ok(!str_contains($dump, 's3cret-feed') && !str_contains($dump, $token), 'the password and the token are in no log row, pull policy, error or reply');
+act(as_member(1), '/sources/delete.php', ['source' => $pf]);
+// the pulls proof reads the Shopify store's public catalog (products.json): the Storefront token goes back off it
+psql_exec("UPDATE sources SET credential_id = NULL WHERE id = $shop; DELETE FROM source_credentials WHERE source_id = $shop");
+finish();

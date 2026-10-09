@@ -18,6 +18,7 @@ const PARTIAL_UPDATE_TARGETS = [
     '/receipts/save.php' => ['goods_receipts', 'receipt', 'mcp_goods_receipts', 'goods_receipt_id'],
     '/adjustments/save.php' => ['inventory_adjustments', 'adjustment', 'mcp_inventory_adjustments', 'adjustment_id'],
     '/transfers/save.php' => ['inventory_transfers', 'transfer', 'mcp_inventory_transfers', 'transfer_id'],
+    '/sources/save.php' => ['sources', 'source', 'mcp_sources', 'source_id'],
 ];
 
 function partial_update_prefill(PDO $pdo): void

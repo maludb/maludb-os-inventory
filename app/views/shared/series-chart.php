@@ -4,7 +4,7 @@
  * it changes), a marker at every change point, four recessive gridlines, the unit on the y axis, the first / middle / last dates on the x
  * axis, the last value direct-labelled; a legend with ≥ 2 series; the availability band (slice 3) under the plot; the table beneath is the
  * same data (the accessibility channel). series-chart.js adds the crosshair and the tooltip; without JavaScript the labels and the table read.
- * Data: id, series = [['key', 'label', 'points' => [[iso8601, number, reason?], …]]], bands = [['from', 'to'|null, 'state']], unit, table_id,
+ * Data: id, series = [['key', 'label', 'points' => [[iso8601, number, reason?, no_marker?], …]]], bands = [['from', 'to'|null, 'state']], unit, table_id,
  * empty, title?, tz?
  */
 $bands = $bands ?? [];
@@ -51,7 +51,7 @@ $slot = 0;
             <?php foreach ($pts as $i => $p): $t = (int) strtotime((string) $p[0]); $x = round($X($t), 1); $y = round($Y((float) $p[1]), 1);
                 $d .= $i === 0 ? "M $x $y" : " H $x V $y"; $prevY = $y; endforeach; $d .= ' H ' . round($X($tMax), 1); ?>
             <path class="viz-line viz-series-<?= $slot ?>" d="<?= e($d) ?>" />
-            <?php foreach ($pts as $p): ?><circle class="viz-marker viz-series-<?= $slot ?>" r="4" cx="<?= round($X((int) strtotime((string) $p[0])), 1) ?>" cy="<?= round($Y((float) $p[1]), 1) ?>"><title><?= e($s['label']) ?> <?= e($fmtV((float) $p[1])) ?> on <?= e($fmtD((int) strtotime((string) $p[0]))) ?><?= !empty($p[2]) ? ' · ' . e($p[2]) : '' ?></title></circle><?php endforeach; ?>
+            <?php foreach ($pts as $p): if (!empty($p[3])) { continue; } /* a heartbeat point (slice 3) draws no marker */ ?><circle class="viz-marker viz-series-<?= $slot ?>" r="4" cx="<?= round($X((int) strtotime((string) $p[0])), 1) ?>" cy="<?= round($Y((float) $p[1]), 1) ?>"><title><?= e($s['label']) ?> <?= e($fmtV((float) $p[1])) ?> on <?= e($fmtD((int) strtotime((string) $p[0]))) ?><?= !empty($p[2]) ? ' · ' . e($p[2]) : '' ?></title></circle><?php endforeach; ?>
             <?php $last = end($pts); ?><text class="viz-label" x="<?= $x0 + $w + 4 ?>" y="<?= round($Y((float) $last[1]) + 4, 1) ?>"><?= e($fmtV((float) $last[1])) ?></text>
         <?php endforeach; ?>
         <rect class="viz-hit" x="<?= $x0 ?>" y="<?= $y0 ?>" width="<?= $w ?>" height="<?= $h ?>" />

@@ -15,6 +15,10 @@ declare(strict_types=1);
  *   --rate N      requests a second per host (default 1; never more than 2)
  *   --ua "…"      the user-agent (default INV_CRAWL_USER_AGENT, else a survey UA naming this repository)
  *   --timeout S   per request (default 15)
+ *   --record      with a database (the kit's db()): each surveyed host updates its template's survey_result (open when the Shopify column is
+ *                 open; blocked when blocked and the platform recognised; not_platform when no and not recognised; unverified otherwise) and
+ *                 surveyed_at, matched by host against base_url; prints what changed; logged source.update on the template (source cron).
+ *                 Never from the planning sandbox, whose rate limit answers for the sites (connectors.md §8).
  *
  * Needs no database and no kernel. Exit 0 when every host answered something; 1 when none could be reached (a sandbox
  * that rate-limits outbound HTTP shows as transport errors — run it from a shell on the build server).
@@ -29,6 +33,7 @@ const SURVEY_DEFAULT_HOSTS = [
 
 $args = array_slice($argv, 1);
 $json = false;
+$record = false;
 $rate = 1.0;
 $timeout = 15;
 $ua = null;
@@ -37,6 +42,8 @@ for ($i = 0; $i < count($args); $i++) {
     $a = $args[$i];
     if ($a === '--json') {
         $json = true;
+    } elseif ($a === '--record') {
+        $record = true;
     } elseif ($a === '--rate') {
         $rate = min(2.0, max(0.2, (float) ($args[++$i] ?? 1)));
     } elseif ($a === '--timeout') {
@@ -73,7 +80,7 @@ $rows = [];
 $reached = 0;
 foreach ($hosts as $host) {
     $http = new InvHttp(['user_agent' => $ua, 'rate_per_second' => $rate, 'cache_dir' => $cacheDir, 'timeout' => $timeout, 'max_bytes' => 2 * 1024 * 1024]);
-    $base = "https://$host";
+    $base = (preg_match('~^(127\.0\.0\.1|localhost)(:\d+)?$~', $host) ? 'http' : 'https') . "://$host";      // a local fixture server speaks http
     $row = ['host' => $host, 'robots' => null, 'crawl_delay' => null, 'shopify' => null, 'woocommerce' => null, 'jsonld' => null, 'sitemap' => null, 'note' => [], 'checked_at' => gmdate('c')];
     $robots = $http->robotsFor($base . '/');
     $row['robots'] = $robots['state'];
@@ -177,5 +184,33 @@ if ($json) {
         printf("%-{$w}s %-9s %-12s %-8s %-8s %s\n", $r['host'], $r['shopify'], $r['woocommerce'], $r['jsonld'], $r['sitemap'], implode('; ', $r['note']));
     }
     echo "\n", count($rows), " hosts; open/blocked/no = the connector's answer; robots = robots.txt disallows the path; error = no answer (a sandbox that rate-limits outbound HTTP shows here).\n";
+}
+if ($record) {
+    require_once __DIR__ . '/../app/bootstrap.php';
+    $pdo = db();
+    $GLOBALS['__public_door'] = 'cron';
+    $templates = $pdo->query('SELECT id, key, base_url, survey_result FROM source_templates WHERE base_url IS NOT NULL')->fetchAll();
+    $hostOf = static function (string $url): string {
+        $p = parse_url($url);
+        return preg_replace('~^www\.~', '', strtolower((string) ($p['host'] ?? ''))) . (isset($p['port']) ? ':' . $p['port'] : '');
+    };
+    $changed = 0;
+    foreach ($rows as $r) {
+        $platform = in_array('platform:shopify', $r['note'], true);
+        $result = match (true) {
+            $r['shopify'] === 'open' => 'open',
+            $r['shopify'] === 'blocked' && $platform => 'blocked',
+            $r['shopify'] === 'no' && !$platform => 'not_platform',
+            default => 'unverified',
+        };
+        foreach ($templates as $t) {
+            if ($hostOf((string) $t['base_url']) !== preg_replace('~^www\.~', '', $r['host'])) { continue; }
+            $pdo->prepare('UPDATE source_templates SET survey_result = :r, surveyed_at = now() WHERE id = :id')->execute(['r' => $result, 'id' => $t['id']]);
+            log_activity($pdo, 'source.update', 'source_template', (int) $t['id'], ['actor_member_id' => null, 'source' => 'cron', 'after' => ['key' => $t['key'], 'survey_result' => $result, 'was' => $t['survey_result']]]);
+            fwrite(STDOUT, sprintf("recorded %s: %s → %s\n", $t['key'], $t['survey_result'], $result));
+            $changed++;
+        }
+    }
+    fwrite(STDOUT, $changed . " template" . ($changed === 1 ? '' : 's') . " recorded.\n");
 }
 exit($reached > 0 ? 0 : 1);

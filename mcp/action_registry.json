@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/inventory-action-manifest.md",
-    "generated_at": "2026-10-09T21:03:25+00:00",
+    "generated_at": "2026-10-09T21:59:35+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -470,8 +470,8 @@
                 "role",
                 "health"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "source-add": {
             "screen": "source-add",
@@ -483,7 +483,7 @@
                 "supplier",
                 "connector"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "source-view": {
@@ -494,7 +494,7 @@
             "params": [
                 "tab"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "source-edit": {
@@ -503,7 +503,7 @@
             "section": "Sources, connectors, listings and matching — THE EXEMPLAR (slice 3)",
             "when": "to change a source's name, URL, role, supplier, schedule, rate, user-agent and connector settings",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "source-listings": {
@@ -516,7 +516,7 @@
                 "q",
                 "availability"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "source-pulls": {
@@ -527,7 +527,7 @@
             "params": [
                 "status"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "source-credential": {
@@ -536,7 +536,7 @@
             "section": "Sources, connectors, listings and matching — THE EXEMPLAR (slice 3)",
             "when": "to set or replace the source's credential (kind, label, the secret — shown never again)",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "source-template-list": {
@@ -545,8 +545,8 @@
             "section": "Sources, connectors, listings and matching — THE EXEMPLAR (slice 3)",
             "when": "the known stores and feeds with their connector and the survey's finding; pick one to add",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "listing-view": {
             "screen": "listing-view",
@@ -557,7 +557,7 @@
                 "listing_variant",
                 "since"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "match-queue": {
@@ -570,8 +570,8 @@
                 "q",
                 "min_confidence"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "supplier-item-list": {
             "screen": "supplier-item-list",
@@ -582,8 +582,8 @@
                 "supplier",
                 "q"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "find": {
             "screen": "find",
@@ -2852,7 +2852,7 @@
             "approval": "other",
             "log_event": "source.create",
             "who": "sources.write",
-            "built": false
+            "built": true
         },
         "source_update": {
             "action": "source_update",
@@ -2931,7 +2931,7 @@
             "approval": null,
             "log_event": "source.update",
             "who": "sources.write",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "source_credential_set": {
@@ -2969,7 +2969,7 @@
             "approval": "other",
             "log_event": "source.credential_set",
             "who": "sources.credentials",
-            "built": false
+            "built": true
         },
         "source_schedule_set": {
             "action": "source_schedule_set",
@@ -3000,7 +3000,7 @@
             "approval": "other",
             "log_event": "source.schedule_set",
             "who": "sources.write",
-            "built": false
+            "built": true
         },
         "source_probe": {
             "action": "source_probe",
@@ -3019,7 +3019,7 @@
             "approval": null,
             "log_event": "source.probe",
             "who": "sources.write",
-            "built": false
+            "built": true
         },
         "source_pull": {
             "action": "source_pull",
@@ -3038,7 +3038,7 @@
             "approval": null,
             "log_event": "source.pull_start",
             "who": "sources.write",
-            "built": false
+            "built": true
         },
         "source_search": {
             "action": "source_search",
@@ -3069,7 +3069,7 @@
             "approval": null,
             "log_event": "source.search",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "source_pause": {
             "action": "source_pause",
@@ -3094,7 +3094,7 @@
             "approval": null,
             "log_event": "source.pause",
             "who": "sources.write",
-            "built": false
+            "built": true
         },
         "source_resume": {
             "action": "source_resume",
@@ -3113,7 +3113,7 @@
             "approval": null,
             "log_event": "source.resume",
             "who": "sources.write",
-            "built": false
+            "built": true
         },
         "source_delete": {
             "action": "source_delete",
@@ -3132,7 +3132,7 @@
             "approval": "deletion",
             "log_event": "source.delete",
             "who": "records.delete",
-            "built": false
+            "built": true
         },
         "listing_match": {
             "action": "listing_match",
@@ -3157,7 +3157,7 @@
             "approval": null,
             "log_event": "listing.match",
             "who": "listings.match",
-            "built": false
+            "built": true
         },
         "listing_unmatch": {
             "action": "listing_unmatch",
@@ -3176,7 +3176,7 @@
             "approval": null,
             "log_event": "listing.unmatch",
             "who": "listings.match",
-            "built": false
+            "built": true
         },
         "match_propose": {
             "action": "match_propose",
@@ -3213,7 +3213,7 @@
             "approval": null,
             "log_event": "listing.propose",
             "who": "listings.match",
-            "built": false
+            "built": true
         },
         "proposal_accept": {
             "action": "proposal_accept",
@@ -3232,7 +3232,7 @@
             "approval": null,
             "log_event": "listing.accept",
             "who": "listings.match",
-            "built": false
+            "built": true
         },
         "proposal_dismiss": {
             "action": "proposal_dismiss",
@@ -3251,7 +3251,7 @@
             "approval": null,
             "log_event": "listing.dismiss",
             "who": "listings.match",
-            "built": false
+            "built": true
         },
         "listing_forget": {
             "action": "listing_forget",
@@ -3270,7 +3270,7 @@
             "approval": "deletion",
             "log_event": "listing.forget",
             "who": "listings.match",
-            "built": false
+            "built": true
         },
         "supplier_item_save": {
             "action": "supplier_item_save",
@@ -3325,7 +3325,7 @@
             "approval": null,
             "log_event": "supplier.item_save",
             "who": "suppliers.write",
-            "built": false
+            "built": true
         },
         "supplier_item_remove": {
             "action": "supplier_item_remove",
@@ -3344,7 +3344,7 @@
             "approval": null,
             "log_event": "supplier.item_remove",
             "who": "suppliers.write",
-            "built": false
+            "built": true
         },
         "watch_set": {
             "action": "watch_set",

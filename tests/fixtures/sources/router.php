@@ -18,6 +18,10 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 $h = static fn(string $name) => $_SERVER['HTTP_' . strtoupper(str_replace('-', '_', $name))] ?? null;
 $body = file_get_contents('php://input') ?: '';
 
+// slice 3: a second version of a fixture (the Queen's price and availability changed) — INV_FIX_VARIANT, or the word in $INV_FIX_TMP/variant
+$fixTmp = getenv('INV_FIX_TMP') ?: ($_SERVER['INV_FIX_TMP'] ?? '');
+$variant = getenv('INV_FIX_VARIANT') ?: ($fixTmp !== '' && is_file("$fixTmp/variant") ? trim((string) file_get_contents("$fixTmp/variant")) : '');
+
 $log = getenv('INV_FIX_LOG') ?: ($_SERVER['INV_FIX_LOG'] ?? null);
 if ($log) {
     file_put_contents($log, json_encode(['method' => $method, 'path' => $path, 'query' => $q, 'ua' => $h('User-Agent'), 'if_none_match' => $h('If-None-Match'), 'if_modified_since' => $h('If-Modified-Since'), 'auth' => $h('Authorization') !== null, 'storefront_token' => $h('X-Shopify-Storefront-Access-Token'), 't' => microtime(true)]) . "\n", FILE_APPEND | LOCK_EX);
@@ -52,7 +56,7 @@ if ($path === '/') {
 if ($path === '/products.json') {
     $page = (int) ($q['page'] ?? 1);
     if ($page <= 1) {
-        $etagged('shopify/products-page1.json', '"p1-v1"');
+        $variant === 'v2' ? $etagged('shopify/products-page1.v2.json', '"p1-v2"') : $etagged('shopify/products-page1.json', '"p1-v1"');
     }
     $send(200, $file('shopify/products-page2.json'));
 }
@@ -159,6 +163,9 @@ if ($path === '/feed.xlsx') {
 
 // ---- walls, blocks and redirects
 if ($path === '/wall') {
+    $send(200, $file('walls/cloudflare.html'), 'text/html; charset=UTF-8', ['Server' => 'cloudflare']);
+}
+if (str_starts_with($path, '/wall/')) {                       // slice 3: a walled store — everything under /wall/ is the bot wall
     $send(200, $file('walls/cloudflare.html'), 'text/html; charset=UTF-8', ['Server' => 'cloudflare']);
 }
 if ($path === '/wall-503') {

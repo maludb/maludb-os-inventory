@@ -1,0 +1,5 @@
+<?php /** The raw fields the connector kept (`listing-raw`, listings.match only): a definition list; images as thumbnails from their URLs. Data: raw */ ?>
+<div class="card mb-3" id="listing-raw"><div class="card-header"><h5 class="card-title mb-0">Raw fields</h5></div><div class="card-body fs-12">
+    <?php if (!empty($raw['images'])): ?><div class="d-flex flex-wrap gap-2 mb-2"><?php foreach ((array) $raw['images'] as $img): if (!is_string($img) || !preg_match('#^https?://#', $img)) { continue; } ?><img src="<?= e($img) ?>" alt="" loading="lazy" referrerpolicy="no-referrer" style="width:64px;height:64px;object-fit:cover" class="rounded border"><?php endforeach; ?></div><?php endif; ?>
+    <dl class="row mb-0"><?php foreach ((array) $raw as $k => $v): if ($k === 'images') { continue; } ?><dt class="col-5 col-md-3 text-muted fw-normal"><?= e(str_replace('_', ' ', (string) $k)) ?></dt><dd class="col-7 col-md-9 mb-1 text-break"><?= e(is_scalar($v) || $v === null ? (is_bool($v) ? ($v ? 'yes' : 'no') : (string) $v) : json_encode($v, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)) ?></dd><?php endforeach; ?></dl>
+</div></div>

@@ -61,7 +61,18 @@ const DB_CHECK_SENTENCES = [
     'inventory_adjustment_lines_qty_delta_check' => 'The quantity change is never zero.',
     'inventory_transfers_check' => 'A transfer goes from one location to another — choose two different ones.',
     'inventory_transactions_qty_check' => 'A movement never has a quantity of zero.',
+    'sources_check' => 'A supplier source names its supplier — choose the supplier, or make it a reference source.',
+    'sources_rate_per_second_check' => 'The rate is between 0.1 and 10 requests a second.',
+    'match_proposals_confidence_check' => 'A confidence is between 0 and 1.',
 ];
+
+/** A RAISE's own sentence whatever its code (the caller decides the status): the text after "ERROR:", up to the CONTEXT. */
+function db_raise_text(Throwable $e): string
+{
+    $text = $e->getMessage();
+    $at = strpos($text, 'ERROR:');
+    return $at === false ? 'That could not be done.' : trim((string) (preg_split('/\R|CONTEXT:/', substr($text, $at + 6))[0] ?? ''));
+}
 
 /** The first column of the first row, or null. */
 function one_value(PDO $pdo, string $sql, array $args = []): mixed

@@ -149,3 +149,11 @@ details.card > summary { list-style: none; cursor: pointer; }
 details.card > summary::-webkit-details-marker { display: none; }
 details.card > summary::after { content: "\25BE"; margin-left: auto; opacity: .6; }
 details.card[open] > summary::after { content: "\25B4"; }
+
+/* Slice 3 — sources, listings and the match queue. */
+.queue-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: .25rem; }
+.queue-actions form { margin: 0; }
+.queue-actions .queue-pick { grid-column: 1 / -1; display: flex; gap: .25rem; align-items: stretch; }
+.queue-actions .queue-pick > :first-child { flex: 1 1 auto; min-width: 0; }
+.source-sub legend { float: none; }
+.credential-field[hidden], .source-sub[hidden] { display: none !important; }

@@ -327,3 +327,50 @@ it `buyer` by SQL for the agent checks, as the shipped manifest does).
 (none)
 
 ## Built and proven
+**2026-10-09 — BUILT and proven by the planning model — THE EXEMPLAR** (`tests/phase3/slice3/run.sh` on the scratch database `inv_dev3` with the
+fixture server on 8606: **290 checks green under php -S and under a real Apache** — world 6, sources 39, credentials 18, probe 16, pulls 45, removal and the ladder 25, matching
+20, queue 25, listing view 19, price sheets 8, health and templates 11, survey 5, json 19, browser 32 at 1280 × 800, 375 × 740 and JavaScript off; the
+registry — **54 screens and 63 actions built**, 21 placeholders — and the approvals in step). Slice 2 re-run green (325), slice 1 (310), Phase 2 (329, its placeholder count 21), Phase 0 (42 + 517 + 511), the Phase 1 claim
+checks (52), the installer's plan clean (57 steps). Every file of "Files" is built, plus
+`tests/fixtures/sources/shopify/products-page1.v2.json` and two router additions (a fixture's second version by `INV_FIX_VARIANT` or the word in
+`$INV_FIX_TMP/variant`; everything under `/wall/` is the bot wall) and **`db/019_probe_not_a_pull.sql`**. The worker's `pulls` pass is live
+(`bin/worker.php`'s hook uncommented — the only change there).
+
+**Found and fixed (not questions):**
+- **A probe made a new source look pulled** (`db/016` `inv_source_pull_finish()`): an `ok` finish of ANY kind set `last_ok_at`, the clock of
+  `inv_sources_due()` and `inv_source_health()` — so probing a new source put its health at "ok" and kept the worker from its FIRST real pull for a
+  whole schedule (a day for a marked-up site). `db/019` copies db/016's body and moves `last_ok_at` for `scheduled` and `manual` pulls only; a probe or a
+  search that answers still clears the ladder and records the robots verdict.
+- **The Buyer's notice key silenced every later streak**: `pull_failed:<source>:<rung>` is remembered by the outbox, so a source resumed and failing
+  again was never told its first and second rungs again. The key now names the streak too — `pull_failed:<source>:<rung>:<the streak's first failed
+  pull>` — once per rung of a streak, as the spec meant (DECISION; `inv_pull_notify()`).
+- **A blocked or failed probe tells the Buyer too** (the spec's probe proof says so; the glue's `run_probe()` calls `inv_pull_notify()`).
+- **`view()` keeps the template's path in `$template`**: a view whose data carries a key named `template` loses it — the source form's data key is
+  `tpl`. A kit lesson for every later slice.
+- **One `availability_chip()`**: slice 1 had written one; slice 3's vocabulary (limited `success`, discontinued `dark`) replaced its colours.
+- **The kit's `db_message()`** maps the sources' CHECKs (`sources_check` → "A supplier source names its supplier — choose the supplier, or make it a
+  reference source.", the rate's) and gains `db_raise_text()` (a RAISE's sentence whatever its code — the agent's refused accept answers 403 with the
+  SQL's own words).
+- **Run facts are fetched on an agent's first admission only** (`app/bootstrap.php`), so `source_search` asks the kernel for the run's facts itself
+  when an agent calls it, to honour `is_eval` (nothing persists under an eval run).
+
+**Decisions taken while building (not questions):**
+- **The proof ages rows instead of `INV_WORKER_NOW`**: the SQL's `now()` decides what is due, removed or backing off, and PHP cannot move it —
+  `age_source()` moves a source's `last_ok_at`, `backoff_until`, its pulls' times and its listings' `last_seen_at` back by the interval.
+- **The fixtures differ from the spec's counts in three places, and the proof follows the fixtures**: the Shopify fixture has ten listing variants
+  (6 + 3 + 1), eight matched by GTIN (the two Queen toppers carry the catalog's barcodes too); eighteen templates are seeded, not nineteen; the
+  marked-up page's King carries the same GTIN as ours, so rule 3 (MPN + size) is proven with our King's barcode cleared for that one pull.
+- **The matcher needs candidates**: the world adds a King topper with no barcode (the Shopify King topper scores 0.513 against it — name words, size,
+  type) and titles the price sheet's rows "SMOKE Cloudrest Hybrid Twin XL — phone quote" / "SMOKE Cloudrest Foundation Queen — phone quote" (brand in
+  the title, all name words, size → 0.75 and 0.63).
+- **The feed mapping is a text field with the file's headers as a datalist**, not a select with a free-text escape: a header, a column number or a
+  letter in one control, with no script and no JavaScript needed; a column the file lacks is the field's error both on "Read the file" and on save.
+- **The credential form renders each field once across the connector's kinds** (a `basic` and an `sftp_password` share username and password); the
+  script hides and disables the fields the chosen kind does not take.
+- **A search's `size` narrows the answer's rows** (a listing variant of another size is left out), never the query sent to the store.
+- **The match queue's row**: Accept · Dismiss · Not ours in one row, Pick another (the picker) beneath it, Score again under them when a proposal exists
+  (it is the row's fourth button when none does).
+- **The source form's sub-forms are fieldsets the script disables when not chosen**, so only the chosen connector's settings are posted; with
+  JavaScript off all are posted and the handler reads only the chosen connector's (`settings_<connector>[…]`).
+- A partial pull is not a failure: it clears the ladder (the schema's), and it never removes (the glue's).
+- The templates screen is `sources.write`'s (the menu's right), as Phase 2's matrix holds.

@@ -117,7 +117,7 @@ function gap_chip(string $gap): string
 function availability_chip(?string $availability): string
 {
     if ($availability === null) { return ''; }
-    $c = match ($availability) { 'in_stock' => 'success', 'limited', 'pre_order', 'back_order' => 'warning', 'out_of_stock', 'discontinued' => 'danger', default => 'secondary' };
+    $c = match ($availability) { 'in_stock', 'limited' => 'success', 'pre_order', 'back_order' => 'warning', 'out_of_stock' => 'danger', 'discontinued' => 'dark', default => 'secondary' };   // sources.md's vocabulary of the seven states
     return '<span class="badge bg-soft-' . $c . ' text-' . $c . '">' . e(str_replace('_', ' ', $availability)) . '</span>';
 }
 
