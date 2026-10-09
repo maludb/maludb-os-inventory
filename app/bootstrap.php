@@ -86,7 +86,9 @@ require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/directory.php';
 require_once __DIR__ . '/mail.php';
 require_once __DIR__ . '/api/kernel.php';
-// The shell's navigation (app/features/shell/nav.php) is Phase 2's; the kit stands without it.
+require_once __DIR__ . '/features/shell/nav.php';        // the ONE menu table, the badge, the placeholders (Phase 2)
+require_once __DIR__ . '/features/shell/queries.php';    // the bell, the business name, my roles
+require_once __DIR__ . '/switcher.php';                  // the application switcher (K31)
 
 // A JSON caller (the kernel's actions server, an approval replay) never receives PHP's own
 // error output — a 500 it can parse instead of an HTML fragment.

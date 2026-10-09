@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/inventory-action-manifest.md",
-    "generated_at": "2026-10-05T21:57:15+00:00",
+    "generated_at": "2026-10-09T18:59:01+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -17,7 +17,7 @@
             "section": "Home, me and the shell (Phase 2 and slice 9)",
             "when": "what the bell holds (a watch fired, a line at risk, a pull failed, a supplier's acknowledgment or tracking, a return, the morning note), and to mark it read",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "trail": {
@@ -33,7 +33,7 @@
                 "purchase_order",
                 "member"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "my-settings": {
@@ -42,7 +42,7 @@
             "section": "Home, me and the shell (Phase 2 and slice 9)",
             "when": "how I am told (email, a text for the watches I chose, which kinds), my time zone",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "tokens": {
@@ -51,7 +51,7 @@
             "section": "Home, me and the shell (Phase 2 and slice 9)",
             "when": "my own MCP tokens: mint one, revoke one",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "product-list": {
@@ -67,7 +67,7 @@
                 "kind"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "product-add": {
             "screen": "product-add",
@@ -168,7 +168,7 @@
                 "q"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "brand-add": {
             "screen": "brand-add",
@@ -195,7 +195,7 @@
             "when": "the product types (Mattress, Foundation, …) in order; add or rename one",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "catalog-gaps": {
             "screen": "catalog-gaps",
@@ -206,7 +206,7 @@
                 "gap"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "catalog-import": {
             "screen": "catalog-import",
@@ -215,7 +215,7 @@
             "when": "to import the business's SKUs from a CSV (name, brand, type, size, SKU, GTIN, MPN, prices): a preview of the first rows, the column mapping, the result",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "stock-levels": {
             "screen": "stock-levels",
@@ -230,7 +230,7 @@
                 "below_reorder"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "movement-list": {
             "screen": "movement-list",
@@ -245,7 +245,7 @@
                 "to"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "floor-model-list": {
             "screen": "floor-model-list",
@@ -256,7 +256,7 @@
                 "location"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "location-list": {
             "screen": "location-list",
@@ -265,7 +265,7 @@
             "when": "the locations as cards: kind, department, sellable, allows negative, on-hand count",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "location-add": {
             "screen": "location-add",
@@ -307,7 +307,7 @@
                 "location"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "receipt-add": {
             "screen": "receipt-add",
@@ -351,7 +351,7 @@
                 "reason"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "adjustment-add": {
             "screen": "adjustment-add",
@@ -394,7 +394,7 @@
                 "location"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "transfer-add": {
             "screen": "transfer-add",
@@ -437,7 +437,7 @@
                 "location"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "count-add": {
             "screen": "count-add",
@@ -471,7 +471,7 @@
                 "health"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "source-add": {
             "screen": "source-add",
@@ -546,7 +546,7 @@
             "when": "the known stores and feeds with their connector and the survey's finding; pick one to add",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "listing-view": {
             "screen": "listing-view",
@@ -571,7 +571,7 @@
                 "min_confidence"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "supplier-item-list": {
             "screen": "supplier-item-list",
@@ -583,7 +583,7 @@
                 "q"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "find": {
             "screen": "find",
@@ -601,7 +601,7 @@
                 "ships_within"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "watch-list": {
             "screen": "watch-list",
@@ -614,7 +614,7 @@
                 "member"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "customer-list": {
             "screen": "customer-list",
@@ -627,7 +627,7 @@
                 "archived"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "customer-add": {
             "screen": "customer-add",
@@ -673,7 +673,7 @@
                 "to"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "order-add": {
             "screen": "order-add",
@@ -759,7 +759,7 @@
                 "location"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "shipment-list": {
             "screen": "shipment-list",
@@ -773,7 +773,7 @@
                 "undelivered"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "shipment-view": {
             "screen": "shipment-view",
@@ -797,7 +797,7 @@
                 "no_tracking"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "purchase-order-add": {
             "screen": "purchase-order-add",
@@ -861,7 +861,7 @@
                 "dropships"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "supplier-add": {
             "screen": "supplier-add",
@@ -899,7 +899,7 @@
             "when": "the feed keys: label, consumer kind, the partner price list, rate limits, usage today, last used, rotated or revoked; mint, rotate, revoke",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "feed-key-add": {
             "screen": "feed-key-add",
@@ -917,7 +917,7 @@
             "when": "the partner price lists: name, percent off retail, the keys using each",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "price-list-add": {
             "screen": "price-list-add",
@@ -948,7 +948,7 @@
                 "awaiting_disposition"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "return-add": {
             "screen": "return-add",
@@ -998,7 +998,7 @@
                 "status"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "report-list": {
             "screen": "report-list",
@@ -1007,7 +1007,7 @@
             "when": "the reports as cards: stock value, sell-through and cover, sales summary and margin, price exceptions, source health and reliability, lead-time actuals",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "report": {
             "screen": "report",
@@ -1037,7 +1037,7 @@
                 "to"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "admin-settings": {
             "screen": "admin-settings",
@@ -1046,7 +1046,7 @@
             "when": "the settings: the business (name, contact, address — the doors and the crawler's user-agent), currency, units, time zone, Sales sees cost, the supplier sees the phone for which shipping kinds, the feed shows quantities, link lifetimes, feed rate limits, the sizes and their synonyms, the attribute keys, reorder defaults, the cost source, the thresholds (cost move, reference undercut, acknowledgment days), the Buyer, the crawl policy (user-agent, rate, back-off, max pages, cadences, removed-after, heartbeat), the attachment limit",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "sequence-list": {
             "screen": "sequence-list",
@@ -1055,7 +1055,7 @@
             "when": "the document sequences (sales orders, purchase orders, receipts, returns, adjustments, transfers, counts): prefix, next value, padding",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "tax-rate-list": {
             "screen": "tax-rate-list",
@@ -1064,7 +1064,7 @@
             "when": "the tax rates with the default marked; archived apart",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "tax-rate-add": {
             "screen": "tax-rate-add",
@@ -1091,7 +1091,7 @@
             "when": "the reason codes for adjustments and returns, in order, with whether each changes quantity",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "reason-code-add": {
             "screen": "reason-code-add",
@@ -1118,7 +1118,7 @@
             "when": "the agents holding a role here, their last run, their pending and failed dispatches — read-only; hiring and grants link to the kernel",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "dispatch-list": {
             "screen": "dispatch-list",
@@ -1130,7 +1130,7 @@
                 "agent"
             ],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "connection-list": {
             "screen": "connection-list",
@@ -1139,7 +1139,7 @@
             "when": "which sibling applications read what of ours (the five shares) and when — the kernel's facts, read-only",
             "params": [],
             "built": false,
-            "stub": false
+            "stub": true
         },
         "customer-door": {
             "screen": "customer-door",
@@ -1202,7 +1202,7 @@
             "approval": null,
             "log_event": "prefs.save",
             "who": "own",
-            "built": false
+            "built": true
         },
         "notification_read": {
             "action": "notification_read",
@@ -1221,7 +1221,7 @@
             "approval": null,
             "log_event": "notification.read",
             "who": "own",
-            "built": false
+            "built": true
         },
         "token_mint": {
             "action": "token_mint",
@@ -1240,7 +1240,7 @@
             "approval": null,
             "log_event": "token.mint",
             "who": "own",
-            "built": false
+            "built": true
         },
         "token_revoke": {
             "action": "token_revoke",
@@ -1259,7 +1259,7 @@
             "approval": null,
             "log_event": "token.revoke",
             "who": "own",
-            "built": false
+            "built": true
         },
         "product_create": {
             "action": "product_create",

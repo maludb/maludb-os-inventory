@@ -1,13 +1,17 @@
 <?php
 declare(strict_types=1);
-/** / — home. Phase 0: a placeholder that proves the sign-on landed (who you are, the roles the kernel sent); the shell and the home screen are Phase 2 (docs/build-specs/sso-shell.md). */
+/** / — home (screen `home`, Phase 2: the regions as empty states naming their slice; the bell real). Slice 9 replaces this with the real one (reports-admin.md). */
 require_once dirname(__DIR__) . '/app/bootstrap.php';
+require_once dirname(__DIR__) . '/app/features/home/queries.php';
+require_once dirname(__DIR__) . '/app/features/settings/present.php';
 require_login();
+require_human();
 $pdo = db();
-$me = current_member();
+$me = (int) current_member_id();
 log_screen_view($pdo, 'home');
-$roles = $pdo->query('SELECT r.role_key, r.name FROM inv_roles r WHERE r.role_key = ANY (inv_member_roles(app_current_member_id())) ORDER BY r.sort_order')->fetchAll();
+$s = home_summary($pdo, $me);
 if (wants_json()) {
-    respond_screen(['member_id' => (int) $me['id'], 'display_name' => $me['display_name'], 'roles' => array_column($roles, 'role_key'), 'phase' => 'Phase 0: the shell is Phase 2']);
+    respond_screen(['note' => null, 'at_risk' => null, 'sources' => null, 'unmatched' => null, 'po_ack' => null, 'today' => null, 'my_orders' => null, 'warehouse' => null, 'admin' => null,
+        'bell' => array_map('present_notification', $s['bell']), 'may' => $s['may'], 'phase' => 'Phase 2: the regions are slice 9\'s']);
 }
-echo view('home/placeholder.php', ['me' => $me, 'roles' => $roles]);
+render_screen('Home', view('home/dashboard.php', ['s' => $s, 'tz' => member_timezone(), 'seesCost' => sees_cost()]), ['activeNav' => 'home', 'screen' => 'home']);

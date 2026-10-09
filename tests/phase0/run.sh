@@ -63,8 +63,8 @@ health=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$PORT/api/v1/h
 hbody=$(curl -s "http://127.0.0.1:$PORT/api/v1/health" | php -r 'echo json_decode(stream_get_contents(STDIN), true)["application"] ?? "";'); check "$hbody" "inventory" "…naming the application inventory"
 url=$(php bin/dev_handoff.php 40)
 first=$(curl -s -o /dev/null -w '%{http_code}' -c /tmp/inv-phase0-jar "$url"); check "$first" "302" "a hand-off opens a session (302 to /)"
-home=$(curl -s -b /tmp/inv-phase0-jar "http://127.0.0.1:$PORT/"); echo "$home" | grep -q 'id="home-member">SMOKE Nora<' && hm=yes || hm=no; check "$hm" "yes" "the home placeholder names the signed-in member"
-echo "$home" | grep -q 'Buyer' && hr=yes || hr=no; check "$hr" "yes" "…and the roles the kernel sent"
+home=$(curl -s -b /tmp/inv-phase0-jar "http://127.0.0.1:$PORT/"); echo "$home" | grep -q 'id="header-user-name">SMOKE Nora<' && hm=yes || hm=no; check "$hm" "yes" "the home (the shell, Phase 2) names the signed-in member"
+echo "$home" | grep -q 'id="header-role-badge">Buyer<' && hr=yes || hr=no; check "$hr" "yes" "…and wears the badge of the highest role the kernel sent (Buyer)"
 again=$(curl -s -o /dev/null -w '%{http_code}' "$url"); check "$again" "403" "the same token a second time is refused (replay)"
 bad_url=$(APP_KEY=other php bin/dev_handoff.php 40 | sed "s#http://127.0.0.1:$PORT##")
 aud=$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$PORT$bad_url"); check "$aud" "403" "a token for another application is refused (audience)"

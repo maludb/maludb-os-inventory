@@ -307,3 +307,39 @@ The fixture (`bin/dev_directory.json`): 1 the owner (super-admin), 40 Nora (buye
 (none)
 
 ## Built and proven
+**2026-10-09 — Phase 1 approved by the owner; Phase 2 BUILT and proven the same day** (`tests/phase2/run.sh`: **327 checks green under php -S,
+330 under a real Apache** serving the rendered `deploy/apache-inventory.conf` with the internal vhost on 8607 — sso 63, gates 104, sync 33, ingest 13,
+kernel_compat 16, vhost 30/33, browser 68; the registry and the approvals in step; Phase 0 re-run green against the shell (42 + 517); the Phase 1
+claim checks green (52); the installer's `plan` clean — 57 steps, 9 notes). Built exactly the files above: `app/features/shell/{nav,queries}.php`
+(the menu table, the badge through `inv_member_roles()`, `record_url()` — the one route map a notification and a trail row link by, `NAV_SLICES`,
+`render_nav_stub()`), `app/features/home/queries.php`, `app/features/settings/{queries,present}.php` (`NOTICE_KINDS` — the thirteen kinds of db/013),
+`app/features/activity/{queries,present}.php`, `app/attachments.php` (`attachment_store()`, `attachment_delete()`, `attachment_path()`,
+`inv_can_see_attachment()`, the MIME allow-list of DECISION 16), the layout and the partials, `html/index.php`, `login.php`, `notifications.php`,
+`settings/*`, `trail.php`, `assistant/ask.php`, `files.php`, and the **38 placeholders** each `render_nav_stub(...)`. The trail's rows partial is
+`app/views/activity/rows.php` beside `trail.php`; the bell's count partial `app/views/shared/bell.php`.
+
+**Decisions taken while building (not questions):**
+- **The application switcher (K31, 2026-10-09)** is in the header — `app/switcher.php` and `app/views/shared/app-switcher.php` copied from Spaces
+  (the kernel's `docs/build-specs/kernel-app-switcher.md`; both plugins 0.9.0): the Helpdesk button and the applications dropdown. It renders
+  nothing until the kernel answers `GET /api/v1/apps/mine.php`, so the proofs (a fake kernel without that route) see no switcher. Not in the
+  spec's file list (written before K31); every application carries it now.
+- **The record picker (plugin 0.8.0)** is NOT in this phase: the modal and `html/assets/js/record-picker.js` arrive with slice 1, whose forms are
+  the first to choose a record (brand, product type). The layout has no `#record-picker` yet.
+- **The menu counts** the spec's gates proof named ("Vera 15 items") were a guess written before the table: with the table as it stands a Viewer
+  sees **22** items (every `inventory.read` item), Nora **34** (everything but the Admin group's nine), the owner **43**. Proven as such.
+- **`/products/new` is a 404, not the placeholder's 200**: the vhost rewrites `/x/new` to `x/form.php`, a file slice 1 has not built; Apache and
+  the dev router both answer 404 (as Spaces' `/pages/new` did). The vhost proof says so.
+- **Cost on the body**: the layout stamps `data-sees-cost="0|1"` on `<body>` (from `sees_cost()`, read once) beside handing `$seesCost` to the page,
+  so a partial or a script may say "cost withheld" without another query.
+- **A refusal in the command bar is swapped**: the layout's htmx config swaps nothing above 3xx, so `#assistant-reply` carries an
+  `hx-on::before-swap` that lets a 4xx (the kernel's words) and a 503 ("The kernel is not reachable right now.") land in the bar. Spaces' bar
+  showed only the browser's error state for those.
+- **`prefs_save` refuses `timezone`** (the manifest names the parameter) in words — the time zone is the directory's; the field is not in the form.
+- **The `home` and `trail` controllers are real files** (slice 9's rows): the registry reads them as built (5 screens), as the spec foresaw.
+- **A defect of the kit (Phase 0), shared with Spaces and GL, fixed here**: `mirror_apply_member()` wrote `job_title`, `phone` and `timezone` on
+  conflict from whatever the row carried — a hand-off's claims carry none, so every sign-on blanked them (the time zone to UTC) until the feed's
+  next pass, and the comment in `html/sso.php` claimed the opposite. Now a key the row does not carry keeps the stored value (`CASE WHEN … given`);
+  the sync proof signs Noor on after the feed delivered `America/Chicago` and her settings still show it. The siblings owe the same fix (told
+  in the kernel's CLAUDE.md).
+- **The log is append-only for `inventory_rw`**: the ingest proof's fixture rows carry `token_id` in the INSERT (an UPDATE on `activity_log` is
+  refused by the grants — right).

@@ -757,6 +757,23 @@ Rules, not questions.
 
 ## 16. State
 
+**2026-10-09 — PHASE 1 APPROVED by the owner ("Push it and start Phase 2"); PHASE 2 THE SHELL BUILT and proven the same day.** `tests/phase2/run.sh`:
+**327 checks green under php -S, 330 under a real Apache** (sso 63, gates 104, sync 33, ingest 13, kernel_compat 16, vhost 30/33, browser 68 at 375 × 740
+and 1280 × 800 and with JavaScript off; the registry — 5 screens and 4 actions built, 38 placeholders — and the 26 approvals in step); Phase 0 re-run green
+against the shell (42 + 517); the Phase 1 claim checks green (52); the installer's `plan` clean (57 steps, 9 notes). What exists: a person lands signed
+in on a home whose regions name their slices and whose Unread card is real; the sidebar of `nav_groups()` (nine groups, every item gated by a right, the
+Admin group for its holders), the bottom tab bar Home · Find · Orders · Stock · Me, the header with the business name, the badge of the highest role,
+the bell with its count and the application switcher (K31); the command bar through the kernel's chat endpoint (a reply, a paused action, a navigate,
+the kernel down — all in the bar); My settings (how I am told — the thirteen kinds of db/013 —, who I am here, the time zone read-only), Notifications
+(mark one, mark all, the kind chips, a link to the record through `record_url()`), Tokens (minted and shown once in a warning box, revoked with a
+confirm), My trail (own rows in words, a record's by `source` / `order` / `purchase_order` / `product` / `variant`, another person's by `member` for the
+admin or `reports.read`); the gated attachment door and `app/attachments.php`; 38 placeholders each 200 after its right, 403 in the right's words, 501
+to JSON and a POST. The record is `docs/build-specs/sso-shell.md` "Built and proven" — with the decisions taken (the switcher in, the record picker
+slice 1's, the menu counts as the table gives them, `/products/new` a 404 until slice 1, the command bar swapping refusals) and **one kit defect fixed:
+a hand-off blanked the job title, phone and time zone the feed had delivered** (`mirror_apply_member()` now keeps a stored value when the row does
+not carry the key; Spaces and GL have the same lines). The repository was pushed to GitHub the same day (the five earlier commits). **Next: slice 1
+(the catalog — the CRUD pattern, with the record picker), slice 2 (locations and stock), then the exemplar (slice 3) with Find (slice 4) — the handoff.**
+
 **PHASE 0, SECOND HALF — BUILT and proven 2026-10-05**, by four builders in parallel on the planning model and every proof re-run by the
 lead. **The schema** `db/001`–`015` (the kernel contract copied from Knowledge's shape with Inventory's appended audit keys; the five
 roles and thirty rights; settings with the sizes and their synonyms, sequences and tax rates on GL's shapes; attachments and notes;

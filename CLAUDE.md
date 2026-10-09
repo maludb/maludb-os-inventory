@@ -114,7 +114,7 @@ The handoff is a clean checkpoint with everything a worker needs in this reposit
    the shape of Consultant Tracking's `time-core.md` (screens, files, query-function signatures, handlers, manifest entries, log
    events, notifications, vocabulary, out of scope, proof, "Open questions" EMPTY). **The owner approves Phase 1 as a whole
    before any PHP.**
-4. **Phase 2** (`sso-shell`), **slice 1** (the catalog — the CRUD pattern), **slice 2** (locations and stock).
+4. **Phase 2** (`sso-shell`) — **BUILT and proven 2026-10-09** (Phase 1 approved the same day; 327 / 330 checks; the record in the spec's "Built and proven" and design §16), **slice 1** (the catalog — the CRUD pattern; brings the record picker, plugin 0.8.0), **slice 2** (locations and stock).
 5. **Slice 3, sources, connectors, listings and matching — THE EXEMPLAR**, with **slice 4 (Find, availability and watches)**
    beside it: the novel surface (a source being read, an offer being remembered, a listing becoming ours, a salesperson asking
    "can we sell this") that every later slice composes; each with its proof suite green at 375 and 1280.

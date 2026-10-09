@@ -39,4 +39,7 @@ reads its sales, purchases and stock value through K7. Built with `htmx-php-buil
   with their fixtures (511 checks), `maludb-os.json`, the two agents' job descriptions, ten skills, the deploy templates; the kernel's installer plan reads the repository clean; the live survey of fourteen brand sites recorded (design §0.2, §16). **Phase 1
   written 2026-10-05** — the tool surface (83 records + 7 activity tools), the action manifest (108 screens, 132 actions, 26 approvals in
   sync), the registry, the connector spec, ten slice specs with every manifest row claimed once (52 checks), db/016–017 (the schema proof at
-  517) — **for the owner's checkpoint; no PHP until it is approved.**
+  517) — **approved by the owner 2026-10-09.** **Phase 2 — the shell — built and proven 2026-10-09**: sign-on into a finished-looking home, the
+  menu of nine groups gated by rights, the tab bar, the bell, the command bar through the kernel, My settings, Notifications, Tokens, My trail, the
+  attachment door, 38 placeholders naming their slices; `tests/phase2/run.sh` 327 checks green under php -S and 330 under Apache; the installer's plan
+  clean (57 steps). Next: slices 1–4 by the planning model, then the handoff.
