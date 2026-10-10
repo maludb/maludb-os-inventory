@@ -106,7 +106,11 @@ function inv_ref(PDO $pdo, string $name, ?int $keep, string $sql, string $label,
     return (int) $v;
 }
 
-/** Run a step: our own sentence (DomainException) or the database's RAISE is a 422 ('Not found.' a 404); a duplicate a 422. Anything else is a 500. */
+/**
+ * Run a step: our own sentence (DomainException) or the database's RAISE is a 422 ('Not found.' a 404); a duplicate a 422; the schema's
+ * no_data_found a 404 and insufficient_privilege a 403 in their own words; a foreign key a 422 in words. Anything else (a missing GRANT
+ * included) is a 500.
+ */
 function inv_guard(PDO $pdo, callable $step): mixed
 {
     try {
@@ -131,6 +135,16 @@ function inv_guard(PDO $pdo, callable $step): mixed
         }
         if ($e instanceof PDOException && (string) $e->getCode() === '23505') {
             refuse(422, 'That name is already taken.');
+        }
+        if ($e instanceof PDOException && (string) $e->getCode() === 'P0002') {
+            refuse(404, db_raise_text($e) . '.');                         // the schema's no_data_found: "No such order" — a 404 in its words
+        }
+        if ($e instanceof PDOException && (string) $e->getCode() === '42501' && !str_starts_with(db_raise_text($e), 'permission denied')) {
+            refuse(403, db_raise_text($e));                               // the schema's insufficient_privilege: the right it names, in words
+        }
+        if ($e instanceof PDOException && (string) $e->getCode() === '23503') {
+            error_log('db error: ' . $e->getMessage());
+            refuse(422, 'That refers to a record that is not here.');     // a foreign key: never the raw constraint text
         }
         throw $e;
     }

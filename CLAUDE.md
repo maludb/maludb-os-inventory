@@ -139,6 +139,8 @@ connector is a class and a fixture, never a change to the worker or the matcher.
 - `view()` keeps the template's path in `$template` — never name a data key `template` (the source form passes `tpl`).
 - `one_value()` answers null for a boolean `false` (it is `fetchColumn()`): read a boolean through `one_row()`.
 - A refusal that points at a record throws `DomainException('sentence|id')` inside `inv_guard()`: JSON callers get `record_id` in the error body.
+- `inv_guard()` speaks the schema's refusals: P0001 / check_violation 422, no_data_found ("No such order") 404, insufficient_privilege 403 in
+  its words, a unique violation 422, a foreign key 422 "That refers to a record that is not here."; anything else is a 500 (a missing GRANT too).
 - `with_back()` keeps a fragment last (`/watches/?back=…#watch-row-7`); a record with no page of its own answers its list row in `record_url()`.
 - A partial that loads as a card scrolls into view uses `hx-trigger="intersect once"` — `revealed` never fires in this shell.
 - The SQL's `now()` decides what is due, stale or removed: proofs AGE rows (`age_source()`), they never set `INV_WORKER_NOW`.
