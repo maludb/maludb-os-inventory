@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/inventory-action-manifest.md",
-    "generated_at": "2026-10-10T13:06:23+00:00",
+    "generated_at": "2026-10-10T14:34:35+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -796,8 +796,8 @@
                 "awaiting_ack",
                 "no_tracking"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "purchase-order-add": {
             "screen": "purchase-order-add",
@@ -810,7 +810,7 @@
                 "reorder",
                 "variant"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "purchase-order-view": {
@@ -821,7 +821,7 @@
             "params": [
                 "tab"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "purchase-order-edit": {
@@ -830,7 +830,7 @@
             "section": "Purchasing, drop-ship orders, receiving and the supplier's door (slice 6)",
             "when": "to change a draft purchase order's supplier, ship-to, lines, costs, expected date, notes",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "purchase-order-send": {
@@ -839,7 +839,7 @@
             "section": "Purchasing, drop-ship orders, receiving and the supplier's door (slice 6)",
             "when": "the purchase order as the supplier will see it, with their link; Send by email, or Mark placed with the portal reference",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "purchase-order-receive": {
@@ -848,7 +848,7 @@
             "section": "Purchasing, drop-ship orders, receiving and the supplier's door (slice 6)",
             "when": "to receive against it: a receipt drafted from the open lines at a location (opens the receipt)",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "supplier-list": {
@@ -860,8 +860,8 @@
                 "q",
                 "dropships"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "supplier-add": {
             "screen": "supplier-add",
@@ -869,7 +869,7 @@
             "section": "Purchasing, drop-ship orders, receiving and the supplier's door (slice 6)",
             "when": "to add a supplier: name, kind, contact, email, phone, address, website, account number, terms, drop-ships, lead time, order method (email, portal, api, edi, phone), order email, portal URL, minimum order",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "supplier-view": {
@@ -880,7 +880,7 @@
             "params": [
                 "tab"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "supplier-edit": {
@@ -889,7 +889,7 @@
             "section": "Purchasing, drop-ship orders, receiving and the supplier's door (slice 6)",
             "when": "to change a supplier's details, dealer-program fields and order method",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "feed-key-list": {
@@ -1156,7 +1156,7 @@
             "section": "The two doors (no session; not actions)",
             "when": "the supplier's purchase order: the business's account number with them, the lines with their SKU and the agreed cost, the ship-to (a location or the customer's address for a drop-ship — the phone when the settings allow it for that shipping kind), delivery notes; opening it is logged `purchase_order.supplier_view` with `source = portal`; the link dies 90 days after the order closes",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         }
     },
@@ -4522,7 +4522,7 @@
             "approval": null,
             "log_event": "supplier.create",
             "who": "suppliers.write",
-            "built": false
+            "built": true
         },
         "supplier_update": {
             "action": "supplier_update",
@@ -4637,7 +4637,7 @@
             "approval": null,
             "log_event": "supplier.update",
             "who": "suppliers.write",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "supplier_archive": {
@@ -4663,7 +4663,7 @@
             "approval": null,
             "log_event": "supplier.archive",
             "who": "suppliers.write",
-            "built": false
+            "built": true
         },
         "supplier_message": {
             "action": "supplier_message",
@@ -4700,7 +4700,7 @@
             "approval": "external_send",
             "log_event": "supplier.message",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_draft": {
             "action": "purchase_order_draft",
@@ -4761,7 +4761,7 @@
             "approval": null,
             "log_event": "purchase_order.draft",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_update": {
             "action": "purchase_order_update",
@@ -4828,7 +4828,7 @@
             "approval": null,
             "log_event": "purchase_order.update",
             "who": "purchasing.write",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "purchase_order_line_add": {
@@ -4896,7 +4896,7 @@
             "approval": null,
             "log_event": "purchase_order.line_add",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_line_update": {
             "action": "purchase_order_line_update",
@@ -4963,7 +4963,7 @@
             "approval": null,
             "log_event": "purchase_order.line_update",
             "who": "purchasing.write",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "purchase_order_line_remove": {
@@ -4983,7 +4983,7 @@
             "approval": null,
             "log_event": "purchase_order.line_remove",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_send": {
             "action": "purchase_order_send",
@@ -5014,7 +5014,7 @@
             "approval": "money_out",
             "log_event": "purchase_order.send",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_place": {
             "action": "purchase_order_place",
@@ -5045,7 +5045,7 @@
             "approval": "money_out",
             "log_event": "purchase_order.place",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_acknowledge": {
             "action": "purchase_order_acknowledge",
@@ -5082,7 +5082,7 @@
             "approval": null,
             "log_event": "purchase_order.supplier_ack",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_line_decline": {
             "action": "purchase_order_line_decline",
@@ -5107,7 +5107,7 @@
             "approval": null,
             "log_event": "purchase_order.supplier_decline",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_tracking": {
             "action": "purchase_order_tracking",
@@ -5144,7 +5144,7 @@
             "approval": null,
             "log_event": "purchase_order.supplier_tracking",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_receive": {
             "action": "purchase_order_receive",
@@ -5169,7 +5169,7 @@
             "approval": null,
             "log_event": "purchase_order.receive",
             "who": "stock.receive",
-            "built": false
+            "built": true
         },
         "purchase_order_close": {
             "action": "purchase_order_close",
@@ -5188,7 +5188,7 @@
             "approval": null,
             "log_event": "purchase_order.close",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_cancel": {
             "action": "purchase_order_cancel",
@@ -5213,7 +5213,7 @@
             "approval": "deletion",
             "log_event": "purchase_order.cancel",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "purchase_order_link_rotate": {
             "action": "purchase_order_link_rotate",
@@ -5232,7 +5232,7 @@
             "approval": null,
             "log_event": "purchase_order.link_rotate",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "feed_key_mint": {
             "action": "feed_key_mint",

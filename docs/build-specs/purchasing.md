@@ -343,7 +343,36 @@ order's salesperson Sam, a Cal King line that ships `ltl` and a King that ships 
   editor with the pick list and the defaults loading, the send screen's preview; every control ≥ 44 px, `scrollWidth` = viewport, no console errors.
 
 ## Built and proven
-(not yet)
+**2026-10-10 — BUILT and proven by a worker (Sonnet 5.5)** (`tests/phase3/slice6/run.sh` on the scratch database `inv_dev6`; :8606 is the fixture server while the world is built, then the fake MaluMail the purchase orders' e-mails go to:
+**343 checks green under php -S and 343 under a real Apache** — world 10, suppliers 40, stock 54, dropship 29, send 36, hand 29, receive 35, door 52, json 30, browser 28 at 375 × 740, 1280 × 800 and JavaScript off; the registry — **83 screens and 103 actions
+built** (the eleven screens and eighteen actions of this slice), **13 placeholders** — and the approvals in step). Every file of "Files" is built (plus `html/assets/js/purchasing.js`, the pick list's glue, and `app/views/purchasing/partials/line-defaults.php`).
+The earlier suites re-run green — slices 5, 4, 3, 2, 1, Phase 2 (its placeholder count 13 and its examples moved to `/admin/connections`, `/admin/dispatches`, `/returns/`, `/reports/`), Phase 0 (42 + 517 + 511), the Phase 1 claim checks — and the
+installer's plan is clean (57 steps). The spec's "Open questions" stayed empty: nothing stopped the slice. **One migration: `db/020_po_cancel_releases_sales_lines.sql`.**
+
+**Found and fixed (not questions):**
+- **`inv_po_cancel()` left the customer's drop-ship line tied to the cancelled purchase order line** (db/011): it put `ordered` lines back to `open` but kept `purchase_order_line_id`, and `inv_order_dropships_draft()` drafts only lines with no
+  purchase order line — so a cancelled drop-ship's line could never be drafted again (the form listed nothing, "Draft" refused "has no open drop-ship line" for an open line), which the spec's proof ("cancel the Malouf draft → the form lists the Cal King under
+  Malouf and Draft makes a new PO") needs. db/020 copies the function's body and frees the link for `open` and `ordered` lines alike. A DECLINED line keeps its link on purpose (`inv_lines_at_risk()` reads the declined line through it).
+- **Two functions named `supplier_sources`**: slice 1's `supplier_sources(PDO)` (every supplier source, for an identifier's select) and the spec's `supplier_sources(PDO, int)`. The spec's is `supplier_sources_of()`.
+- **`po_status_chip()`** (slice 5's, shown on the order page and today's drop-ships) now speaks the spec's vocabulary (acknowledged primary, closed_short dark "Closed short", cancelled danger, partial "Partly received") and takes an optional id.
+- **The SQL's order of refusals for a cancel**: a PO with goods received is `partial`, and `inv_po_cancel()` checks the status first — "PO-… is partial — close it instead"; "…has goods received or shipped — close it short instead" is what an order with a SHIPPED line (status sent / acknowledged) answers. The proof asserts both.
+- **The fixture's expert is a Sales agent** (it holds `user`): it may not raise purchase orders (403, as it should). The proof gives its mirror row the Buyer role for the one step that proves "an agent drafts" and puts it back.
+- **The Shopify pull already keeps a price sheet** (`supplier_items` for Malouf, no cost): the world gives the Queen's entry a cost of 700.00 and a minimum of 2 instead of inserting one, and the Cal King's cost falls through to the offer's (1299.00, "the sheet has none").
+
+**Decisions taken while building (not questions):**
+- **The fixtures' figures, not the spec's**: the spec's "send on Zinus's PO … the ltl drop-ship and the parcel one" is Malouf's drop-ship (the Cal King, ships ltl, phone shown) and Zinus's (the King, parcel, no phone); the stock order the send proof mails is Zinus's.
+  Zinus' Queen is out of stock in the feed fixture, so the reorder candidate is the Twin (reorder point 5, quantity 6, Zinus the cheapest in-stock offer at 349.50); a re-run lifts its reorder point above what is on order.
+- **A drop-ship draft refuses a quote** ("SO-… is a quote — confirm it first; its drop-ships are drafted then.") and a cancelled or closed order, and a line whose source has no supplier ("Line N's source has no supplier…"); the order is looked up by id or by number.
+- **A line's lines/save and lines/remove leave the "only a draft changes" refusal to the SQL** (the trigger's sentence: "The lines of a purchase order change only while it is a draft (it is sent)"); the header's refusal is the handler's. A drop-ship's line is never added or removed here.
+- **Changing a draft's supplier clears the lines' supplier SKUs AND their offers** (the offers are the old supplier's); the form says so.
+- **The account number**: on the supplier's form only for a holder of `purchasing.write` (a save from anyone else keeps it — the base row is read for "a field left out stays"); never in a log row or any view for the rest.
+- **Rotating a link**: refused for a received, closed or cancelled order ("… its link is not rotated" — a new live link on a cancelled order would outlive its cancel); the button shows from `sent` on; the API still rotates a draft's.
+- **The ship-to's full address and phone are read from the base table for `purchasing.write`** (the view carries the city and region); the PO page marks the phone "shown to the supplier" / "not shown" by `inv_po_shows_phone()`.
+- **The door's POST limit counts the three logged success rows** (`supplier_ack`, `supplier_decline`, `supplier_tracking`, source portal) per link (30) and per address (300); the view limit the `supplier_view` rows (60 / 300). The honeypot `website` is off-screen, never counted as a control. The Buyer is told by `notify_buyer()`; a decline also tells the salesperson (`line_at_risk`, by hand and by the door).
+- **The purchase-order page's tabs are `po`, `notes`, `attachments`, `trail`**; the lines table is read-only and the Decline / Tracking forms are a card per live line under it (a table cell is no place for a form on a phone); the acknowledge form is a `<details>`.
+- **`po_for_mail()` reads the base tables** (the caller holds purchasing.write): the account number, the full ship-to, the supplier SKUs; the mail never carries the internal notes (the proof greps for "internal").
+- **`purchasing.js`** (≈ 75 lines) is the only script: it fills a picked variant's line and fetches `/purchasing/line-defaults` (an HTML fragment whose data attributes the script copies into the cost box); JavaScript off, the typed SKU and the server's defaults do the same job.
+- The send screen shows "Sent by phone" only for a supplier whose order method is phone; the action itself (`via=phone`) is open to every order.
 
 ## Decisions taken while writing (2026-10-05)
 - A drop-ship purchase order is drafted by `inv_order_dropships_draft()` alone (the confirmation's call, and this slice's "draft for order"); `lines` on a drop-ship

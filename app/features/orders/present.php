@@ -176,9 +176,10 @@ const ORDER_NOTICES = [
     'link_rotated' => ['success', 'The old link stopped. A new one goes out with the next send.'], 'line_cancelled' => ['success', 'The line is cancelled.'], 'line_saved' => ['success', 'The line is saved.'],
 ];
 
-/** A purchase order's status (the Buyer's vocabulary; slice 6 owns the screens — the order page and today's drop-ships show it). */
-function po_status_chip(string $status): string
+/** A purchase order's status chip (slice 6 owns the vocabulary — purchasing.md "Status vocabulary"; the order page, today's drop-ships and the purchase-order screens show it). */
+function po_status_chip(string $status, string $id = ''): string
 {
-    $c = ['draft' => 'secondary', 'sent' => 'info', 'acknowledged' => 'info', 'partial' => 'warning', 'received' => 'success', 'closed' => 'dark', 'closed_short' => 'warning', 'cancelled' => 'dark'][$status] ?? 'secondary';
-    return '<span class="badge bg-soft-' . $c . ' text-' . $c . '">' . e(ucfirst(str_replace('_', ' ', $status))) . '</span>';
+    $c = ['draft' => 'secondary', 'sent' => 'info', 'acknowledged' => 'primary', 'partial' => 'warning', 'received' => 'success', 'closed' => 'dark', 'closed_short' => 'dark', 'cancelled' => 'danger'][$status] ?? 'secondary';
+    $w = ['partial' => 'Partly received', 'closed_short' => 'Closed short'][$status] ?? ucfirst(str_replace('_', ' ', $status));
+    return '<span class="badge bg-soft-' . $c . ' text-' . $c . '"' . ($id !== '' ? ' id="' . e($id) . '"' : '') . '>' . e($w) . '</span>';
 }

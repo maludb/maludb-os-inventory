@@ -1,0 +1,2 @@
+<?php /** The ONE supplier picker: the record picker over the active suppliers (app/pickers.php `supplier`), under the form's field name and id. Data: id (default po-form-field-supplier), name (default supplier), value, invalid, extra, disabled */
+echo picker_field(['id' => $id ?? 'po-form-field-supplier', 'name' => $name ?? 'supplier', 'source' => 'supplier', 'value' => $value ?? null, 'placeholder' => 'Choose a supplier', 'invalid' => !empty($invalid), 'extra' => $extra ?? '', 'required' => !empty($required), 'disabled' => !empty($disabled)]);

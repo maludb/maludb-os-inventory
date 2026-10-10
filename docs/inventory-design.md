@@ -757,6 +757,14 @@ Rules, not questions.
 
 ## 16. State
 
+**2026-10-10 — SLICE 6, PURCHASING (SUPPLIERS, PURCHASE ORDERS, THE SUPPLIER'S DOOR) — BUILT and proven** by a worker (Sonnet 5.5). `tests/phase3/slice6/run.sh` 343 checks green under php -S and 343 under Apache: suppliers as cards and a
+full-page form (the account number only behind `purchasing.write`, never in a log row; archive refused while a purchase order is open; a price sheet, open orders, lead-time actuals and sources on the page; a free message to the supplier through MaluMail with a `note` event on the order it names);
+purchase orders for stock (the reorder candidates prefill, a pick list per line, the price sheet's or the offer's cost and SKU by default, the lines saved on their own, a new supplier re-reading the SKUs) and for drop-ship (drafted by the database, one per supplier, from a confirmed order's open lines); send
+(one MaluMail call inside the transaction that mints the supplier's link — a refused address is a 422 and a transport error a 503, both rolling the send back; by phone nothing is mailed and no link is made), place on a portal with their reference, acknowledge / decline / tracking by hand (a drop-ship's
+tracking is the customer's `dropship` shipment with its tracking link; a decline tells the salesperson), receive against (a draft goods receipt for slice 2's screen), close (the link's 90 days), cancel (the customer's lines freed), rotate the link (mailed at once on a sent order); the supplier's door
+`/s/<token>` (the base tables as the writer, one dead page, noindex, 429 over 60 views or 30 POSTs an hour per link, three CSRF-protected forms and a honeypot, the supplier's own events with no member, the Buyer told of each). **`db/020`** frees a cancelled purchase order's customer lines (they could
+never be drafted again). The registry reads 83 screens and 103 actions built (13 placeholders); the earlier suites, Phase 0 and the Phase 1 checks are green; the installer's plan is clean (57 steps). Next: slices 7–9 by workers.
+
 **2026-10-10 — SLICE 5, CUSTOMERS AND SALES ORDERS — BUILT and proven** by a worker (Sonnet 5.5), the first after the handoff. `tests/phase3/slice5/run.sh` 308 checks green
 under php -S and 308 under Apache (the fixture server builds the world, then hands :8606 to the fake MaluMail): customers as cards and a form (the view nulls email and phone for a
 Viewer; the log says "email changed", never the address); the order form on slice 4's picker — the record picker for the customer, a pick list per line, the compact availability partial's
