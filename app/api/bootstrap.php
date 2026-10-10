@@ -89,3 +89,74 @@ function api_authenticate(): array
     db_apply_context($pdo);
     return $member;
 }
+
+// ---- the availability feed's door (feed.md "The feed"): a feed key, never a session or a person's token ---------------------------------------------------------------
+
+/** The one 401 of the feed: no bearer, a wrong one, a person's mcp_ token, a revoked, expired or rotated-out key, a minter no longer admitted — the same body (DECISION 1). */
+function feed_unauthorized(): never
+{
+    feed_drop_session();
+    api_error('unauthorized', 'A valid feed key is required.', 401);
+}
+
+/** The feed sends no cookie and keeps no session: the one PHP's bootstrap opened is abandoned (its in-memory $_SESSION stays readable for the request, nothing is saved). */
+function feed_drop_session(): void
+{
+    header_remove('Set-Cookie');
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_abort();
+    }
+}
+
+/**
+ * The key row of inv_resolve_feed_key() (key_id, member_id, label, consumer_kind, price_list_id, rate_per_minute, rate_per_day), or the feed's 401. The minter becomes the acting member for this request
+ * (inv_feed_answer() runs as the writer with the minter's identity), every log row's source is `feed`, and no cookie is ever sent — the session is abandoned, not saved.
+ */
+function feed_authenticate(): array
+{
+    $raw = api_bearer_token();
+    if (preg_match('/^feed_[0-9a-f]{48}$/', $raw) !== 1) {
+        feed_unauthorized();
+    }
+    $pdo = db();
+    $st = $pdo->prepare('SELECT * FROM inv_resolve_feed_key(:h)');
+    $st->execute(['h' => hash('sha256', $raw)]);
+    $key = $st->fetch();
+    if ($key === false) {
+        feed_unauthorized();
+    }
+    $_SESSION['member_id'] = (int) $key['member_id'];
+    $GLOBALS['__public_door'] = 'feed';
+    $GLOBALS['__feed_key'] = $key;
+    db_apply_context($pdo);
+    feed_drop_session();                                  // nothing of this call is kept in a session file, and no cookie is owed
+    return $key;
+}
+
+/**
+ * The rate (DECISION 5: before the query is read, so a flood of malformed calls still counts): inv_rate_ok() counts the call in the minute bucket, then the day's, and a refused call is never charged to the day.
+ * Nothing when ok. A key revoked between calls → the feed's 401. Else 429 with Retry-After, logging `feed.rate_limited` ONCE per bucket (when the bucket's `refused` has just become 1).
+ */
+function feed_rate_limit(array $key): void
+{
+    $pdo = db();
+    $st = $pdo->prepare('SELECT * FROM inv_rate_ok(:k)');
+    $st->execute(['k' => (int) $key['key_id']]);
+    $r = $st->fetch();
+    if ($r === false || $r['ok']) {
+        return;
+    }
+    $hit = (string) $r['limit_hit'];
+    if (!in_array($hit, ['minute', 'day'], true)) {
+        feed_unauthorized();                              // 'revoked' or 'no_key': a race with a revoke
+    }
+    $retry = max(1, (int) $r['retry_after']);
+    $bucket = $pdo->prepare('SELECT refused FROM key_usage WHERE token_id = :k AND bucket_kind = :kind AND bucket_start = date_trunc(CAST(:unit AS text), now())');
+    $bucket->execute(['k' => (int) $key['key_id'], 'kind' => $hit, 'unit' => $hit]);
+    if ((int) $bucket->fetchColumn() === 1) {
+        log_activity($pdo, 'feed.rate_limited', 'feed_key', (int) $key['key_id'], ['actor_member_id' => null, 'source' => 'feed', 'token_id' => (int) $key['key_id'],
+            'after' => ['key_label' => (string) $key['label'], 'limit_hit' => $hit, 'retry_after' => $retry]]);
+    }
+    header('Retry-After: ' . $retry);
+    json_error('rate_limited', 'Too many calls (' . $hit . ').', 429, ['limit' => $hit, 'retry_after' => $retry]);
+}

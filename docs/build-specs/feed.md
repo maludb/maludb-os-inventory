@@ -260,7 +260,43 @@ in-stock offer for the Zinus Queen (lead time 4 days) and a reference source und
   three sections stacked at 375; every control ≥ 44 px, `scrollWidth` = viewport, no console errors.
 
 ## Built and proven
-Not built.
+**2026-10-10 — BUILT and proven by a worker (Sonnet 5.5)** (`tests/phase3/slice7/run.sh` on the scratch database `inv_dev7`; :8606 is the fixture server only while the world is built — the feed needs no mail): **225 checks green under php -S and 225 under a
+real Apache** (under Apache :8601 is the PUBLIC vhost, which carries the feed on its allow-list) — world 4, keys 27, api 46, rate 18, rotate 23, partner 19, shares 30, connections 16, json 21, browser 21 at 375 × 740, 1280 × 800 and JavaScript off; the
+registry — **89 screens and 107 actions built** (the six screens and four actions of this slice), **10 placeholders** — and the approvals in step. Every file of "Files" is built, plus `html/assets/js/feed.js` (the price-list row's toggle and Copy — about 30
+lines; JavaScript off, the row is always there and the key sits in a read-only field) and `app/views/admin/feed-keys/partials/key-row.php` serving both the table row and the card. The earlier suites re-run green — slices 6, 5, 4, 3, 2, 1, Phase 2 (its
+placeholder count 10 and its examples moved to `/admin/dispatches`, `/returns/`, `/reports/`, `/admin/settings`; its vhost check now reads the feed's 401 and 405 where it read 404; its browser proof opens the Dispatches placeholder where it opened Connections; slice 6's json proof, which pinned the registry's built counts to 83 and 103, now says "at least" — a later slice only adds), Phase 0 (42 + 517 + 511), the Phase 1 claim checks — and the installer's plan is
+clean (57 steps). The spec's "Open questions" stayed empty: nothing stopped the slice. **One migration: `db/021_bundle_state_in_the_feed.sql`.**
+
+**Found and fixed (not questions):**
+- **A bundle had no state of its own in the feed** (db/014's `inv_feed_answer()`, and db/016's `inv_share_availability_index()` which repeats its loop): both read `inv_own_stock()` and `inv_best_lead_time()` of the variant itself, which for a set (the Queen set: a mattress and a foundation) is
+  nothing — a set holds no stock — so the feed and the availability share said `out_of_stock` for a set whose parts were on the shelf. Find and the order form get it right through `inv_availability()` / `inv_bundle_availability()`; the spec's proof reads "a bundle → its state from the
+  components" and the design says the feed answers from the same SQL as Find. db/021 adds one internal helper, `inv_variant_supply(variant)` (a set's available count is its scarcest component's — sellable available ÷ the component's quantity —, its lead time the longest of the components' and
+  NULL when any component can be supplied by nobody, 0 when the set is in stock; a single variant as before), with no caller check (the feed's key and the kernel's token have no reader), and copies both functions' bodies with that one line changed.
+- **`inv_feed_answer()` builds `partner_price` as a null for every key** (`jsonb_build_object('partner_price', CASE … END)` keeps a null member), but the document says "`partner_price` only for a partner key" and the proof "no `partner_price` key at all". `feed_answer()` leaves the member out
+  of every result for a key that is not a partner's (a partner key whose variant has no retail keeps it null). Done in PHP, not in SQL: the function is the writer's alone and the database answer is not wrong, only wider than the document.
+- **`jsonb` sorts an object's keys by length** (`sku, gtin, name, size, currency, quantity, …`): `feed_answer()` re-orders each result into the document's order (sku, gtin, name, size, retail_price, currency, partner_price, availability, quantity, lead_time_days, ships_how).
+- **`log_screen_view()` takes no `after`**: the keys page with `?key=` logs through `feed_screen_view()` (the same row, with the key as entity, `token_id` and `after.key`); the three other admin screens use the same helper.
+- **`emit_action_status()` writes its data into `X-Action-Data` under an action token**: the raw key is therefore never given to it — `feed_key_done()` answers a JSON caller through `respond_saved()` alone and a browser through the session.
+- **The expert is a Sales agent in the fixtures** (role `user`, no `feed.keys`): the proof shows its 403 in words, then gives its mirror row the admin role for the one step that proves "an agent mints a key through the handler" and puts it back. The spec's "the expert may mint" holds for an agent granted the admin role.
+- **The fixtures' figures, not the spec's** (the world is slice 4's/5's `order_world()`, not the spec's Casper Original): the Queen has 4 on hand and 1 allocated, so `feed_shows_quantity` on says 3, not 1; "`?q=zinus` → back_order lead 4" became the Cal King (back_order, Malouf's 5 days) and the King (a floor model only: back_order, Zinus' 3 days); the "Queen only" query is `q=cloudrest&size=queen` (the mattress, its foundation and the set).
+
+**Decisions taken while building (not questions):**
+- **Table and cards carry different ids**: `feed-key-row-{id}` (table row, with `-rotate-btn`, `-revoke-btn`, `-status`, `-today`, `-label`, `-from`) and `feed-key-card-{id}` (the phone's card with the same suffixes); the same for the price lists (`price-list-row-{id}` / `price-list-card-{id}`). Both are rendered, one is hidden by CSS (`d-none d-lg-block` / `d-lg-none`), so an id is never repeated.
+- **The key's state** (`feed_key_state()`): revoked › expired › minter gone (`minter no longer here`, danger — the minter is no longer in `mcp_members`, which lists active admitted members only) › expiring (a successor exists and `expires_at` is set: "expiring at <time>", warning) › live. A key with a future `expires_at` and no successor is simply live.
+- **Rotating a key that has run out** (expired, not revoked) is refused with the same sentence as a revoked one ("Only a live key is rotated"): the function itself only checks `revoked_at`, and a rotation of a dead key would hand out a key that answers while its parent does not.
+- **A partner's key names a price list at mint** ("A partner's key names the price list it answers with."): the spec's table says required for partner; the CHECK only forbids the reverse.
+- **The feed's `size` is ignored with `gtin` and `sku`** (it qualifies a `q`); two of the three, none, an empty value or an array are a 422 `invalid`, with `fields` naming the parameters at fault (`query` when none was given). `sku` is exact (a prefix finds nothing).
+- **A minter who lost the right to read** (`inv_feed_answer()` → `insufficient_privilege`) answers the same 401.
+- **The Connections page opens to `settings.manage` or `agents.settings`** (`require_any_right`); the menu item stays `settings.manage` (sso-shell's), so a holder of only `agents.settings` reaches the page by its address. Its `share_reads()` and `share_readers()` read `activity_log` as the writer. The page's section ids: `connections-shares`, `connections-readers`, `share-reads`, `connections-reads`, `connections-os-note` (with the link `connections-os-link`).
+- **`declared_shares()` / `declared_reads()` live in `app/features/connections/queries.php`** (the spec names them under both shares and connections); `declared_shares()` adds each share's `document`.
+- **The feed drops its session** (`feed_drop_session()`): no `Set-Cookie`, nothing saved, even on a 401, a 405 or a 422.
+- **`feed.read` and `feed.rate_limited` carry `actor_member_id` NULL explicitly** (the minter is the acting member for the database, not the actor of the row).
+- **The expiry** is "a date from tomorrow on" in the business's time zone; stored as that day's last second (`23:59:59`), so a key "expires on Oct 13" works through the 13th.
+- **Limits above the settings' defaults are allowed** (only the admin mints); the bounds are the table's (1–100000 a minute, 1–10000000 a day).
+- **Day buckets are UTC days** (`date_trunc('day', now())` in a UTC session, as `inv_rate_ok()` makes them); the usage page says "Day (UTC)".
+- **`price_list_save` logs the notes' change by name only** (`changed: ['notes']`), never their words; creating a list logs its name, percent and active flag.
+- **`API_CORS_ORIGINS`** is appended to the scratch environment by `run.sh` (`https://shop.example.invalid`) for the CORS checks.
+
 
 ## Decisions recorded (the DECISIONs above, in one place)
 1. The feed admits feed keys only — never a session, never a person's `mcp_` token; one 401 body for every failure.

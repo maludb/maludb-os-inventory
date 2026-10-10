@@ -1,0 +1,77 @@
+<?php
+/** JSON mode (feed.md "Proof" ≈ 10): the four handlers under a signed action token answer their facts — the key once in a reply and nowhere else —; `_partial=1` on a price list; the refusals' shape; the expert on a run token; the registry reads the six screens and four actions built. */
+require __DIR__ . '/lib.php';
+$w = feed_world();
+$O = ['X-Action-Token: ' . person_token(1)];
+$N = ['X-Action-Token: ' . person_token(40)];
+$run = substr(md5((string) microtime(true)), 0, 6);
+$gtin = $w['queen_gtin'];
+$shape = static fn (array $b): bool => ($b['ok'] ?? false) === true && is_string($b['did'] ?? null) && isset($b['record_id'], $b['location']) && ($b['refresh'] ?? '') === 'feedChanged';
+$since = last_activity_id();
+
+echo "1. A person's action token\n";
+[$c, $b, $r] = act_token('/admin/feed-keys/mint.php', ['label' => "Json key $run", 'consumer_kind' => 'website', 'rate_per_minute' => '200'], $O);
+$kid = (int) ($b['record_id'] ?? 0);
+$raw = (string) ($b['key'] ?? '');
+ok($c === 200 && $shape($b) && $kid > 0 && preg_match('/^feed_[0-9a-f]{48}$/', $raw) === 1 && $b['location'] === "/admin/feed-keys/#feed-key-row-$kid", 'feed_key_mint: {ok, did, record_id, location, refresh} and `key` — the raw value, once');
+ok(!str_contains((string) $r['headers'], $raw) && !str_contains((string) $r['headers'], 'feed_') && !str_contains(json_encode($b['did']), 'feed_'), 'the key is not in the response headers (X-Action-Data) nor in the `did` sentence — only in `key`');
+[$cf] = feed_get("gtin=$gtin", $raw);
+ok($cf === 200 && key_row($kid)['token_hash'] === hash('sha256', $raw), 'the key works, and only its hash is stored');
+$log = last_log('feed.key_mint', $since);
+ok($log !== null && $log['source'] === 'assistant' && (int) $log['token_id'] === $kid && after_of($log)['label'] === "Json key $run" && !str_contains((string) $log['after'], $raw), 'feed.key_mint under a person\'s action token: source assistant, token_id the key, no key in the row');
+[$c, $b] = act_token('/admin/feed-keys/rotate.php', ['key' => $kid], $O);
+$nk = (string) ($b['key'] ?? '');
+ok($c === 200 && $shape($b) && $b['record_id'] !== $kid && preg_match('/^feed_[0-9a-f]{48}$/', $nk) === 1 && $nk !== $raw && $b['old_key_id'] === $kid && abs(strtotime((string) $b['old_expires_at']) - (time() + 86400)) < 120, 'feed_key_rotate: the new `key` once, old_key_id and old_expires_at (about 24 h out)');
+$rid = (int) $b['record_id'];
+[$c, $b] = act_token('/admin/feed-keys/revoke.php', ['key' => $rid], $O);
+ok($c === 200 && $shape($b) && $b['key_id'] === $rid && !array_key_exists('key', $b) && key_row($rid)['revoked_at'] !== null, 'feed_key_revoke: key_id, and no key in the answer');
+[$c, $b] = act_token('/admin/feed-keys/revoke.php', ['key' => $rid], $O);
+ok($c === 422 && ($b['error']['code'] ?? '') === 'invalid' && ($b['error']['message'] ?? '') === 'That key is already revoked.', 'a refusal is {error: {code: invalid, message}} with the sentence');
+[$c, $b] = act_token('/admin/feed-keys/mint.php', ['label' => '', 'consumer_kind' => 'partner'], $O);
+ok($c === 422 && ($b['error']['code'] ?? '') === 'invalid' && isset($b['error']['fields']['label']) && isset($b['error']['fields']['price_list']) && is_array($b['error']['errors'] ?? null), 'field errors: 422 {error: {code: invalid, message, errors[], fields}}');
+[$c, $b] = act_token('/admin/price-lists/save.php', ['name' => "Json list $run", 'percent_off_retail' => '15', 'notes' => 'Keep these words', 'active' => 'yes'], $O);
+$pl = (int) ($b['record_id'] ?? 0);
+ok($c === 200 && $shape($b) && $b['price_list_id'] === $pl && $b['location'] === "/admin/price-lists/?notice=created#price-list-row-$pl", 'price_list_save: {ok, did, record_id, location, refresh} and price_list_id');
+[$c, $b] = act_token('/admin/price-lists/save.php', ['price_list' => $pl, '_partial' => '1', 'percent_off_retail' => '17.5'], $O);
+$row = q('SELECT * FROM price_lists WHERE id = :i', ['i' => $pl])[0];
+ok($c === 200 && (string) $row['percent_off_retail'] === '17.50' && $row['notes'] === 'Keep these words' && $row['name'] === "Json list $run" && $row['active'] === true, 'price_list_save with `_partial=1`: only the percent is sent — the notes, name and active switch stay');
+[$c, $b] = act_token('/admin/price-lists/save.php', ['price_list' => $pl, 'percent_off_retail' => '100'], $O);
+ok($c === 422 && isset($b['error']['fields']['percent_off_retail']), 'a percent of 100: 422 with its field');
+[$c, $b] = act_token('/admin/feed-keys/mint.php', ['label' => "Json Nora $run"], $N);
+ok($c === 403 && str_contains((string) ($b['error']['message'] ?? ''), "feed's keys"), 'Nora\'s token: 403 in words');
+[$c, $d] = screen($w['owner'], "/admin/price-lists/");
+ok($c === 200 && in_array($pl, array_column($d['price_lists'], 'price_list_id'), true), 'the screens answer as JSON too: the price lists');
+
+echo "2. The expert\n";
+kernel_state(function ($s) { $s['facts']['97'] = ['valid' => true, 'is_agent' => true, 'member_id' => 45, 'run_id' => 97, 'request_id' => 'req-run-97', 'trigger' => 'chat', 'endpoints' => [['name' => 'Records MCP']]]; return $s; });
+$rt = run_token(45, 97);
+[$c, $b] = act_token('/admin/feed-keys/mint.php', ['label' => "Json expert $run"], as_agent($rt));
+ok($c === 403 && str_contains((string) ($b['error']['message'] ?? ''), "feed's keys"), 'the expert as the fixtures cast it (role user) holds no feed.keys: 403 in words');
+$roles = (string) one('SELECT roles::text FROM members WHERE id = 45');
+psql_exec("UPDATE members SET roles = '{admin}' WHERE id = 45");
+$since2 = last_activity_id();
+[$c, $b] = act_token('/admin/feed-keys/mint.php', ['label' => "Json expert $run", 'consumer_kind' => 'website'], as_agent($rt));
+$ek = (string) ($b['key'] ?? '');
+$log = last_log('feed.key_mint', $since2);
+ok($c === 200 && preg_match('/^feed_[0-9a-f]{48}$/', $ek) === 1 && $log !== null && $log['source'] === 'agent' && (int) $log['agent_run_id'] === 97 && $log['request_id'] === 'req-run-97' && (int) $log['actor_member_id'] === 45, 'granted the admin role, the expert mints through the handler: the key once in the reply; logged as the agent, run 97, the run\'s request id');
+psql_exec("UPDATE members SET roles = '$roles' WHERE id = 45");
+[$cf] = feed_get("gtin=$gtin", $ek);
+ok($cf === 200, 'the key an agent minted answers the feed');
+
+echo "3. The registry\n";
+$reg = json_decode((string) file_get_contents(dirname(__DIR__, 3) . '/mcp/action_registry.json'), true);
+$screens = ['feed-key-list', 'feed-key-add', 'price-list-list', 'price-list-add', 'price-list-edit', 'connection-list'];
+$bad = array_values(array_filter($screens, static fn ($s) => empty($reg['screens'][$s]['built'])));
+ok($bad === [] && count($screens) === 6, 'the registry reads the six screens built' . ($bad ? ' — not: ' . implode(', ', $bad) : ''));
+$names = ['feed_key_mint' => '/admin/feed-keys/mint.php', 'feed_key_rotate' => '/admin/feed-keys/rotate.php', 'feed_key_revoke' => '/admin/feed-keys/revoke.php', 'price_list_save' => '/admin/price-lists/save.php'];
+$bad = [];
+foreach ($names as $n => $ep) { if (empty($reg['actions'][$n]['built']) || ($reg['actions'][$n]['endpoint'] ?? '') !== $ep || !is_file(dirname(__DIR__, 3) . '/html' . $ep)) { $bad[] = $n; } }
+ok($bad === [] && $reg['actions']['feed_key_mint']['approval'] === 'external_send' && $reg['actions']['feed_key_rotate']['approval'] === null && $reg['actions']['feed_key_revoke']['approval'] === null && $reg['actions']['price_list_save']['approval'] === null && $reg['actions']['feed_key_rotate']['confirm'] === true && $reg['actions']['feed_key_revoke']['confirm'] === true, 'the four actions are built at their files; only feed_key_mint carries an approval (external_send); rotate and revoke are confirm');
+$built = count(array_filter($reg['screens'], static fn ($s) => !empty($s['built'])));
+$builtA = count(array_filter($reg['actions'], static fn ($a) => !empty($a['built'])));
+ok($built === 89 && $builtA === 107, "the registry reads $built screens and $builtA actions built (83 + 6, 103 + 4)");
+$out = shell_exec('cd ' . escapeshellarg(dirname(__DIR__, 3)) . ' && php bin/build_action_registry.php --check >/dev/null 2>&1; echo $?');
+ok(trim((string) $out) === '0', 'bin/build_action_registry.php --check: the registry matches the manifest and the files');
+$out = shell_exec('cd ' . escapeshellarg(dirname(__DIR__, 3)) . ' && php bin/sync_approvals.php --check >/dev/null 2>&1; echo $?');
+ok(trim((string) $out) === '0', 'bin/sync_approvals.php --check: maludb-os.json approvals[] matches the manifest');
+finish();

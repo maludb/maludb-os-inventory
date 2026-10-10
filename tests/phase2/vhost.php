@@ -22,7 +22,7 @@ ok(req('GET', '/nosuchscreen', ['jar' => $j])['code'] === 404, 'an unknown path:
 $tok = str_repeat('ab', 24);
 ok(req('GET', "/o/$tok")['code'] === 404 && req('GET', "/s/$tok")['code'] === 404 && req('GET', "/s/$tok/acknowledge")['code'] === 404, 'the two doors /o/{token} and /s/{token} (and the supplier\'s actions) are rewritten to o.php / s.php (slices 5 and 6) and answer 404 (a dead token)');
 ok(req('GET', '/o/short')['code'] === 404 && req('GET', '/s/' . str_repeat('zz', 24))['code'] === 404, 'a door token of the wrong shape: 404');
-ok(req('GET', '/api/v1/availability')['code'] === 404 && req('GET', '/api/v1/availability?q=x')['code'] === 404, '/api/v1/availability is rewritten to its handler (slice 7) and answers 404 until then');
+ok(req('GET', '/api/v1/availability')['code'] === 401 && req('GET', '/api/v1/availability?q=x')['code'] === 401 && req('POST', '/api/v1/availability')['code'] === 405 && req('GET', '/api/v1/nosuch')['code'] === 404, '/api/v1/availability is rewritten to its handler (slice 7): a call with no key is 401, a POST 405 — and anything else under /api/ is 404');
 ok(req('GET', '/files/1')['code'] === 401, '/files/1 without a session: 401 (never a redirect — a file URL sits in an <img>)');
 ok(page($j, '/files/1')['code'] === 404 && page($j, '/files/1/thumb')['code'] === 404, '/files/1 with a session: 404 (no attachment yet); /files/1/thumb the same');
 $h = req('GET', '/api/v1/health');

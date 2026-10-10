@@ -757,6 +757,15 @@ Rules, not questions.
 
 ## 16. State
 
+**2026-10-10 — SLICE 7, THE AVAILABILITY FEED (KEYS, PRICE LISTS, CONNECTIONS, THE PUBLIC API) — BUILT and proven** by a worker (Sonnet 5.5). `tests/phase3/slice7/run.sh` 225 checks green under php -S and 225 under Apache (world 4, keys 27, api 46, rate 18,
+rotate 23, partner 19, shares 30, connections 16, json 21, browser 21 at 375 × 740, 1280 × 800 and JavaScript off): `GET /api/v1/availability?gtin=|sku=|q=[&size=]` with a feed key as the Bearer — no session, no cookie, one 401 for a missing, wrong, revoked, expired or rotated-out
+key, a person's `mcp_` token or a minter no longer admitted — answers `os.inventory-feed/1`: per variant our retail, the state (in stock, back order, out of stock — a bundle's from its components), the quantity only when the setting says so, the best lead time and how it ships, and a partner's price (retail
+less its list's percent, retail while the list is inactive) on a partner key alone; never cost, never a source's name; 60 calls a minute and 10,000 a day by default, the 429 with `Retry-After`, a refused call never charged to the day, a flood of malformed calls still counted, one `feed.rate_limited` row a bucket, one
+`feed.read` row an answered call with the key's label. The admin's keys page (a table, cards on a phone): mint (the key shown once in a copy-once box, only its sha256 stored, in no log row), rotate with the 24-hour overlap (the old key listed "expiring at"), revoke, a minter who is gone marked, today's count
+turning red at 90 %, the usage by day and by minute; the partner price lists; the Connections page (the five shares with their documents and the `share.read` rows by application and tool); the five shares' PHP readers over db/016's functions, proven with an order closed, a receipt posted and a drop-ship
+delivered. **`db/021`**: a bundle (the Queen set) had no state of its own in `inv_feed_answer()` and the availability share — now its components' (`inv_variant_supply()`). The registry reads 89 screens and 107 actions built (10 placeholders); the earlier suites, Phase 0 and the Phase 1 checks are green; the
+installer's plan is clean (57 steps). Next: slices 8–9 by workers.
+
 **2026-10-10 — SLICE 6, PURCHASING (SUPPLIERS, PURCHASE ORDERS, THE SUPPLIER'S DOOR) — BUILT and proven** by a worker (Sonnet 5.5). `tests/phase3/slice6/run.sh` 343 checks green under php -S and 343 under Apache: suppliers as cards and a
 full-page form (the account number only behind `purchasing.write`, never in a log row; archive refused while a purchase order is open; a price sheet, open orders, lead-time actuals and sources on the page; a free message to the supplier through MaluMail with a `note` event on the order it names);
 purchase orders for stock (the reorder candidates prefill, a pick list per line, the price sheet's or the offer's cost and SKU by default, the lines saved on their own, a new supplier re-reading the SKUs) and for drop-ship (drafted by the database, one per supplier, from a confirmed order's open lines); send

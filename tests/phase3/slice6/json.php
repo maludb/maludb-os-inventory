@@ -89,7 +89,7 @@ foreach ($approvals as $n => $cat) { if (($reg['actions'][$n]['approval'] ?? nul
 ok($bad === [] && count(array_filter($names, static fn ($n) => ($reg['actions'][$n]['approval'] ?? null) !== null)) === 4, 'exactly four carry an approval category: send, place (money_out); message (external_send); cancel (deletion)');
 $built = count(array_filter($reg['screens'], static fn ($s) => !empty($s['built'])));
 $builtA = count(array_filter($reg['actions'], static fn ($a) => !empty($a['built'])));
-ok($built === 83 && $builtA === 103, "the registry reads $built screens and $builtA actions built (72 + 11, 85 + 18)");
+ok($built >= 83 && $builtA >= 103, "the registry reads $built screens and $builtA actions built (at least 72 + 11, 85 + 18 — a later slice only adds)");
 $out = shell_exec('cd ' . escapeshellarg(dirname(__DIR__, 3)) . ' && php bin/sync_approvals.php --check >/dev/null 2>&1; echo $?');
 ok(trim((string) $out) === '0', 'bin/sync_approvals.php --check: maludb-os.json approvals[] matches the manifest');
 finish();

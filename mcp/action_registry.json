@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/inventory-action-manifest.md",
-    "generated_at": "2026-10-10T14:34:35+00:00",
+    "generated_at": "2026-10-10T15:22:34+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -898,8 +898,8 @@
             "section": "The availability feed (slice 7)",
             "when": "the feed keys: label, consumer kind, the partner price list, rate limits, usage today, last used, rotated or revoked; mint, rotate, revoke",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "feed-key-add": {
             "screen": "feed-key-add",
@@ -907,7 +907,7 @@
             "section": "The availability feed (slice 7)",
             "when": "to mint a feed key: label, consumer (website or installation or partner), the partner's price list, rate limits — the key shown once",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "price-list-list": {
@@ -916,8 +916,8 @@
             "section": "The availability feed (slice 7)",
             "when": "the partner price lists: name, percent off retail, the keys using each",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "price-list-add": {
             "screen": "price-list-add",
@@ -925,7 +925,7 @@
             "section": "The availability feed (slice 7)",
             "when": "to add a price list: name, percent off retail, notes",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "price-list-edit": {
@@ -934,7 +934,7 @@
             "section": "The availability feed (slice 7)",
             "when": "to change a price list's name, percent, notes, active",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "return-list": {
@@ -1138,8 +1138,8 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "which sibling applications read what of ours (the five shares) and when — the kernel's facts, read-only",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "customer-door": {
             "screen": "customer-door",
@@ -5281,7 +5281,7 @@
             "approval": "external_send",
             "log_event": "feed.key_mint",
             "who": "feed.keys",
-            "built": false
+            "built": true
         },
         "feed_key_rotate": {
             "action": "feed_key_rotate",
@@ -5300,7 +5300,7 @@
             "approval": null,
             "log_event": "feed.key_rotate",
             "who": "feed.keys",
-            "built": false
+            "built": true
         },
         "feed_key_revoke": {
             "action": "feed_key_revoke",
@@ -5319,7 +5319,7 @@
             "approval": null,
             "log_event": "feed.key_revoke",
             "who": "feed.keys",
-            "built": false
+            "built": true
         },
         "price_list_save": {
             "action": "price_list_save",
@@ -5362,7 +5362,7 @@
             "approval": null,
             "log_event": "price_list.save",
             "who": "feed.keys",
-            "built": false
+            "built": true
         },
         "return_request": {
             "action": "return_request",
