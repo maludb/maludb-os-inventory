@@ -21,6 +21,7 @@ elseif (preg_match('#^/s/([a-f0-9]{48})/?$#', $path, $m)) { $set(['token' => $m[
 elseif (preg_match('#^/s/([a-f0-9]{48})/([a-z_]+)$#', $path, $m)) { $set(['token' => $m[1], 'do' => $m[2]]); $target = '/s.php'; }
 elseif (preg_match('#^/files/([0-9]+)$#', $path, $m)) { $set(['id' => $m[1]]); $target = '/files.php'; }
 elseif (preg_match('#^/files/([0-9]+)/thumb$#', $path, $m)) { $set(['id' => $m[1], 'thumb' => '1']); $target = '/files.php'; }
+elseif (preg_match('#^/reports/([a-z-]+)/?$#', $path, $m)) { $set(['report' => $m[1]]); $target = '/reports/report.php'; }          // a report by name (deploy/apache-inventory.conf)
 elseif (preg_match('#^/(.+)/([0-9]+)/([a-z_-]+)$#', $path, $m) && is_file($root . '/' . $m[1] . '/' . $m[3] . '.php')) { $target = '/' . $m[1] . '/' . $m[3] . '.php'; $set(['id' => $m[2]]); }
 elseif (isset($map[$rel])) { $target = $map[$rel]; }
 elseif ($rel === '/') { $target = '/index.php'; }

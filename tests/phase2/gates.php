@@ -1,6 +1,6 @@
 <?php
 /**
- * Proof: rights per role on every screen of the manifest (200, the placeholder with its slice named, 403 in the right's words, 302 anonymous),
+ * Proof: rights per role on every screen of the manifest (200, 403 in the right's words, 302 anonymous),
  * the menu per role, CSRF, My settings, the tokens screen, notifications and the bell, the trail's visibility, the command bar through the
  * kernel's chat endpoint (a reply, a refusal in the kernel's words, an approval, a navigate), the action-token / run-token gate, cost as the
  * wall, health (sso-shell.md "The shell", "Handlers", "Proof: gates"). Run after sso.php through tests/phase2/run.sh.
@@ -40,12 +40,17 @@ ok($wrong === [], "$n role × screen checks (" . count($matrix) . ' screens × 6
 ok(str_contains(page($jars['vera'], '/receipts/')['body'], 'You may not receive goods.'), 'a refusal says what the person may not do, in words ("You may not receive goods.")');
 ok(str_contains(page($jars['vera'], '/matching/')['body'], 'You may not match listings.') && str_contains(page($jars['sam'], '/counts/')['body'], 'You may not count stock.') && str_contains(page($jars['vera'], '/admin/settings')['body'], 'You may not change the settings.'), 'Vera on the match queue, Sam on counts, Vera on the admin settings: each in that right\'s sentence');
 $stubs = trim((string) shell_exec('grep -rl "render_nav_stub(" ' . escapeshellarg(dirname(__DIR__, 2) . '/html') . ' 2>/dev/null | wc -l'));
-ok((int) $stubs === 7, "the placeholders stand: $stubs controllers name their slice (38 at Phase 2, five built by slice 1, eight by slice 2, four by slice 3, two by slice 4, four by slice 5, two by slice 6, three by slice 7, three by slice 8 — seven are slice 9's)");
-ok(str_contains(page($jars['owner'], '/admin/agents')['body'], 'slice 9 builds this screen') && str_contains(page($jars['nora'], '/reports/')['body'], 'slice 9 builds this screen') && str_contains(page($jars['nora'], '/exports/')['body'], 'slice 9 builds this screen') && str_contains(page($jars['owner'], '/admin/settings')['body'], 'slice 9 builds this screen'), 'each placeholder names its slice (agents 9, reports 9, exports 9, settings 9)');
-ok(str_contains(page($jars['owner'], '/admin/agents')['body'], 'id="agent-list-coming"') && str_contains(page($jars['owner'], '/admin/agents')['body'], 'data-screen="agent-list"'), 'a placeholder renders inside the shell with its screen id stamped');
-ok(req('POST', '/admin/agents', ['jar' => $jars['owner'], 'form' => ['csrf_token' => page_csrf($jars['owner'])]])['code'] === 501, 'a POST to a placeholder: 501');
+ok((int) $stubs === 0, "no placeholder remains: $stubs controllers name a slice (38 at Phase 2, every one built by slices 1 to 9)");
+$said = [];
+foreach (['/admin/agents' => 'owner', '/reports/' => 'nora', '/exports/' => 'nora', '/admin/settings' => 'owner', '/admin/sequences' => 'owner', '/admin/tax-rates/' => 'owner', '/admin/reason-codes/' => 'owner', '/' => 'nora', '/trail' => 'nora'] as $route => $who) {
+    $b = page($jars[$who], $route)['body'];
+    if (str_contains($b, 'builds this screen') || str_contains($b, 'is not built yet')) { $said[] = $route; }
+}
+ok($said === [], 'no page says "builds this screen" or "is not built yet"' . ($said ? ': ' . implode(', ', $said) : ''));
+ok(str_contains(page($jars['owner'], '/admin/agents')['body'], 'id="agent-list-cards"') && str_contains(page($jars['owner'], '/admin/agents')['body'], 'data-screen="agent-list"'), 'the agents page renders inside the shell with its screen id stamped');
+ok(req('POST', '/admin/agents', ['jar' => $jars['owner'], 'form' => ['csrf_token' => page_csrf($jars['owner'])]])['code'] === 405, 'a POST to the agents page (it has no form): 405');
 $r = req('GET', '/admin/agents', ['jar' => $jars['owner']] + $json);
-ok($r['code'] === 501 && (json_decode($r['body'], true)['error']['code'] ?? '') === 'not_built', 'JSON to a placeholder: 501 not_built');
+ok($r['code'] === 200 && isset(json_decode($r['body'], true)['data']['agents']), 'JSON to the agents page: 200 with the agents');
 $menu = fn (string $j): array => (preg_match_all('/id="nav-((?!group-)[a-z-]+)"/', page($j, '/')['body'], $m) ? $m[1] : []);
 $groups = fn (string $j): array => (preg_match_all('/nxl-caption" id="nav-group-[a-z]+"><label>([^<]+)</', page($j, '/')['body'], $m) ? $m[1] : []);
 ok(count($menu($jars['vera'])) === 22 && !in_array('receipt-list', $menu($jars['vera']), true) && !in_array('watch-list', $menu($jars['vera']), true) && $groups($jars['vera']) === ['Inventory', 'Catalog', 'Stock', 'Sources', 'Orders', 'Purchasing', 'Returns', 'Me'], 'Vera sees 22 items (every inventory.read item) and no Admin or Reports group: ' . implode(', ', $groups($jars['vera'])));
@@ -62,7 +67,7 @@ ok($r['code'] === 200 && $d['may']['sales'] === true && $d['may']['warehouse'] =
 $h = page($jars['sam'], '/')['body'];
 ok(str_contains($h, 'id="home-note"') && str_contains($h, 'id="home-at-risk"') && str_contains($h, 'id="home-my-orders"') && !str_contains($h, 'id="home-warehouse"') && !str_contains($h, 'id="home-unmatched"') && !str_contains($h, 'id="home-admin"'), 'Sam\'s home: the note, at risk, my orders; no warehouse block, no unmatched, nothing for the admin');
 ok(str_contains(page($jars['wes'], '/')['body'], 'id="home-warehouse"') && !str_contains(page($jars['wes'], '/')['body'], 'id="home-my-orders"') && str_contains(page($jars['owner'], '/')['body'], 'id="home-admin"') && str_contains(page($jars['nora'], '/')['body'], 'id="home-unmatched"'), 'Wes\'s shows the warehouse block and not my orders; the owner\'s the admin card; Nora\'s the unmatched listings');
-ok(str_contains(page($jars['vera'], '/')['body'], 'id="home-bell-empty"') && str_contains(page($jars['vera'], '/')['body'], 'slice 5'), 'a Viewer\'s home: the bell\'s card and the regions naming their slices');
+ok(str_contains(page($jars['vera'], '/')['body'], 'id="home-bell-empty"') && str_contains(page($jars['vera'], '/')['body'], 'id="home-at-risk"'), 'a Viewer\'s home: the bell\'s card and the regions (slice 9 made them real)');
 
 echo "2. My settings — how I am told, who I am here, my time zone\n";
 $t = csrf_of(page($jars['sam'], '/')['body']);
@@ -161,9 +166,9 @@ $r = page($jars['sam'], '/trail');
 ok($r['code'] === 200 && str_contains($r['body'], 'id="trail-list"') && preg_match('/id="trail-row-\d+"/', $r['body']) === 1, 'the screen renders (Pattern B table, trail-row-{id})');
 $r = page($jars['sam'], '/trail?period=7', ['headers' => ['HX-Request: true', 'HX-Target: trail-results']]);
 ok($r['code'] === 200 && str_starts_with(trim($r['body']), '<div id="trail-results"') && !str_contains($r['body'], '<html'), 'the filter swaps only #trail-results');
-pdo()->exec("INSERT INTO activity_log (actor_member_id, source, action, entity_type, entity_id, source_id, after) VALUES (40, 'web', 'source.update', 'source', 9, 9, '{\"name\": \"SMOKE Layla\"}'), (NULL, 'cron', 'pull.run', 'source_pull', 1, 9, '{\"listings\": 3}')");
+pdo()->exec("INSERT INTO activity_log (actor_member_id, source, action, entity_type, entity_id, source_id, after) VALUES (40, 'web', 'source.update', 'source', 9, 9, '{\"name\": \"SMOKE Layla\"}'), (NULL, 'cron', 'source.pull_done', 'source_pull', 1, 9, '{\"listings\": 3}')");
 $rows = json_decode(page($jars['sam'], '/trail?source=9', $json)['body'], true)['data']['rows'] ?? [];
-ok(count($rows) === 2 && $rows[0]['source_id'] === 9 && $rows[0]['url'] === '/sources/9' && str_contains(json_encode($rows), 'the worker pull run'), '?source= answers that source\'s rows by the audit key (a person\'s and the worker\'s), each linking to the source');
+ok(count($rows) === 2 && $rows[0]['source_id'] === 9 && $rows[0]['url'] === '/sources/9' && str_contains(json_encode($rows), 'the worker finished a pull of the source'), '?source= answers that source\'s rows by the audit key (a person\'s and the worker\'s), each linking to the source');
 pdo()->exec("INSERT INTO activity_log (actor_member_id, source, action, entity_type, entity_id, sales_order_id, after) VALUES (41, 'web', 'order.confirm', 'sales_order', 3, 3, '{\"number\": \"SO-1003\"}'), (40, 'web', 'product.update', 'product', 12, NULL, '{\"name\": \"Dreamer\"}')");
 ok(count(json_decode(page($jars['vera'], '/trail?order=3', $json)['body'], true)['data']['rows']) === 1 && count(json_decode(page($jars['vera'], '/trail?product=12', $json)['body'], true)['data']['rows']) === 1, '?order= and ?product= answer their rows to any reader (the view admits records anyone here may see)');
 ok(page($jars['sam'], '/trail?member=40')['code'] === 403 && page($jars['owner'], '/trail?member=40')['code'] === 200 && page($jars['nora'], '/trail?member=41')['code'] === 200, 'another person\'s trail: 403 for Sam, 200 for the admin and for Nora (reports.read)');
@@ -233,8 +238,8 @@ ok(($row['source'] ?? '') === 'agent' && (int) ($row['agent_run_id'] ?? 0) === 7
 ok(req('GET', '/', ['headers' => as_agent($tok)])['code'] === 403 && req('POST', '/settings/tokens/mint.php', ['headers' => as_agent($tok), 'form' => ['label' => 'agent']])['code'] === 403 && req('POST', '/assistant/ask.php', ['headers' => as_agent($tok), 'form' => ['utterance' => 'hi']])['code'] === 403, 'an agent may not open the home, mint a person\'s token or use the command bar: 403');
 $r = req('POST', '/settings/prefs.php', ['headers' => as_agent($tok), 'form' => ['text_enabled' => 'no']]);
 ok($r['code'] === 200 && one('SELECT text_enabled FROM notification_prefs WHERE member_id = 45') === false, 'but an agent may save its own notification choices (prefs_save is "own")');
-pdo()->exec("UPDATE members SET roles = '{buyer}' WHERE id = 45");               // a placeholder checks the right first: the expert borrows the Buyer's reports.read
-ok(req('GET', '/reports/', ['headers' => as_agent($tok)])['code'] === 501 && req('POST', '/reports/', ['headers' => as_agent($tok), 'form' => []])['code'] === 501, 'an agent on a placeholder: 501 not_built (GET and POST)');
+pdo()->exec("UPDATE members SET roles = '{buyer}' WHERE id = 45");               // the expert borrows the Buyer's reports.read
+ok(req('GET', '/reports/', ['headers' => as_agent($tok)])['code'] === 200 && req('GET', '/reports/stock-value', ['headers' => as_agent($tok)])['code'] === 200, 'an agent on the reports (JSON): 200 (the reports answer JSON, slice 9)');
 pdo()->exec("UPDATE members SET roles = '{user}' WHERE id = 45");
 // an agent the feed introduces with no grant: admitted at first contact only when the kernel vouches
 kernel_state(function ($s) { $s['incremental'] = incr(['members' => [['id' => 900, 'member_kind' => 'agent', 'display_name' => 'SMOKE Stock Buyer', 'email' => null, 'business_role' => 'user', 'is_external' => false, 'status' => 'active', 'updated_at' => '2026-01-01T00:00:00Z', 'departments' => []]]], '2026-01-01T00:03:00.000000Z'); return $s; });

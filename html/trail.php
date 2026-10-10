@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 /**
- * /trail — my activity trail in words (screen `trail`; Phase 2's first rendering, slice 9's row): my own rows newest first, 50 a page; with a record
- * param that record's rows — `source`, `order`, `purchase_order` by the audit keys; `product`, `variant` by entity; `member` another person's trail
- * (the admin or reports.read; an agent's rows any reader — the tool surface's DECISION 17). Filters `action` (a prefix) and `period` (1 · 7 · 30 · 90).
+ * /trail?product=&variant=&source=&order=&purchase_order=&member=&action=&period= — the activity trail in words (screen `trail`, reports-admin.md): my own rows newest first, 50 a page; with a record
+ * param that record's history — `source`, `order`, `purchase_order` by the audit keys (everything that touched it); `product`, `variant` by entity and the rows whose payload names them; `member` another person's
+ * trail (the admin or reports.read; an agent's rows any reader — the tool surface's DECISION 17). Filters `action` (a prefix) and `period` (1 · 7 · 30 · 90 days; 30 by default).
  * Pattern B on #trail-results. JSON: the rows with their sentences.
  */
 require_once dirname(__DIR__) . '/app/bootstrap.php';
@@ -26,14 +26,18 @@ if ($record !== null && $record[0] === 'member' && $record[1] !== $me && !is_inv
 $filters = ['own' => $record === null, 'action' => request_string('action'), 'since' => request_integer('period') ?? request_integer('since')];
 if ($record !== null) { $filters[$record[0]] = $record[1]; }
 if (!preg_match('/^[a-z_]+(\.[a-z_]+)*\.?$/', $filters['action'])) { $filters['action'] = ''; }
-if (!in_array($filters['since'], [1, 7, 30, 90], true)) { $filters['since'] = null; }
+if (!in_array($filters['since'], [1, 7, 30, 90], true)) { $filters['since'] = 30; }
 $page = max(1, (int) (request_integer('page') ?? 1));
 $result = find_my_activity($pdo, $me, $page, $filters);
 $rows = $result['rows'];
 foreach ($rows as &$r) { $r['sentence'] = activity_sentence($r); }
 unset($r);
 $query = array_filter([($record[0] ?? 'x') => $record[1] ?? null, 'action' => $filters['action'], 'period' => $filters['since']], static fn ($v) => $v !== null && $v !== '');
-log_screen_view($pdo, 'trail');
+if (!wants_json() || ($_SERVER['HTTP_X_SCREEN_VIEW'] ?? '') === '1') {
+    if (!(is_htmx_request() && ($_SERVER['HTTP_HX_TARGET'] ?? '') === 'trail-results')) {
+        log_activity($pdo, 'screen.view', null, null, ['screen' => 'trail', 'after' => ['screen' => 'trail'] + ($record !== null ? [$record[0] => $record[1]] : [])]);
+    }
+}
 if (wants_json()) {
     respond_screen(['rows' => array_map('present_activity_row', $rows), 'page' => $page, 'more' => $result['more'], 'filters' => $query]);
 }

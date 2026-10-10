@@ -155,12 +155,12 @@ const smallControls = (page, scope) => page.evaluate((s) => [...document.querySe
   ok(bar.x >= nav.width - 1 && bar.y + bar.height >= 780, `the command bar sits at the bottom, right of the sidebar (x ${Math.round(bar.x)}, sidebar ${Math.round(nav.width)})`);
   ok((await page.locator('#header-role-badge').innerText()).includes('Super-admin'), 'the badge reads Super-admin');
   await page.screenshot({ path: `${SHOTS}/desktop-home.png` });
-  await page.click('#nav-report-list .nxl-link');                     // a placeholder (slice 9) — HTMX navigation pushes its URL
+  await page.click('#nav-report-list .nxl-link');                     // a real screen (slice 9) — HTMX navigation pushes its URL
   await page.waitForURL(BASE + '/reports/');
-  await page.waitForSelector('#report-list-coming');
+  await page.waitForSelector('#report-list-cards');
   ok((await page.title()).startsWith('Reports'), 'HTMX navigation: /reports/ pushed, title "' + (await page.title()) + '"');
   ok(await page.evaluate(() => document.querySelector('#nav-report-list .nxl-link').classList.contains('active') && !document.querySelector('#nav-home .nxl-link').classList.contains('active')), 'the sidebar highlights the screen, not Home');
-  await page.screenshot({ path: `${SHOTS}/desktop-placeholder.png` });
+  await page.screenshot({ path: `${SHOTS}/desktop-reports.png` });
   await page.goBack();
   await page.waitForURL(BASE + '/');
   ok(true, 'the browser back button returns to /');
@@ -232,7 +232,7 @@ const smallControls = (page, scope) => page.evaluate((s) => [...document.querySe
   ok(trail.includes('SMOKE Owner made an access token') && trail.includes('SMOKE Owner changed how they are told'), 'the trail shows the person\'s own rows in words');
   await page.goto(BASE + '/trail?source=9', { waitUntil: 'networkidle' });
   const rec = await page.locator('#trail-list').innerText();
-  ok(rec.includes('SMOKE Owner source update: SMOKE Layla') && (await page.locator('#trail-card .card-title').innerText()).includes("source's history"), 'and a record\'s rows by ?source=');
+  ok(rec.includes('SMOKE Owner changed the source SMOKE Layla') && (await page.locator('#trail-card .card-title').innerText()).includes("source's history"), 'and a record\'s rows by ?source=');
   ok(errors.length === 0, 'no console errors' + (errors.length ? ': ' + errors.join(' / ') : ''));
   await ctx.close();
 }

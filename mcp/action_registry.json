@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/inventory-action-manifest.md",
-    "generated_at": "2026-10-10T16:47:54+00:00",
+    "generated_at": "2026-10-10T19:03:13+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -1006,8 +1006,8 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "the reports as cards: stock value, sell-through and cover, sales summary and margin, price exceptions, source health and reliability, lead-time actuals",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "report": {
             "screen": "report",
@@ -1024,7 +1024,7 @@
                 "source",
                 "by"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "export-list": {
@@ -1036,8 +1036,8 @@
                 "from",
                 "to"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "admin-settings": {
             "screen": "admin-settings",
@@ -1045,8 +1045,8 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "the settings: the business (name, contact, address — the doors and the crawler's user-agent), currency, units, time zone, Sales sees cost, the supplier sees the phone for which shipping kinds, the feed shows quantities, link lifetimes, feed rate limits, the sizes and their synonyms, the attribute keys, reorder defaults, the cost source, the thresholds (cost move, reference undercut, acknowledgment days), the Buyer, the crawl policy (user-agent, rate, back-off, max pages, cadences, removed-after, heartbeat), the attachment limit",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "sequence-list": {
             "screen": "sequence-list",
@@ -1054,8 +1054,8 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "the document sequences (sales orders, purchase orders, receipts, returns, adjustments, transfers, counts): prefix, next value, padding",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "tax-rate-list": {
             "screen": "tax-rate-list",
@@ -1063,8 +1063,8 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "the tax rates with the default marked; archived apart",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "tax-rate-add": {
             "screen": "tax-rate-add",
@@ -1072,7 +1072,7 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "to add a tax rate: name, rate, default",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "tax-rate-edit": {
@@ -1081,7 +1081,7 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "to change a tax rate's name, rate, default, or archive it",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "reason-code-list": {
@@ -1090,8 +1090,8 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "the reason codes for adjustments and returns, in order, with whether each changes quantity",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "reason-code-add": {
             "screen": "reason-code-add",
@@ -1099,7 +1099,7 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "to add a reason code: code, name, applies to (adjustment or return), affects quantity, order",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "reason-code-edit": {
@@ -1108,7 +1108,7 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "to change a reason code's name, applies to, affects quantity, order, active",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "agent-list": {
@@ -1117,8 +1117,8 @@
             "section": "Reports, home, admin and tokens (slice 9)",
             "when": "the agents holding a role here, their last run, their pending and failed dispatches — read-only; hiring and grants link to the kernel",
             "params": [],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "dispatch-list": {
             "screen": "dispatch-list",
@@ -6162,7 +6162,7 @@
             "approval": "other",
             "log_event": "settings.save",
             "who": "settings.manage",
-            "built": false
+            "built": true
         },
         "sequence_set": {
             "action": "sequence_set",
@@ -6199,7 +6199,7 @@
             "approval": "other",
             "log_event": "sequence.set",
             "who": "sequences.manage",
-            "built": false
+            "built": true
         },
         "tax_rate_save": {
             "action": "tax_rate_save",
@@ -6236,7 +6236,7 @@
             "approval": "other",
             "log_event": "tax_rate.save",
             "who": "settings.manage",
-            "built": false
+            "built": true
         },
         "tax_rate_archive": {
             "action": "tax_rate_archive",
@@ -6255,7 +6255,7 @@
             "approval": null,
             "log_event": "tax_rate.archive",
             "who": "settings.manage",
-            "built": false
+            "built": true
         },
         "reason_code_save": {
             "action": "reason_code_save",
@@ -6310,7 +6310,7 @@
             "approval": null,
             "log_event": "reason_code.save",
             "who": "settings.manage",
-            "built": false
+            "built": true
         },
         "report_run": {
             "action": "report_run",
@@ -6383,7 +6383,7 @@
             "approval": null,
             "log_event": "report.run",
             "who": "reports.read",
-            "built": false
+            "built": true
         },
         "export_download": {
             "action": "export_download",
@@ -6432,7 +6432,7 @@
             "approval": null,
             "log_event": "export.download",
             "who": "reports.read or exports.all",
-            "built": false
+            "built": true
         }
     }
 }

@@ -257,6 +257,7 @@ $groups    = nav_groups();
     <script src="/assets/js/purchasing.js"></script>
     <script src="/assets/js/feed.js"></script>
     <script src="/assets/js/returns.js"></script>
+    <script src="/assets/js/admin.js"></script>
     <script src="/assets/js/theme-customizer-init.min.js"></script>
 </body>
 </html>

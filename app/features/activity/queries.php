@@ -25,10 +25,12 @@ function find_my_activity(PDO $pdo, int $memberId, int $pageNo, array $filters =
             $keyed = true;
         }
     }
-    foreach (['product' => 'product', 'variant' => 'product_variant'] as $k => $etype) {
+    foreach (['product' => ['product', 'product_id'], 'variant' => ['product_variant', 'variant_id']] as $k => [$etype, $afterKey]) {
         if (($filters[$k] ?? null) !== null) {
-            $where[] = "entity_type = '$etype' AND entity_id = :$k";
+            // the record itself, and the rows (a watch, an image, a line) whose payload names it
+            $where[] = "((entity_type = '$etype' AND entity_id = :$k) OR (after IS NOT NULL AND after->>'$afterKey' = :{$k}_s))";
             $args[$k] = (int) $filters[$k];
+            $args[$k . '_s'] = (string) (int) $filters[$k];
             $keyed = true;
         }
     }

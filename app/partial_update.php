@@ -26,6 +26,9 @@ const PARTIAL_UPDATE_TARGETS = [
     '/returns/save.php' => ['return_authorizations', 'return', 'mcp_return_authorizations', 'return_id'],
     '/returns/lines/save.php' => ['return_lines', 'return_line', 'mcp_return_lines', 'return_line_id'],
     '/admin/price-lists/save.php' => ['price_lists', 'price_list', 'mcp_price_lists', 'price_list_id'],
+    '/admin/settings.php' => ['inv_settings', '_settings', 'inv_settings', 'id'],             // the one row; the view has no id, the writer reads its own table (reports-admin.md DECISION 12)
+    '/admin/tax-rates/save.php' => ['tax_rates', 'tax_rate', 'mcp_tax_rates', 'tax_rate_id'],
+    '/admin/reason-codes/save.php' => ['reason_codes', 'reason', 'mcp_reason_codes', 'reason_code_id'],
 ];
 
 function partial_update_prefill(PDO $pdo): void
