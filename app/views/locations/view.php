@@ -42,4 +42,6 @@ if ($mayWrite) {
             <?php foreach ($tabdata['trail'] as $r): ?><tr id="location-view-trail-row-<?= (int) $r['activity_id'] ?>"><td class="text-nowrap"><?= e(format_ts($r['occurred_at'], $tz, 'M j, g:i A')) ?></td><td><?= e(activity_sentence($r)) ?></td></tr><?php endforeach; ?>
         </tbody></table></div></div></div>
     <?php endif; ?>
+    <?= view('shared/notes.php', ['recordType' => 'location', 'recordId' => $id, 'tz' => $tz]) ?>
+    <?= view('shared/attachments.php', ['recordType' => 'location', 'recordId' => $id, 'tz' => $tz]) ?>
 </div>

@@ -40,11 +40,11 @@ ok($wrong === [], "$n role × screen checks (" . count($matrix) . ' screens × 6
 ok(str_contains(page($jars['vera'], '/receipts/')['body'], 'You may not receive goods.'), 'a refusal says what the person may not do, in words ("You may not receive goods.")');
 ok(str_contains(page($jars['vera'], '/matching/')['body'], 'You may not match listings.') && str_contains(page($jars['sam'], '/counts/')['body'], 'You may not count stock.') && str_contains(page($jars['vera'], '/admin/settings')['body'], 'You may not change the settings.'), 'Vera on the match queue, Sam on counts, Vera on the admin settings: each in that right\'s sentence');
 $stubs = trim((string) shell_exec('grep -rl "render_nav_stub(" ' . escapeshellarg(dirname(__DIR__, 2) . '/html') . ' 2>/dev/null | wc -l'));
-ok((int) $stubs === 10, "the placeholders stand: $stubs controllers name their slice (38 at Phase 2, five built by slice 1, eight by slice 2, four by slice 3, two by slice 4, four by slice 5, two by slice 6, three by slice 7)");
-ok(str_contains(page($jars['owner'], '/admin/dispatches')['body'], 'slice 8 builds this screen') && str_contains(page($jars['nora'], '/returns/')['body'], 'slice 8 builds this screen') && str_contains(page($jars['nora'], '/reports/')['body'], 'slice 9 builds this screen') && str_contains(page($jars['owner'], '/admin/settings')['body'], 'slice 9 builds this screen'), 'each placeholder names its slice (dispatches 8, returns 8, reports 9, settings 9)');
-ok(str_contains(page($jars['owner'], '/admin/dispatches')['body'], 'id="dispatch-list-coming"') && str_contains(page($jars['owner'], '/admin/dispatches')['body'], 'data-screen="dispatch-list"'), 'a placeholder renders inside the shell with its screen id stamped');
-ok(req('POST', '/admin/dispatches', ['jar' => $jars['owner'], 'form' => ['csrf_token' => page_csrf($jars['owner'])]])['code'] === 501, 'a POST to a placeholder: 501');
-$r = req('GET', '/admin/dispatches', ['jar' => $jars['owner']] + $json);
+ok((int) $stubs === 7, "the placeholders stand: $stubs controllers name their slice (38 at Phase 2, five built by slice 1, eight by slice 2, four by slice 3, two by slice 4, four by slice 5, two by slice 6, three by slice 7, three by slice 8 — seven are slice 9's)");
+ok(str_contains(page($jars['owner'], '/admin/agents')['body'], 'slice 9 builds this screen') && str_contains(page($jars['nora'], '/reports/')['body'], 'slice 9 builds this screen') && str_contains(page($jars['nora'], '/exports/')['body'], 'slice 9 builds this screen') && str_contains(page($jars['owner'], '/admin/settings')['body'], 'slice 9 builds this screen'), 'each placeholder names its slice (agents 9, reports 9, exports 9, settings 9)');
+ok(str_contains(page($jars['owner'], '/admin/agents')['body'], 'id="agent-list-coming"') && str_contains(page($jars['owner'], '/admin/agents')['body'], 'data-screen="agent-list"'), 'a placeholder renders inside the shell with its screen id stamped');
+ok(req('POST', '/admin/agents', ['jar' => $jars['owner'], 'form' => ['csrf_token' => page_csrf($jars['owner'])]])['code'] === 501, 'a POST to a placeholder: 501');
+$r = req('GET', '/admin/agents', ['jar' => $jars['owner']] + $json);
 ok($r['code'] === 501 && (json_decode($r['body'], true)['error']['code'] ?? '') === 'not_built', 'JSON to a placeholder: 501 not_built');
 $menu = fn (string $j): array => (preg_match_all('/id="nav-((?!group-)[a-z-]+)"/', page($j, '/')['body'], $m) ? $m[1] : []);
 $groups = fn (string $j): array => (preg_match_all('/nxl-caption" id="nav-group-[a-z]+"><label>([^<]+)</', page($j, '/')['body'], $m) ? $m[1] : []);
@@ -137,7 +137,7 @@ ok(str_contains($h, 'id="home-bell-') && str_contains($h, 'SMOKE Back in stock')
 $d = json_decode(page($jars['sam'], '/notifications', $json)['body'], true)['data'];
 ok(count($d['notifications']) === 2 && $d['notifications'][0]['read'] === false && $d['unread'] === 2 && !str_contains(json_encode($d), 'for Nora') && $d['notifications'][1]['url'] === '/orders/3', 'the screen lists his two with their records (an order links to /orders/3), never Nora\'s');
 $h = page($jars['sam'], '/notifications')['body'];
-ok(preg_match('~href="/watches/\?back=[^"#]*#watch-row-7"~', $h) === 1 && str_contains($h, 'href="/orders/3?back=') && preg_match('/badge bg-soft-primary[^>]*>watch</', $h) === 1 && preg_match('/badge bg-soft-info[^>]*>order</', $h) === 1, 'a notification links to its record with the way back; the kind chips wear their colours (watch primary, order info)');
+ok(str_contains($h, 'href="/watches/?back=') && str_contains($h, 'href="/orders/3?back=') && preg_match('/badge bg-soft-info[^>]*>A watch fired</', $h) === 1 && preg_match('/badge bg-soft-info[^>]*>An order</', $h) === 1, 'a notification links to its record with the way back (a watch to /watches/); the kind chips wear slice 8\'s label and colour (a watch, an order: info)');
 $nid = (int) one("SELECT id FROM notifications WHERE member_id = 41 AND kind = 'watch'");
 $since = last_activity_id();
 $r = req('POST', '/settings/notifications/read.php', ['jar' => $jars['sam'], 'form' => ['notification' => $nid, 'csrf_token' => $t]]);
@@ -233,7 +233,9 @@ ok(($row['source'] ?? '') === 'agent' && (int) ($row['agent_run_id'] ?? 0) === 7
 ok(req('GET', '/', ['headers' => as_agent($tok)])['code'] === 403 && req('POST', '/settings/tokens/mint.php', ['headers' => as_agent($tok), 'form' => ['label' => 'agent']])['code'] === 403 && req('POST', '/assistant/ask.php', ['headers' => as_agent($tok), 'form' => ['utterance' => 'hi']])['code'] === 403, 'an agent may not open the home, mint a person\'s token or use the command bar: 403');
 $r = req('POST', '/settings/prefs.php', ['headers' => as_agent($tok), 'form' => ['text_enabled' => 'no']]);
 ok($r['code'] === 200 && one('SELECT text_enabled FROM notification_prefs WHERE member_id = 45') === false, 'but an agent may save its own notification choices (prefs_save is "own")');
-ok(req('GET', '/returns/', ['headers' => as_agent($tok)])['code'] === 501 && req('POST', '/returns/', ['headers' => as_agent($tok), 'form' => []])['code'] === 501, 'an agent on a placeholder: 501 not_built (GET and POST)');
+pdo()->exec("UPDATE members SET roles = '{buyer}' WHERE id = 45");               // a placeholder checks the right first: the expert borrows the Buyer's reports.read
+ok(req('GET', '/reports/', ['headers' => as_agent($tok)])['code'] === 501 && req('POST', '/reports/', ['headers' => as_agent($tok), 'form' => []])['code'] === 501, 'an agent on a placeholder: 501 not_built (GET and POST)');
+pdo()->exec("UPDATE members SET roles = '{user}' WHERE id = 45");
 // an agent the feed introduces with no grant: admitted at first contact only when the kernel vouches
 kernel_state(function ($s) { $s['incremental'] = incr(['members' => [['id' => 900, 'member_kind' => 'agent', 'display_name' => 'SMOKE Stock Buyer', 'email' => null, 'business_role' => 'user', 'is_external' => false, 'status' => 'active', 'updated_at' => '2026-01-01T00:00:00Z', 'departments' => []]]], '2026-01-01T00:03:00.000000Z'); return $s; });
 sync();

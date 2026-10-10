@@ -164,24 +164,7 @@ function cancel_order(PDO $pdo, int $id, int $by, string $reason): array
     return ['released' => $released, 'dropships_cancelled' => $draftBefore, 'dropships_to_cancel_by_hand' => count($byHand)];
 }
 
-/** The Buyer: inv_settings.buyer_member_id, else the first active super-admin of the mirror. Null when there is none. */
-function buyer_member_id(PDO $pdo): ?int
-{
-    $v = one_value($pdo, 'SELECT buyer_member_id FROM inv_settings WHERE id = 1');
-    if ($v === null) { $v = one_value($pdo, "SELECT id FROM members WHERE business_role = 'super_admin' AND status = 'active' ORDER BY id LIMIT 1"); }
-    return $v === null ? null : (int) $v;
-}
-
-/** Tell the Buyer (a notifications row, kind `order`, and the outbox per their prefs — slice 8 sends). Returns the notification id, or null when nobody is the Buyer. */
-function notify_buyer(PDO $pdo, string $kind, string $recordType, int $recordId, string $title, ?string $body = null): ?int
-{
-    $buyer = buyer_member_id($pdo);
-    if ($buyer === null) { return null; }
-    $st = $pdo->prepare('SELECT inv_notify(:m, :k, :rt, :rid, :t, :b)');
-    $st->execute(['m' => $buyer, 'k' => $kind, 'rt' => $recordType, 'rid' => $recordId, 't' => mb_substr($title, 0, 300), 'b' => $body]);
-    $id = $st->fetchColumn();
-    return $id === false || $id === null ? null : (int) $id;
-}
+// The Buyer and notify_buyer() are slice 8's (app/features/notify/queue.php, required by the bootstrap): the settings' Buyer, else the first super-admin.
 
 /** Mint the customer's link (inv_order_link_mint(): the previous live one is rotated). The raw token is returned ONCE — it lives in the email alone. */
 function mint_order_link(PDO $pdo, int $orderId): string

@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/inventory-action-manifest.md",
-    "generated_at": "2026-10-10T15:22:34+00:00",
+    "generated_at": "2026-10-10T16:47:54+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -947,8 +947,8 @@
                 "customer",
                 "awaiting_disposition"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "return-add": {
             "screen": "return-add",
@@ -958,7 +958,7 @@
             "params": [
                 "order"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "return-view": {
@@ -967,7 +967,7 @@
             "section": "Returns, the Buyer agent's data, notifications and the worker (slice 8)",
             "when": "one return: lines, reasons, dispositions, received quantities, the refund and restocking fee recorded, photos; Approve, Deny, Receive, Disposition, Close",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "return-edit": {
@@ -976,7 +976,7 @@
             "section": "Returns, the Buyer agent's data, notifications and the worker (slice 8)",
             "when": "to change a requested or approved return's lines, method, date, dispositions, notes",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "return-receive": {
@@ -985,7 +985,7 @@
             "section": "Returns, the Buyer agent's data, notifications and the worker (slice 8)",
             "when": "to receive the goods: per line the quantity back, its condition, where it lands — restock writes the movement",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "proposal-list": {
@@ -997,8 +997,8 @@
                 "kind",
                 "status"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "report-list": {
             "screen": "report-list",
@@ -1129,8 +1129,8 @@
                 "status",
                 "agent"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "connection-list": {
             "screen": "connection-list",
@@ -5411,7 +5411,7 @@
             "approval": null,
             "log_event": "return.request",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "return_update": {
             "action": "return_update",
@@ -5466,7 +5466,7 @@
             "approval": null,
             "log_event": "return.update",
             "who": "orders.write",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "return_line_add": {
@@ -5528,7 +5528,7 @@
             "approval": null,
             "log_event": "return.line_add",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "return_line_remove": {
             "action": "return_line_remove",
@@ -5547,7 +5547,7 @@
             "approval": null,
             "log_event": "return.line_remove",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "return_authorize": {
             "action": "return_authorize",
@@ -5566,7 +5566,7 @@
             "approval": "other",
             "log_event": "return.approve",
             "who": "returns.write",
-            "built": false
+            "built": true
         },
         "return_deny": {
             "action": "return_deny",
@@ -5591,7 +5591,7 @@
             "approval": null,
             "log_event": "return.deny",
             "who": "returns.write",
-            "built": false
+            "built": true
         },
         "return_receive": {
             "action": "return_receive",
@@ -5622,7 +5622,7 @@
             "approval": null,
             "log_event": "return.receive",
             "who": "returns.receive",
-            "built": false
+            "built": true
         },
         "return_disposition_set": {
             "action": "return_disposition_set",
@@ -5653,7 +5653,7 @@
             "approval": null,
             "log_event": "return.disposition",
             "who": "returns.write",
-            "built": false
+            "built": true
         },
         "return_close": {
             "action": "return_close",
@@ -5684,7 +5684,7 @@
             "approval": null,
             "log_event": "return.close",
             "who": "returns.write",
-            "built": false
+            "built": true
         },
         "buyer_propose": {
             "action": "buyer_propose",
@@ -5751,7 +5751,7 @@
             "approval": null,
             "log_event": "buyer.propose",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "buyer_proposal_accept": {
             "action": "buyer_proposal_accept",
@@ -5770,7 +5770,7 @@
             "approval": null,
             "log_event": "buyer.accept",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "buyer_proposal_dismiss": {
             "action": "buyer_proposal_dismiss",
@@ -5795,7 +5795,7 @@
             "approval": null,
             "log_event": "buyer.dismiss",
             "who": "purchasing.write",
-            "built": false
+            "built": true
         },
         "morning_note_send": {
             "action": "morning_note_send",
@@ -5820,7 +5820,7 @@
             "approval": null,
             "log_event": "buyer.note",
             "who": "agents.settings",
-            "built": false
+            "built": true
         },
         "note_add": {
             "action": "note_add",
@@ -5851,7 +5851,7 @@
             "approval": null,
             "log_event": "note.add",
             "who": "notes.write",
-            "built": false
+            "built": true
         },
         "note_delete": {
             "action": "note_delete",
@@ -5870,7 +5870,7 @@
             "approval": null,
             "log_event": "note.delete",
             "who": "own or records.delete",
-            "built": false
+            "built": true
         },
         "attachment_add": {
             "action": "attachment_add",
@@ -5901,7 +5901,7 @@
             "approval": null,
             "log_event": "attachment.add",
             "who": "notes.write",
-            "built": false
+            "built": true
         },
         "attachment_delete": {
             "action": "attachment_delete",
@@ -5920,7 +5920,7 @@
             "approval": null,
             "log_event": "attachment.delete",
             "who": "own or records.delete",
-            "built": false
+            "built": true
         },
         "dispatch_retry": {
             "action": "dispatch_retry",
@@ -5939,7 +5939,7 @@
             "approval": null,
             "log_event": "agent.dispatch",
             "who": "agents.settings",
-            "built": false
+            "built": true
         },
         "settings_save": {
             "action": "settings_save",

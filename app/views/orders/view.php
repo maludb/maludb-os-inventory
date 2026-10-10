@@ -55,7 +55,7 @@ $mayNotify = $may['send'] && !in_array($st, ['quote', 'cancelled'], true);
                 <?= view('orders/partials/shipments.php', ['o' => $o, 'tz' => $tz, 'may' => $may, 'here' => $here]) ?>
                 <?= view('orders/partials/dropships.php', ['o' => $o, 'seesCost' => $may['cost'], 'here' => $here]) ?>
                 <?php if ($may['send']): ?><?= view('orders/partials/link-state.php', ['o' => $o, 'tz' => $tz]) ?><?php endif; ?>
-                <?php if ($o['returns'] !== []): ?><div class="card mb-3" id="order-returns"><div class="card-header fw-semibold">Returns</div><div class="card-body fs-12"><?php foreach ($o['returns'] as $r): ?><div><?= e($r['number']) ?> · <?= e(str_replace('_', ' ', $r['status'])) ?></div><?php endforeach; ?></div></div><?php endif; ?>
+                <?php if ($o['returns'] !== []): ?><div class="card mb-3" id="order-returns"><div class="card-header fw-semibold">Returns</div><div class="card-body fs-12"><?php foreach ($o['returns'] as $r): ?><div id="order-return-<?= (int) $r['return_id'] ?>"><?= hx_link(with_back('/returns/' . (int) $r['return_id'], $here), e($r['number']), 'fw-semibold') ?> · <?= e(str_replace('_', ' ', $r['status'])) ?></div><?php endforeach; ?></div></div><?php endif; ?>
                 <?php if ($mayNotify): ?>
                 <details class="card mb-3" id="order-notify"><summary class="card-body py-2 fw-semibold d-flex">Tell the customer</summary><div class="card-body pt-0">
                     <form method="post" action="/orders/notify.php" hx-post="/orders/notify.php" hx-target="#flash" id="order-notify-form" hx-confirm="Send this notice to the customer?"><?= csrf_field() ?><input type="hidden" name="order" value="<?= $oid ?>">
@@ -78,13 +78,9 @@ $mayNotify = $may['send'] && !in_array($st, ['quote', 'cancelled'], true);
     <?php elseif ($tab === 'timeline'): ?>
         <?= view('orders/partials/timeline.php', ['rows' => $extra['timeline'], 'tz' => $tz, 'seesCost' => $may['cost']]) ?>
     <?php elseif ($tab === 'notes'): ?>
-        <div class="card" id="order-notes"><div class="card-body"><?php if ($extra['notes'] === []): ?><div class="text-muted text-center">No notes yet.</div><?php endif; ?>
-            <?php foreach ($extra['notes'] as $n): ?><div class="border-bottom py-2 fs-12"><div class="text-muted"><?= e($n['member_name'] ?? '') ?> · <?= e(format_ts($n['created_at'], $tz, 'M j, g:i A')) ?></div><div style="white-space: pre-line"><?= e($n['body']) ?></div></div><?php endforeach; ?>
-            <?php if (is_file(dirname(__DIR__) . '/shared/note-form.php')): ?><?= view('shared/note-form.php', ['recordType' => 'sales_order', 'recordId' => $oid]) ?><?php endif; ?></div></div>
+        <?= view('shared/notes.php', ['recordType' => 'sales_order', 'recordId' => $oid, 'tz' => $tz]) ?>
     <?php elseif ($tab === 'attachments'): ?>
-        <div class="card" id="order-attachments"><div class="card-body"><?php if ($extra['attachments'] === []): ?><div class="text-muted text-center">No attachments yet.</div><?php endif; ?>
-            <?php foreach ($extra['attachments'] as $a): ?><div class="py-1 fs-12"><a href="/files/<?= (int) $a['attachment_id'] ?>"><?= e($a['filename']) ?></a> <span class="text-muted"><?= e(number_format($a['byte_size'] / 1024, 0)) ?> kB</span></div><?php endforeach; ?>
-            <?php if (is_file(dirname(__DIR__) . '/shared/attachment-form.php')): ?><?= view('shared/attachment-form.php', ['recordType' => 'sales_order', 'recordId' => $oid]) ?><?php endif; ?></div></div>
+        <?= view('shared/attachments.php', ['recordType' => 'sales_order', 'recordId' => $oid, 'tz' => $tz]) ?>
     <?php else: ?>
         <div class="card" id="order-trail"><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12"><tbody>
             <?php if ($extra['trail'] === []): ?><tr><td class="text-muted py-3 text-center">Nothing yet.</td></tr><?php endif; ?>

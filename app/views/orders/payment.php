@@ -1,8 +1,8 @@
-<?php /** Record a payment or a refund (screen `order-payment`). Data: o, kind, here */
+<?php /** Record a payment or a refund (screen `order-payment`). Data: o, kind, amount? (the amount a return asks to be refunded), here */
 $oid = (int) $o['sales_order_id'];
 $refund = $kind === 'refund';
 $action = $refund ? '/orders/payments/refund.php' : '/orders/payments/save.php';
-$suggest = $refund ? $o['amount_paid'] : ($kind === 'balance' && (float) $o['balance_due'] > 0 ? $o['balance_due'] : '');
+$suggest = ($amount ?? null) !== null ? $amount : ($refund ? $o['amount_paid'] : ($kind === 'balance' && (float) $o['balance_due'] > 0 ? $o['balance_due'] : ''));
 ?>
 <?= view('shared/header.php', ['id' => 'order-payment', 'title' => 'Payment for ' . $o['number'], 'crumbs' => [['Home', '/'], ['Orders', '/orders/'], [$o['number'], '/orders/' . $oid], ['Payment', null]], 'back' => back_link() ?? ['/orders/' . $oid, $o['number']]]) ?>
 <div class="main-content" id="order-payment-content">

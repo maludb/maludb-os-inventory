@@ -32,7 +32,7 @@ function present_notification(array $n): array
 {
     return ['notification_id' => (int) $n['notification_id'], 'kind' => $n['kind'], 'record_type' => $n['record_type'],
             'record_id' => $n['record_id'] !== null ? (int) $n['record_id'] : null, 'title' => $n['title'], 'body' => $n['body'],
-            'read' => $n['read_at'] !== null, 'created_at' => json_ts($n['created_at']), 'url' => record_url($n['record_type'], $n['record_id'])];
+            'read' => $n['read_at'] !== null, 'created_at' => json_ts($n['created_at']), 'url' => notification_record_url($n), 'label' => notification_kind((string) $n['kind'])['label']];
 }
 
 /** The chip colour of a notification kind (sso-shell.md "Status vocabulary"). */

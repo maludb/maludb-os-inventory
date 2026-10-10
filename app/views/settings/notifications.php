@@ -16,14 +16,14 @@
             </div>
         </div></div>
     <?php else: ?>
-        <?php foreach ($rows as $n): $id = (int) $n['notification_id']; $unread = $n['read_at'] === null; $colour = notification_kind_colour((string) $n['kind']); $u = record_url($n['record_type'], $n['record_id']); ?>
+        <?php foreach ($rows as $n): $id = (int) $n['notification_id']; $unread = $n['read_at'] === null; $k = notification_kind((string) $n['kind']); $colour = $k['color']; $u = notification_record_url($n); ?>
             <div class="card mb-2<?= $unread ? ' border-primary' : '' ?>" id="notification-row-<?= $id ?>">
                 <div class="card-body d-flex align-items-start gap-3 py-3">
-                    <span class="avatar-text avatar-md rounded <?= $unread ? 'bg-soft-primary text-primary' : '' ?>"><i class="feather-bell"></i></span>
+                    <span class="avatar-text avatar-md rounded <?= $unread ? 'bg-soft-' . e($colour) . ' text-' . e($colour) : '' ?>" id="notification-row-<?= $id ?>-icon"><i class="<?= e($k['icon']) ?>"></i></span>
                     <div class="min-w-0 flex-grow-1">
                         <div class="fw-semibold"><?= $u !== null ? hx_link(with_back($u, '/notifications'), e($n['title']), 'text-dark') : e($n['title']) ?></div>
                         <?php if (($n['body'] ?? '') !== ''): ?><div class="fs-12 text-muted"><?= e($n['body']) ?></div><?php endif; ?>
-                        <div class="fs-11 text-muted"><span class="badge bg-soft-<?= e($colour) ?> text-<?= $colour === 'light' ? 'dark' : e($colour) ?> me-1"><?= e(str_replace('_', ' ', (string) $n['kind'])) ?></span><?= e(format_ts($n['created_at'], $tz, 'M j, g:i A')) ?><?= $unread ? '' : ' · read' ?></div>
+                        <div class="fs-11 text-muted"><span class="badge bg-soft-<?= e($colour) ?> text-<?= $colour === 'light' ? 'dark' : e($colour) ?> me-1"><?= e($k['label']) ?></span><?= e(format_ts($n['created_at'], $tz, 'M j, g:i A')) ?><?= $unread ? '' : ' · read' ?></div>
                     </div>
                     <?php if ($unread): ?>
                         <form method="post" action="/settings/notifications/read.php" hx-post="/settings/notifications/read.php" hx-target="#page-content" hx-swap="innerHTML"><?= csrf_field() ?><input type="hidden" name="notification" value="<?= $id ?>">

@@ -13,8 +13,8 @@ $coming = static fn (string $id, string $icon, string $title, string $text, stri
 <div class="main-content" id="home-content">
     <div class="row g-3">
         <div class="col-lg-6">
-            <?= $s['note'] === null ? $coming('note', 'feather-sunrise', 'The morning note', "The Stock Buyer's seven headings — at risk, reorder, prices, unmatched, sources, purchase orders, returns — each a count that opens its list.", 'slice 8') : '' ?>
-            <?= $s['at_risk'] === null ? $coming('at-risk', 'feather-alert-triangle', 'Lines at risk', 'Order lines whose source is gone, whose price moved or whose supplier is late appear here.', 'slice 8', '/orders/') : '' ?>
+            <?= $s['note'] === null ? $coming('note', 'feather-sunrise', 'The morning note', "The Stock Buyer's seven headings — at risk, reorder, prices, unmatched, sources, purchase orders, returns — each a count that opens its list.", 'slice 9') : '' ?>
+            <?= $s['at_risk'] === null ? $coming('at-risk', 'feather-alert-triangle', 'Lines at risk', 'Order lines whose source is gone, whose price moved or whose supplier is late appear here.', 'slice 9', '/orders/') : '' ?>
             <?php if ($may['sales']): ?><?= $s['my_orders'] === null ? $coming('my-orders', 'feather-shopping-cart', 'My open orders', 'Your quotes and orders with their next step — confirm, record a deposit, ship, deliver — appear here.', 'slice 5', '/orders/') : '' ?><?php endif; ?>
             <?php if ($may['warehouse']): ?><?= $s['warehouse'] === null ? $coming('warehouse', 'feather-layers', 'To receive, to pick, to count', 'Draft receipts and stock purchase orders due, the lines to pick today and the open counts appear here.', 'slice 2 and 5', '/stock/') : '' ?><?php endif; ?>
             <?= $s['today'] === null ? $coming('today', 'feather-truck', "Today's deliveries and pickups", 'What goes out today by location and delivery method appears here.', 'slice 5', '/orders/today') : '' ?>

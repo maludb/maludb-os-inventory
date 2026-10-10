@@ -4,7 +4,9 @@
  * endpoints Inventory calls, from the JSON state file $FAKE_KERNEL_STATE (the proofs rewrite it between steps):
  *   GET  /api/v1/directory/changes.php  → state.feed (os.directory-changes/1); ?since= answers state.incremental when set, else an empty change
  *   POST /api/v1/runs/facts.php {token} → state.facts[<run id>] (the run token's third part), else {valid: false}
- *   POST /api/v1/agents/chat.php        → state.chat (a canned reply) or the refusal state.chat_status names, echoing the acting member it saw
+ *   POST /api/v1/agents/chat.php        → state.chat (a canned reply; state.chat_http = 202 with {finished: false} for a run still going; {approval_request_id} for a paused write; state.chat_by_agent[<agent>] for one agent)
+ *                                         or the refusal / failure state.chat_status names (400, 403, 404, 409, 422, 500), echoing the acting member it saw; every request is appended to "<state file>.chat"
+ *   GET  /api/v1/agents/chat.php?run=N  → state.chat_runs[N] (the body of a run the POST answered 202 for), 404 when none; state.chat_get_status refuses it
  *   GET  /api/v1/ledger/periods.php     → A5, from state.ledger: no ?period= answers os.ledger-periods/1 (state.ledger.periods — the months and their status); ?period=YYYY-MM answers
  *                                         state.ledger.docs[<period>] (an os.ledger-period/1 document, as the kernel sends it), a 422 for a month it has none of; state.ledger.mode = down answers 503;
  *                                         every request is appended to "<state file>.ledger" (the period asked, or "list")
@@ -50,12 +52,22 @@ switch ($path) {
         $run = $parts[2] ?? '';
         $out($state['facts'][$run] ?? ['valid' => false]);
     case '/api/v1/agents/chat.php':
-        file_put_contents((string) getenv('FAKE_KERNEL_STATE') . '.chat', json_encode(['agent' => $_GET['agent'] ?? null, 'acting' => $_SERVER['HTTP_X_ACTING_MEMBER'] ?? null, 'utterance' => $input['utterance'] ?? null]) . "\n", FILE_APPEND);
-        if (isset($state['chat_status'])) {
-            $messages = [403 => 'This person may not use the expert.', 404 => 'No expert for this application.', 409 => 'The expert is busy with another turn.'];
+        $log = (string) getenv('FAKE_KERNEL_STATE') . '.chat';
+        $method = $_SERVER['REQUEST_METHOD'] ?? 'POST';
+        file_put_contents($log, json_encode(['method' => $method, 'run' => $_GET['run'] ?? null, 'agent' => $_GET['agent'] ?? null, 'acting' => $_SERVER['HTTP_X_ACTING_MEMBER'] ?? null, 'utterance' => $input['utterance'] ?? null,
+            'conversation_id' => $input['conversation_id'] ?? null, 'screen' => $input['screen'] ?? null, 'context' => $input['context'] ?? null, 'wait' => $input['wait'] ?? null]) . "\n", FILE_APPEND);
+        if ($method === 'GET' && isset($_GET['run'])) {                                    // a run the POST answered 202 for: state.chat_runs[<run id>] is its body (404 when the proof set none)
+            $body = ($state['chat_runs'] ?? [])[(string) $_GET['run']] ?? null;
+            if (isset($state['chat_get_status'])) { $out(['error' => ['code' => 'refused', 'message' => 'The run cannot be read.']], (int) $state['chat_get_status']); }
+            if ($body === null) { $out(['error' => ['code' => 'not_found', 'message' => 'No such run.']], 404); }
+            $out($body);
+        }
+        if (isset($state['chat_status'])) {                                               // state.chat_status: the refusal (400, 403, 404, 409, 422) or the failure (500) the POST answers
+            $messages = [400 => 'No acting member.', 403 => 'This person may not use the expert.', 404 => 'No expert for this application.', 409 => 'The expert is busy with another turn.', 422 => 'Say what you want.', 500 => 'The kernel failed.'];
             $out(['error' => ['code' => 'refused', 'message' => $state['chat_message'] ?? ($messages[(int) $state['chat_status']] ?? 'Refused.')]], (int) $state['chat_status']);
         }
-        $out(($state['chat'] ?? ['run_id' => 1, 'status' => 'succeeded', 'finished' => true, 'reply' => 'Hello from the fake expert', 'actions' => []])
-            + ['seen_acting_member' => $_SERVER['HTTP_X_ACTING_MEMBER'] ?? null, 'seen_agent' => $_GET['agent'] ?? null, 'seen_utterance' => $input['utterance'] ?? null]);
+        // state.chat: the canned body (finished, or {finished: false, status: running} with state.chat_http = 202; {approval_request_id: N} for a paused write); state.chat_by_agent[<agent>] overrides it for one agent
+        $chat = ($state['chat_by_agent'][(string) ($_GET['agent'] ?? '')] ?? null) ?? ($state['chat'] ?? ['run_id' => 1, 'status' => 'succeeded', 'finished' => true, 'reply' => 'Hello from the fake expert', 'actions' => []]);
+        $out($chat + ['seen_acting_member' => $_SERVER['HTTP_X_ACTING_MEMBER'] ?? null, 'seen_agent' => $_GET['agent'] ?? null, 'seen_utterance' => $input['utterance'] ?? null], (int) ($state['chat_http'] ?? 200));
 }
 $out(['error' => ['code' => 'not_found', 'message' => 'No such internal endpoint.']], 404);

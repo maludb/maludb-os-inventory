@@ -83,14 +83,8 @@ $tabUrl = static fn (string $t): string => '/products/' . $id . ($t === 'variant
         </tbody></table></div></div></div>
     <?php elseif ($tab === 'notes'): ?>
         <div class="row g-3" id="product-notes">
-            <div class="col-12 col-lg-6"><div class="card h-100"><div class="card-header"><h5 class="card-title mb-0">Notes</h5></div><div class="card-body">
-                <?php if ($full['notes'] === []): ?><div class="text-muted fs-12" id="product-notes-empty">No notes yet. Notes are added in slice 8.</div><?php endif; ?>
-                <?php foreach ($full['notes'] as $n): ?><div class="border-bottom py-2 fs-12" id="product-note-<?= (int) $n['note_id'] ?>"><div class="fw-semibold"><?= e($n['member_name'] ?? 'Someone') ?> <span class="text-muted fw-normal"><?= e(format_ts($n['created_at'], $tz)) ?></span></div><?= nl2br(e($n['body'])) ?></div><?php endforeach; ?>
-            </div></div></div>
-            <div class="col-12 col-lg-6"><div class="card h-100"><div class="card-header"><h5 class="card-title mb-0">Attachments</h5></div><div class="card-body">
-                <?php if ($full['attachments'] === []): ?><div class="text-muted fs-12" id="product-attachments-empty">Nothing attached. Attachments are added in slice 8; images on the Images page.</div><?php endif; ?>
-                <?php foreach ($full['attachments'] as $a): ?><div class="py-1 fs-12"><a href="/files/<?= (int) $a['attachment_id'] ?>" target="_blank" rel="noopener"><i class="feather-paperclip me-1"></i><?= e($a['filename']) ?></a> <span class="text-muted">· <?= e(fmt_bytes((int) $a['byte_size'])) ?></span></div><?php endforeach; ?>
-            </div></div></div>
+            <div class="col-12 col-lg-6"><?= view('shared/notes.php', ['recordType' => 'product', 'recordId' => (int) $p['product_id'], 'tz' => $tz]) ?></div>
+            <div class="col-12 col-lg-6"><?= view('shared/attachments.php', ['recordType' => 'product', 'recordId' => (int) $p['product_id'], 'tz' => $tz]) ?><div class="fs-12 text-muted">Pictures of the product are on <?= hx_link(with_back('/products/' . (int) $p['product_id'] . '/images', $here), 'the Images page') ?>.</div></div>
         </div>
     <?php elseif ($tab === 'trail'): ?>
         <div class="card" id="product-trail"><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12" id="product-trail-table"><thead class="thead-light"><tr><th>When</th><th>What</th></tr></thead><tbody>

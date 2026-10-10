@@ -12,9 +12,9 @@ declare(strict_types=1);
  * settings once its slice builds it). INV_WORKER_NOW (ISO 8601) replaces the clock a pass selects by; honoured only when APP_ENV is
  * not prod. Exits 1 when a pass failed.
  *
- * PHASE 0: every pass is a STUB that changes nothing and answers 0 — the slice whose data it touches fills it in (design §10; the
- * division reconciled 2026-10-05): `pulls` is slice 3's (the connectors under app/sources/), `snapshots_heartbeat` and `watches`
- * slice 4's, `links_expire` slice 5's (one function for both doors), `outbox`, `dispatches` and `key_usage_prune` slice 8's.
+ * Every pass is filled by the slice whose data it touches (design §10; the division reconciled 2026-10-05): `pulls` is slice 3's (the connectors under
+ * app/sources/), `snapshots_heartbeat` and `watches` slice 4's, `links_expire` slice 5's (one function for both doors), `outbox`, `dispatches` and
+ * `key_usage_prune` slice 8's (built 2026-10-10).
  */
 if (PHP_SAPI !== 'cli') { fwrite(STDERR, "CLI only.\n"); exit(1); }
 require_once dirname(__DIR__) . '/app/bootstrap.php';
@@ -64,7 +64,7 @@ echo json_encode($report, JSON_UNESCAPED_SLASHES) . "\n";
 $pdo->query("SELECT pg_advisory_unlock(hashtext('inventory_worker'))");
 exit($report['errors'] === [] ? 0 : 1);
 
-// ---- the passes (stubs until their slice) ------------------------------------------------------------------------------------------
+// ---- the passes ------------------------------------------------------------------------------------------
 
 /**
  * SLICE 3 HOOK — the due pulls: for each active source whose schedule says so (schedule_minutes > 0, last_ok_at + schedule <= now,
@@ -101,16 +101,18 @@ function worker_pass_watches(PDO $pdo, int $limit, DateTimeImmutable $now): arra
     return ['fired' => count($fired)];
 }
 
-/** SLICE 8 — the outbox: email through MaluMail (malumail_send), texts to members through the kernel (kernel_send_text), retries with backoff. */
+/** SLICE 8 — the outbox: email through MaluMail (malumail_send), texts to members through the kernel (kernel_send_text), retries with backoff (2, 4, 8, 16 minutes; the fifth failure is final). */
 function worker_pass_outbox(PDO $pdo, int $limit, DateTimeImmutable $now): array
 {
-    return ['sent' => 0, 'skipped' => 0, 'retried' => 0, 'failed' => 0, 'stub' => true];
+    require_once APP_ROOT . '/app/features/worker/passes.php';
+    return outbox_send_batch($pdo, $limit, $now);
 }
 
-/** SLICE 8 — agent dispatches: a watch naming an agent, an ask, a duty proposal → one chat turn (ask_assistant), at most three attempts. */
+/** SLICE 8 — agent dispatches: a watch naming an agent (an ask, a duty's proposal) → one chat turn of that agent through the kernel (ask_assistant), at most five a pass, three calls each; a run the kernel is still working on is polled. */
 function worker_pass_dispatches(PDO $pdo, int $limit, DateTimeImmutable $now): array
 {
-    return ['dispatched' => 0, 'retried' => 0, 'stub' => true];
+    require_once APP_ROOT . '/app/features/worker/passes.php';
+    return dispatches_pass($pdo, $limit, $now);
 }
 
 /** SLICE 5 (orders.md) — the doors' links (the customer's and the supplier's, one function): a customer's order link dies 180 days after the order closes, a supplier's 90 days after the purchase order closes (settings). */
@@ -119,8 +121,9 @@ function worker_pass_links_expire(PDO $pdo, int $limit, DateTimeImmutable $now):
     return ['expired' => (int) $pdo->query('SELECT inv_expire_links()')->fetchColumn()];        // one function for both doors (slice 5 fills it; slice 6 adds nothing)
 }
 
-/** SLICE 9 — the feed's key_usage rows older than the retention (settings) are pruned. */
+/** SLICE 8 — the feed's key_usage buckets past their retention are pruned (the schema's clock: minutes after a day, days after 35). */
 function worker_pass_key_usage_prune(PDO $pdo, int $limit, DateTimeImmutable $now): array
 {
-    return ['pruned' => 0, 'stub' => true];
+    require_once APP_ROOT . '/app/features/worker/passes.php';
+    return key_usage_prune($pdo);
 }

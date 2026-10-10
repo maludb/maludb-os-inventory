@@ -15,4 +15,5 @@ $actions = $mayShip && $s['delivered_at'] === null ? '<form method="post" action
     <div class="card"><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12" id="shipment-view-lines"><thead class="thead-light"><tr><th>#</th><th>SKU</th><th>Product</th><th class="text-end">Qty</th><th>Serials</th></tr></thead><tbody>
         <?php foreach ($s['lines'] as $l): ?><tr><td><?= (int) $l['line_no'] ?></td><td class="fw-semibold"><?= e($l['sku']) ?></td><td><?= e($l['product_name']) ?><?= $l['size_name'] ? ', ' . e($l['size_name']) : '' ?></td><td class="text-end"><?= (int) $l['qty'] ?></td><td><?= e(implode(', ', $l['serials'])) ?></td></tr><?php endforeach; ?>
     </tbody></table></div></div></div>
+    <?= view('shared/attachments.php', ['recordType' => 'shipment', 'recordId' => $sid, 'tz' => $tz]) ?>
 </div>

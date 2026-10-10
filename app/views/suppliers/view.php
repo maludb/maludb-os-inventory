@@ -56,13 +56,9 @@ if ($may['write']) {
                 <td class="text-nowrap"><?= $r['last_ok_at'] ? e(format_ts($r['last_ok_at'], $tz, 'M j, g:i A')) : '—' ?></td></tr><?php endforeach; ?>
         </tbody></table></div></div></div>
     <?php elseif ($tab === 'notes'): ?>
-        <div class="card" id="supplier-view-notes"><div class="card-body"><?php if ($tabdata['notes'] === []): ?><div class="text-muted text-center">No notes yet.</div><?php endif; ?>
-            <?php foreach ($tabdata['notes'] as $n): ?><div class="border-bottom py-2 fs-12"><div class="text-muted"><?= e($n['member_name'] ?? '') ?> · <?= e(format_ts($n['created_at'], $tz, 'M j, g:i A')) ?></div><div style="white-space: pre-line"><?= e($n['body']) ?></div></div><?php endforeach; ?>
-            <?php if (is_file(dirname(__DIR__) . '/shared/note-form.php')): ?><?= view('shared/note-form.php', ['recordType' => 'supplier', 'recordId' => $id]) ?><?php endif; ?></div></div>
+        <?= view('shared/notes.php', ['recordType' => 'supplier', 'recordId' => $id, 'tz' => $tz]) ?>
     <?php elseif ($tab === 'attachments'): ?>
-        <div class="card" id="supplier-view-attachments"><div class="card-body"><?php if ($tabdata['attachments'] === []): ?><div class="text-muted text-center">No attachments yet.</div><?php endif; ?>
-            <?php foreach ($tabdata['attachments'] as $a): ?><div class="py-1 fs-12"><a href="/files/<?= (int) $a['attachment_id'] ?>"><?= e($a['filename']) ?></a> <span class="text-muted"><?= e(number_format($a['byte_size'] / 1024, 0)) ?> kB · <?= e(format_ts($a['created_at'], $tz, 'M j, Y')) ?></span></div><?php endforeach; ?>
-            <?php if (is_file(dirname(__DIR__) . '/shared/attachment-form.php')): ?><?= view('shared/attachment-form.php', ['recordType' => 'supplier', 'recordId' => $id]) ?><?php endif; ?></div></div>
+        <?= view('shared/attachments.php', ['recordType' => 'supplier', 'recordId' => $id, 'tz' => $tz]) ?>
     <?php else: ?>
         <div class="card" id="supplier-view-trail"><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12"><tbody>
             <?php if ($tabdata['trail'] === []): ?><tr><td class="text-muted py-3 text-center">Nothing yet.</td></tr><?php endif; ?>

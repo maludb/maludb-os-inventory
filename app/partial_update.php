@@ -23,6 +23,8 @@ const PARTIAL_UPDATE_TARGETS = [
     '/orders/save.php' => ['sales_orders', 'order', 'mcp_sales_orders', 'sales_order_id'],
     '/suppliers/save.php' => ['suppliers', 'supplier', 'mcp_suppliers', 'supplier_id'],
     '/purchasing/save.php' => ['purchase_orders', 'purchase_order', 'mcp_purchase_orders', 'purchase_order_id'],
+    '/returns/save.php' => ['return_authorizations', 'return', 'mcp_return_authorizations', 'return_id'],
+    '/returns/lines/save.php' => ['return_lines', 'return_line', 'mcp_return_lines', 'return_line_id'],
     '/admin/price-lists/save.php' => ['price_lists', 'price_list', 'mcp_price_lists', 'price_list_id'],
 ];
 

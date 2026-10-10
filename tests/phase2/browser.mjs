@@ -155,11 +155,11 @@ const smallControls = (page, scope) => page.evaluate((s) => [...document.querySe
   ok(bar.x >= nav.width - 1 && bar.y + bar.height >= 780, `the command bar sits at the bottom, right of the sidebar (x ${Math.round(bar.x)}, sidebar ${Math.round(nav.width)})`);
   ok((await page.locator('#header-role-badge').innerText()).includes('Super-admin'), 'the badge reads Super-admin');
   await page.screenshot({ path: `${SHOTS}/desktop-home.png` });
-  await page.click('#nav-dispatch-list .nxl-link');                   // a placeholder (slice 8) — HTMX navigation pushes its URL
-  await page.waitForURL(BASE + '/admin/dispatches');
-  await page.waitForSelector('#dispatch-list-coming');
-  ok((await page.title()).startsWith('Dispatches'), 'HTMX navigation: /admin/dispatches pushed, title "' + (await page.title()) + '"');
-  ok(await page.evaluate(() => document.querySelector('#nav-dispatch-list .nxl-link').classList.contains('active') && !document.querySelector('#nav-home .nxl-link').classList.contains('active')), 'the sidebar highlights the screen, not Home');
+  await page.click('#nav-report-list .nxl-link');                     // a placeholder (slice 9) — HTMX navigation pushes its URL
+  await page.waitForURL(BASE + '/reports/');
+  await page.waitForSelector('#report-list-coming');
+  ok((await page.title()).startsWith('Reports'), 'HTMX navigation: /reports/ pushed, title "' + (await page.title()) + '"');
+  ok(await page.evaluate(() => document.querySelector('#nav-report-list .nxl-link').classList.contains('active') && !document.querySelector('#nav-home .nxl-link').classList.contains('active')), 'the sidebar highlights the screen, not Home');
   await page.screenshot({ path: `${SHOTS}/desktop-placeholder.png` });
   await page.goBack();
   await page.waitForURL(BASE + '/');

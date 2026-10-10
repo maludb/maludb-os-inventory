@@ -91,4 +91,6 @@ $offers = array_merge($a['offers'] ?? [], $a['references'] ?? []);
             </tbody></table></div></div></div>
         </div>
     </div>
+    <?= view('shared/notes.php', ['recordType' => 'product_variant', 'recordId' => (int) $vid, 'tz' => $tz]) ?>
+    <?= view('shared/attachments.php', ['recordType' => 'product_variant', 'recordId' => (int) $vid, 'tz' => $tz]) ?>
 </div>

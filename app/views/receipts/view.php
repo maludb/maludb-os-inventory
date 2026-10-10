@@ -38,10 +38,7 @@ if ($draft) {
     <?php if (!$draft && $r['status'] === 'posted'): ?>
         <h6 class="mt-3 mb-2">The movements it posted</h6>
         <?= view('stock/partials/movements-table.php', ['rows' => $movements, 'here' => $here, 'tz' => $tz, 'mayReverse' => $mayReverse, 'seesCost' => sees_cost(), 'seesReceiptCost' => $seesCost, 'empty' => 'Nothing posted.']) ?>
-        <div class="card mt-3" id="receipt-attachments"><div class="card-header"><h5 class="card-title mb-0">Attachments</h5></div><div class="card-body fs-12">
-            <?php if ($attachments === []): ?><div class="text-muted" id="receipt-attachments-empty">No delivery note attached. Attaching files is slice 8's.</div><?php endif; ?>
-            <?php foreach ($attachments as $a): ?><div id="receipt-attachment-<?= (int) $a['attachment_id'] ?>"><a href="/files/<?= (int) $a['attachment_id'] ?>"><?= e($a['filename']) ?></a> <span class="text-muted"><?= e(fmt_bytes((int) $a['byte_size'])) ?></span></div><?php endforeach; ?>
-        </div></div>
+        <?= view('shared/attachments.php', ['recordType' => 'goods_receipt', 'recordId' => (int) $r['goods_receipt_id'], 'tz' => $tz]) ?>
     <?php endif; ?>
     <div class="card mt-3" id="receipt-trail"><div class="card-header"><h5 class="card-title mb-0">Trail</h5></div><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12"><tbody>
         <?php if ($trail === []): ?><tr><td class="text-muted py-3 text-center">Nothing yet.</td></tr><?php endif; ?>

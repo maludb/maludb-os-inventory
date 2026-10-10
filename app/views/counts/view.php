@@ -34,4 +34,5 @@ if ($open) {
         <?php if ($trail === []): ?><tr><td class="text-muted py-3 text-center">Nothing yet.</td></tr><?php endif; ?>
         <?php foreach ($trail as $r): ?><tr id="count-trail-row-<?= (int) $r['activity_id'] ?>"><td class="text-nowrap"><?= e(format_ts($r['occurred_at'], $tz, 'M j, g:i A')) ?></td><td><?= e(activity_sentence($r)) ?></td></tr><?php endforeach; ?>
     </tbody></table></div></div></div>
+    <?= view('shared/attachments.php', ['recordType' => 'inventory_count', 'recordId' => $id, 'tz' => $tz]) ?>
 </div>

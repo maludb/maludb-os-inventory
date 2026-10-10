@@ -77,4 +77,6 @@ if ($may['delete'] && $deleteCounts !== null) {
             </tbody></table></div></div></div>
         </div>
     </div>
+    <?= view('shared/notes.php', ['recordType' => 'source', 'recordId' => $id, 'tz' => $tz]) ?>
+    <?= view('shared/attachments.php', ['recordType' => 'source', 'recordId' => $id, 'tz' => $tz]) ?>
 </div>

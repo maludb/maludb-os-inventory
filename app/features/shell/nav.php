@@ -241,7 +241,7 @@ function record_url(?string $type, int|string|null $id): ?string
         'inventory_count', 'count' => '/counts/' . $id,
         'shipment' => '/shipments/' . $id,
         'watch' => '/watches/#watch-row-' . $id,
-        'proposal', 'buyer_proposal' => '/proposals/' . $id,
+        'proposal', 'buyer_proposal' => '/proposals/#proposal-card-' . $id,
         'dispatch', 'agent_dispatch' => '/admin/dispatches',
         default => null,
     };

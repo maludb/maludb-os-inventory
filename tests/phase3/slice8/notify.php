@@ -1,0 +1,78 @@
+<?php
+/** notify() and the bell (returns-worker.md "Proof": notifications and the bell ≥ 16): the channels the preferences allow, the dedupe, the eval guard, the kinds' icons and labels, the links, the Buyer. */
+require __DIR__ . '/lib.php';
+$w = returns_world();
+[$nora, $sam, $wes, $vera, $owner] = [$w['nora'], $w['sam'], $w['wes'], $w['vera'], $w['owner']];
+$ra1 = (int) one("SELECT id FROM return_authorizations WHERE notes = 'SMOKE S8-RA1'");
+
+echo "1. The channels a person's preferences allow\n";
+psql_exec("DELETE FROM notification_prefs WHERE member_id = 41");
+$n0 = last_notification_id(); $o0 = last_outbox_id();
+$r = call_fn(0, 'notify', [41, 'return', 'return', $ra1, 'S8 notify one', 'the body', 's8:notify:one']);
+$out = outbox_rows($o0);
+ok(isset($r['result']) && $r['result'] > $n0 && count(notifications_for(41, 'return', $n0)) === 1, 'notify() to Sam with his preferences at their defaults: one notifications row');
+ok(count($out) === 1 && $out[0]['channel'] === 'email' && $out[0]['dedupe_key'] === 's8:notify:one:email' && $out[0]['subject'] === 'S8 notify one' && $out[0]['body'] === 'the body' && $out[0]['status'] === 'queued', '…and one e-mail in the outbox (his kinds include `return`), no text');
+$r2 = call_fn(0, 'notify', [41, 'return', 'return', $ra1, 'S8 notify one', 'the body', 's8:notify:one']);
+ok(array_key_exists('result', $r2) && $r2['result'] === null && count(notifications_for(41, 'return', $n0)) === 1 && count(outbox_rows($o0)) === 1, 'the same dedupe key queued twice: one row, the second call answers null');
+$o1 = last_outbox_id(); $n1 = last_notification_id();
+$r = call_fn(0, 'notify', [41, 'agent_drafted', 'agent_dispatch', 1, 'S8 outside his kinds', null, 's8:notify:two']);
+ok(isset($r['result']) && count(notifications_for(41, 'agent_drafted', $n1)) === 1 && outbox_rows($o1) === [], 'a kind outside his `kinds`: the bell row only, nothing queued to send');
+psql_exec("INSERT INTO notification_prefs (member_id, text_enabled, text_kinds) VALUES (41, true, '{watch,line_at_risk}') ON CONFLICT (member_id) DO UPDATE SET text_enabled = true, text_kinds = '{watch,line_at_risk}'");
+$o1 = last_outbox_id();
+call_fn(0, 'notify', [41, 'watch', 'watch', $w['watch_sam'], 'S8 watch notice', 'it fired', 's8:notify:three']);
+$out = outbox_rows($o1);
+ok(count($out) === 2 && array_column($out, 'channel') === ['email', 'text'] && $out[1]['body'] === 'it fired' && $out[1]['to_email'] === null, 'with text_enabled and `watch` in his text_kinds: an e-mail and a text row for a watch');
+$o1 = last_outbox_id();
+call_fn(0, 'notify', [41, 'return', 'return', $ra1, 'S8 forced text', 'forced', 's8:notify:four', true]);
+ok(array_column(outbox_rows($o1), 'channel') === ['email', 'text'], 'forceText queues a text even for a kind he did not choose for texts');
+psql_exec("UPDATE notification_prefs SET text_enabled = false, email_enabled = false WHERE member_id = 41");
+$o1 = last_outbox_id(); $n1 = last_notification_id();
+call_fn(0, 'notify', [41, 'return', 'return', $ra1, 'S8 everything off', null, 's8:notify:five']);
+ok(count(notifications_for(41, 'return', $n1)) === 1 && outbox_rows($o1) === [], 'e-mail and text switched off: the bell row stands alone');
+psql_exec("UPDATE notification_prefs SET text_enabled = false, email_enabled = true WHERE member_id = 41");
+
+echo "2. An evaluation run queues nothing\n";
+kernel_state(function ($s) { $s['facts']['311'] = ['valid' => true, 'is_agent' => true, 'is_eval' => true, 'member_id' => 47, 'run_id' => 311, 'request_id' => 'req-run-311', 'trigger' => 'eval', 'endpoints' => [['name' => 'Records MCP']]]; return $s; });
+$s3 = sol_of(ref_order('S8-SO3'), 'SMOKE-FND-Q');
+$n1 = last_notification_id(); $o1 = last_outbox_id();
+$tok = run_token(47, 311);
+[$c, $b] = act_token('/returns/save.php', ['order' => ref_order('S8-SO3'), 'lines' => json_encode([['line' => $s3['id'], 'qty' => 1, 'reason' => 'comfort', 'disposition' => 'dispose']])], as_agent($tok));
+ok($c === 200 && (int) $b['record_id'] > 0, 'the Buyer agent under an eval run request a return (the actions server records an eval write and never sends it; this is the application\'s own guard)');
+ok(q('SELECT id FROM notifications WHERE id > :s', ['s' => $n1]) === [] && outbox_rows($o1) === [], '…and the Buyer was told nothing: no notification, no e-mail');
+psql_exec('DELETE FROM return_authorizations WHERE id = ' . (int) $b['record_id']);
+kernel_state(function ($s) { unset($s['facts']['311']); return $s; });
+
+echo "3. The bell\n";
+$n1 = last_notification_id();
+call_fn(0, 'notify', [41, 'return', 'return', $ra1, 'S8 bell return', null, 's8:bell:1']);
+call_fn(0, 'notify', [41, 'watch', 'watch', $w['watch_sam'], 'S8 bell watch', null, 's8:bell:2']);
+call_fn(0, 'notify', [41, 'morning_note', 'morning_note', 20251231, 'S8 bell note', null, 's8:bell:3']);
+call_fn(0, 'notify', [41, 'order', 'sales_order', $w['so1'], 'S8 bell order', null, 's8:bell:4']);
+$r = req('GET', '/notifications', ['jar' => $sam]);
+ok($r['code'] === 200 && str_contains($r['body'], 'feather-rotate-ccw') && str_contains($r['body'], 'feather-sunrise') && str_contains($r['body'], 'feather-eye') && str_contains($r['body'], 'A return') && str_contains($r['body'], 'The morning note'), 'the bell page shows each kind\'s icon and label');
+ok(preg_match('~href="/returns/' . $ra1 . '\?back=%2Fnotifications"~', $r['body']) === 1 && str_contains($r['body'], 'href="/watches/?back=') && str_contains($r['body'], 'href="/proposals/?date=2025-12-31&amp;back=') === false || str_contains($r['body'], '/proposals/?date=2025-12-31'), 'and each row links to its record (/returns/N, /watches/, /proposals/?date=)');
+[$c, $d] = screen($sam, '/notifications');
+$urls = array_column($d['notifications'], 'url');
+ok(in_array("/returns/$ra1", $urls, true) && in_array('/watches/', $urls, true) && in_array('/proposals/?date=2025-12-31', $urls, true) && in_array("/orders/{$w['so1']}", $urls, true), 'the JSON of the bell carries the same URLs');
+$st = q("SELECT id FROM sources ORDER BY id LIMIT 1")[0]['id'];
+$sp = (int) one('SELECT id FROM source_pulls ORDER BY id LIMIT 1');
+$lv = q('SELECT lv.id, lv.listing_id FROM listing_variants lv ORDER BY lv.id LIMIT 1')[0];
+$sol = sol_of($w['so1'], 'SMOKE-NW-CR-Q');
+$po = (int) one('SELECT id FROM purchase_orders ORDER BY id LIMIT 1');
+$u = static function (string $t, ?int $id, int $m = 41): ?string { $r = call_fn($m, 'notification_record_url', [['record_type' => $t, 'record_id' => $id]]); return array_key_exists('result', $r) ? $r['result'] : 'ERR'; };
+ok($u('watch', 3) === '/watches/' && $u('source', $st) === "/sources/$st" && $u('source_pull', $sp) === '/sources/' . one('SELECT source_id FROM source_pulls WHERE id = :i', ['i' => $sp]) . '/pulls' && $u('sales_order', $w['so1']) === "/orders/{$w['so1']}" && $u('sales_order_line', (int) $sol['id']) === "/orders/{$w['so1']}#line-{$sol['id']}" && $u('purchase_order', $po) === "/purchasing/$po" && $u('return', $ra1) === "/returns/$ra1", 'notification_record_url(): watch, source, source_pull, sales_order, sales_order_line, purchase_order, return');
+ok($u('buyer_proposal', 4) === '/proposals/' && $u('morning_note', 20251231) === '/proposals/?date=2025-12-31' && $u('listing_variant', (int) $lv['id']) === "/listings/{$lv['listing_id']}?listing_variant={$lv['id']}" && $u('agent_dispatch', 9, 1) === '/admin/dispatches' && $u('agent_dispatch', 9, 41) === '/watches/' && $u('bogus', 1) === null && $u('return', null) === null, 'buyer_proposal, morning_note (the date from the id), listing_variant, agent_dispatch (an admin: the dispatch list; else /watches/), an unknown type and no id: null');
+ok(call_fn(0, 'notification_kind', ['return'])['result'] === ['label' => 'A return', 'icon' => 'feather-rotate-ccw', 'color' => 'warning'] && call_fn(0, 'notification_kind', ['made_up'])['result']['icon'] === 'feather-bell', 'notification_kind(): a kind\'s label, icon and colour; an unknown one is a plain notice');
+
+echo "4. The Buyer\n";
+ok(call_fn(0, 'buyer_member')['result'] === 40, 'buyer_member() is Nora, the settings\' Buyer');
+psql_exec('UPDATE inv_settings SET buyer_member_id = NULL WHERE id = 1');
+ok(call_fn(0, 'buyer_member')['result'] === 1, 'with none set it is the first super-admin (member 1)');
+psql_exec("UPDATE members SET status = 'inactive' WHERE id = 1");
+ok(call_fn(0, 'buyer_member')['result'] === null, 'with no active super-admin either: null');
+$nid = last_notification_id();
+$r = call_fn(0, 'notify_buyer', ['return', 'return', $ra1, 'S8 nobody', null, 's8:buyer:none']);
+ok(array_key_exists('result', $r) && $r['result'] === null && q('SELECT id FROM notifications WHERE id > :s', ['s' => $nid]) === [], 'notify_buyer() with nobody to tell is a no-op (a line in the error log)');
+psql_exec("UPDATE members SET status = 'active' WHERE id = 1; UPDATE inv_settings SET buyer_member_id = 40 WHERE id = 1");
+ok(call_fn(0, 'buyer_member')['result'] === 40, 'restored: Nora');
+finish();

@@ -10,6 +10,7 @@ declare(strict_types=1);
  *   variant    the active variants — SKU, product, size (a bundle's component)        slice 1   param single=1: single products' variants only
  *   product    the products (a variant's product, a filter)                           slice 1
  *   customer   the live customers (an order's customer)                               slice 5
+ *   returnable_order  the orders with something shipped to take back (a return's order)  slice 8
  *
  * Every `gate` is the authorization the screens that use the field apply (null = allowed, else the refusal's words); every row comes from
  * the mcp_* views. `search` reuses the feature's own query function and only filters and slices what it returns; `label` names one record
@@ -91,6 +92,20 @@ return [
             require_once __DIR__ . '/features/customers/queries.php';
             $c = is_int($id) ? find_customer($pdo, $id) : null;
             return $c === null || $c['archived_at'] !== null ? null : $c['name'];
+        },
+    ],
+    'returnable_order' => [
+        'title' => 'Orders', 'noun' => 'order', 'params' => [],
+        'gate' => static fn (array $p): ?string => has_right('orders.write') ? null : 'You may not ' . RIGHT_WORDS['orders.write'] . '.',
+        'search' => static function (PDO $pdo, string $q, array $params, int $page): array {
+            require_once __DIR__ . '/features/returns/queries.php';
+            $rows = array_map(static fn (array $o): array => ['id' => (int) $o['sales_order_id'], 'label' => $o['number'], 'detail' => trim($o['customer_name'] . ' · ' . str_replace('_', ' ', (string) $o['status']) . ' · ' . format_date((string) $o['ordered_on']), ' ·')],
+                orders_with_returnable_lines($pdo, $q, 25, ($page - 1) * 25));
+            $total = count_orders_with_returnable_lines($pdo, $q);
+            return ['rows' => $rows, 'total' => $total, 'page' => $page, 'page_size' => 25, 'pages' => max(1, (int) ceil($total / 25))];
+        },
+        'label' => static function (PDO $pdo, int|string $id): ?string {
+            return is_int($id) ? (one_value($pdo, 'SELECT number FROM mcp_sales_orders WHERE sales_order_id = :id', ['id' => $id]) ?: null) : null;
         },
     ],
 ];

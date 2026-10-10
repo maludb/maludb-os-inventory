@@ -66,13 +66,9 @@ $cancellable = $may['write'] && in_array($st, ['draft', 'sent', 'acknowledged'],
         <div id="po-notes"><?php if ($o['note_count'] > 0): ?><div class="fs-12 text-muted mb-1"><?= hx_link($tabUrl('notes'), (int) $o['note_count'] . ' note' . ($o['note_count'] === 1 ? '' : 's')) ?></div><?php endif; ?></div>
         <div id="po-attachments"><?php if ($o['attachment_count'] > 0): ?><div class="fs-12 text-muted mb-1"><?= hx_link($tabUrl('attachments'), (int) $o['attachment_count'] . ' attachment' . ($o['attachment_count'] === 1 ? '' : 's')) ?></div><?php endif; ?></div>
     <?php elseif ($tab === 'notes'): ?>
-        <div class="card" id="po-notes"><div class="card-body"><?php if ($extra['notes'] === []): ?><div class="text-muted text-center">No notes yet.</div><?php endif; ?>
-            <?php foreach ($extra['notes'] as $n): ?><div class="border-bottom py-2 fs-12"><div class="text-muted"><?= e($n['member_name'] ?? '') ?> · <?= e(format_ts($n['created_at'], $tz, 'M j, g:i A')) ?></div><div style="white-space: pre-line"><?= e($n['body']) ?></div></div><?php endforeach; ?>
-            <?php if (is_file(dirname(__DIR__) . '/shared/note-form.php')): ?><?= view('shared/note-form.php', ['recordType' => 'purchase_order', 'recordId' => $poid]) ?><?php endif; ?></div></div>
+        <?= view('shared/notes.php', ['recordType' => 'purchase_order', 'recordId' => $poid, 'tz' => $tz]) ?>
     <?php elseif ($tab === 'attachments'): ?>
-        <div class="card" id="po-attachments"><div class="card-body"><?php if ($extra['attachments'] === []): ?><div class="text-muted text-center">No attachments yet.</div><?php endif; ?>
-            <?php foreach ($extra['attachments'] as $a): ?><div class="py-1 fs-12"><a href="/files/<?= (int) $a['attachment_id'] ?>"><?= e($a['filename']) ?></a> <span class="text-muted"><?= e(number_format($a['byte_size'] / 1024, 0)) ?> kB</span></div><?php endforeach; ?>
-            <?php if (is_file(dirname(__DIR__) . '/shared/attachment-form.php')): ?><?= view('shared/attachment-form.php', ['recordType' => 'purchase_order', 'recordId' => $poid]) ?><?php endif; ?></div></div>
+        <?= view('shared/attachments.php', ['recordType' => 'purchase_order', 'recordId' => $poid, 'tz' => $tz]) ?>
     <?php else: ?>
         <div class="card" id="po-trail"><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12"><tbody>
             <?php if ($extra['trail'] === []): ?><tr><td class="text-muted py-3 text-center">Nothing yet.</td></tr><?php endif; ?>

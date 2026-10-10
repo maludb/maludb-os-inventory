@@ -59,4 +59,6 @@ $props = array_values(array_filter($full['proposals'], static fn ($p) => $p['sta
             </tbody></table></div></div></div>
         </div>
     </div>
+    <?= view('shared/notes.php', ['recordType' => 'listing', 'recordId' => (int) $id, 'tz' => $tz]) ?>
+    <?= view('shared/attachments.php', ['recordType' => 'listing', 'recordId' => (int) $id, 'tz' => $tz]) ?>
 </div>

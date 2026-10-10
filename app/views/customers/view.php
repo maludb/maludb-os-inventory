@@ -43,16 +43,12 @@ if ($may['delete'] && $deletable) {
     <?php elseif ($tab === 'returns'): ?>
         <div class="card" id="customer-view-returns"><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12"><thead class="thead-light"><tr><th>Return</th><th>Order</th><th>Status</th><th class="text-end">Refund</th></tr></thead><tbody>
             <?php if ($tabdata['returns'] === []): ?><tr><td colspan="4" class="text-center text-muted py-4">No returns.</td></tr><?php endif; ?>
-            <?php foreach ($tabdata['returns'] as $r): ?><tr><td><?= e($r['number']) ?></td><td><?= hx_link(with_back('/orders/' . (int) $r['sales_order_id'], $here), e($r['order_number'])) ?></td><td><?= e(str_replace('_', ' ', $r['status'])) ?></td><td class="text-end"><?= money($r['refund_amount']) ?></td></tr><?php endforeach; ?>
+            <?php foreach ($tabdata['returns'] as $r): ?><tr><td><?= hx_link(with_back('/returns/' . (int) $r['return_id'], $here), e($r['number']), 'fw-semibold') ?></td><td><?= hx_link(with_back('/orders/' . (int) $r['sales_order_id'], $here), e($r['order_number'])) ?></td><td><?= e(str_replace('_', ' ', $r['status'])) ?></td><td class="text-end"><?= money($r['refund_amount']) ?></td></tr><?php endforeach; ?>
         </tbody></table></div></div></div>
     <?php elseif ($tab === 'notes'): ?>
-        <div class="card" id="customer-view-notes"><div class="card-body"><?php if ($tabdata['notes'] === []): ?><div class="text-muted text-center">No notes yet.</div><?php endif; ?>
-            <?php foreach ($tabdata['notes'] as $n): ?><div class="border-bottom py-2 fs-12"><div class="text-muted"><?= e($n['member_name'] ?? '') ?> · <?= e(format_ts($n['created_at'], $tz, 'M j, g:i A')) ?></div><div style="white-space: pre-line"><?= e($n['body']) ?></div></div><?php endforeach; ?>
-            <?php if (is_file(dirname(__DIR__) . '/shared/note-form.php')): ?><?= view('shared/note-form.php', ['recordType' => 'customer', 'recordId' => $id]) ?><?php endif; ?></div></div>
+        <?= view('shared/notes.php', ['recordType' => 'customer', 'recordId' => $id, 'tz' => $tz]) ?>
     <?php elseif ($tab === 'attachments'): ?>
-        <div class="card" id="customer-view-attachments"><div class="card-body"><?php if ($tabdata['attachments'] === []): ?><div class="text-muted text-center">No attachments yet.</div><?php endif; ?>
-            <?php foreach ($tabdata['attachments'] as $a): ?><div class="py-1 fs-12"><a href="/files/<?= (int) $a['attachment_id'] ?>"><?= e($a['filename']) ?></a> <span class="text-muted"><?= e(number_format($a['byte_size'] / 1024, 0)) ?> kB · <?= e(format_ts($a['created_at'], $tz, 'M j, Y')) ?></span></div><?php endforeach; ?>
-            <?php if (is_file(dirname(__DIR__) . '/shared/attachment-form.php')): ?><?= view('shared/attachment-form.php', ['recordType' => 'customer', 'recordId' => $id]) ?><?php endif; ?></div></div>
+        <?= view('shared/attachments.php', ['recordType' => 'customer', 'recordId' => $id, 'tz' => $tz]) ?>
     <?php else: ?>
         <div class="card" id="customer-view-trail"><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12"><tbody>
             <?php if ($tabdata['trail'] === []): ?><tr><td class="text-muted py-3 text-center">Nothing yet.</td></tr><?php endif; ?>

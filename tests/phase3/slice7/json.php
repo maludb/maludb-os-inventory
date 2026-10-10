@@ -69,7 +69,7 @@ foreach ($names as $n => $ep) { if (empty($reg['actions'][$n]['built']) || ($reg
 ok($bad === [] && $reg['actions']['feed_key_mint']['approval'] === 'external_send' && $reg['actions']['feed_key_rotate']['approval'] === null && $reg['actions']['feed_key_revoke']['approval'] === null && $reg['actions']['price_list_save']['approval'] === null && $reg['actions']['feed_key_rotate']['confirm'] === true && $reg['actions']['feed_key_revoke']['confirm'] === true, 'the four actions are built at their files; only feed_key_mint carries an approval (external_send); rotate and revoke are confirm');
 $built = count(array_filter($reg['screens'], static fn ($s) => !empty($s['built'])));
 $builtA = count(array_filter($reg['actions'], static fn ($a) => !empty($a['built'])));
-ok($built === 89 && $builtA === 107, "the registry reads $built screens and $builtA actions built (83 + 6, 103 + 4)");
+ok($built >= 89 && $builtA >= 107, "the registry reads at least $built screens and $builtA actions built (83 + 6, 103 + 4 — a later slice only adds)");
 $out = shell_exec('cd ' . escapeshellarg(dirname(__DIR__, 3)) . ' && php bin/build_action_registry.php --check >/dev/null 2>&1; echo $?');
 ok(trim((string) $out) === '0', 'bin/build_action_registry.php --check: the registry matches the manifest and the files');
 $out = shell_exec('cd ' . escapeshellarg(dirname(__DIR__, 3)) . ' && php bin/sync_approvals.php --check >/dev/null 2>&1; echo $?');

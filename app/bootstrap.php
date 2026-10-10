@@ -88,6 +88,9 @@ require_once __DIR__ . '/mail.php';
 require_once __DIR__ . '/api/kernel.php';
 require_once __DIR__ . '/features/shell/nav.php';        // the ONE menu table, the badge, the placeholders (Phase 2)
 require_once __DIR__ . '/features/shell/queries.php';    // the bell, the business name, my roles
+require_once __DIR__ . '/features/notify/kinds.php';     // the kinds of notice (slice 8)
+require_once __DIR__ . '/features/notify/present.php';   // notification_record_url(), the e-mail of a notice (slice 8)
+require_once __DIR__ . '/features/notify/queue.php';     // notify(), the Buyer, notify_buyer() (slice 8 — slices 5 and 6 call notify_buyer())
 require_once __DIR__ . '/switcher.php';                  // the application switcher (K31)
 require_once __DIR__ . '/picker.php';                    // the record picker (plugin 0.8.0; slice 1 brought it)
 

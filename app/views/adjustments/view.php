@@ -35,4 +35,5 @@ if ($draft) {
         <?php if ($trail === []): ?><tr><td class="text-muted py-3 text-center">Nothing yet.</td></tr><?php endif; ?>
         <?php foreach ($trail as $t): ?><tr id="adjustment-trail-row-<?= (int) $t['activity_id'] ?>"><td class="text-nowrap"><?= e(format_ts($t['occurred_at'], $tz, 'M j, g:i A')) ?></td><td><?= e(activity_sentence($t)) ?></td></tr><?php endforeach; ?>
     </tbody></table></div></div></div>
+    <?= view('shared/attachments.php', ['recordType' => 'inventory_adjustment', 'recordId' => $id, 'tz' => $tz]) ?>
 </div>

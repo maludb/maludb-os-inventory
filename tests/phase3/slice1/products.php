@@ -89,7 +89,7 @@ foreach (['identifiers', 'bundle', 'images', 'sources', 'prices', 'notes', 'trai
     if ($code !== 200) { ok(false, "tab $t: $code"); }
 }
 ok(true, 'every tab of the set renders (identifiers, bundle, images, sources, prices, notes, trail)');
-ok(str_contains(page($nora, '/products/' . $w['mattress'] . '?tab=sources')['body'], 'slice 3') && str_contains(page($nora, '/products/' . $w['mattress'] . '?tab=notes')['body'], 'slice 8'), 'the Sources and Notes tabs name their slices while empty');
+ok(str_contains(page($nora, '/products/' . $w['mattress'] . '?tab=sources')['body'], 'slice 3') && str_contains(page($nora, '/products/' . $w['mattress'] . '?tab=notes')['body'], 'id="notes-form"'), 'the Sources tab names its slice while empty; the Notes tab holds the notes and files partials (slice 8 built them: their add forms are there)');
 ok(str_contains(page($nora, '/products/' . $pid . '?tab=sources')['body'], 'SMOKE Draft listing'), 'the Sources tab lists a listing matched to a variant');
 ok(page($nora, '/products/999999')['code'] === 404 && page($nora, '/products/999999/edit')['code'] === 404, 'a product that does not exist: 404');
 finish();
