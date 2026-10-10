@@ -78,16 +78,27 @@ function worker_pass_pulls(PDO $pdo, int $limit, DateTimeImmutable $now): array
     return ['sources' => 0, 'pulls' => 0, 'stub' => true];
 }
 
-/** SLICE 4 — a snapshot of every live listing variant unchanged for snapshot_heartbeat_days (the daily heartbeat) and the removals (last_seen_at older than two pulls). */
+/** SLICE 4 (find.md) — the daily heartbeat: inv_snapshot_heartbeat() writes a snapshot of every live listing variant unconfirmed for snapshot_heartbeat_days. Removals are the pull's (connectors.md §6.3 step 7). */
 function worker_pass_snapshots_heartbeat(PDO $pdo, int $limit, DateTimeImmutable $now): array
 {
-    return ['snapshots' => 0, 'removed' => 0, 'stub' => true];
+    return ['snapshots' => (int) $pdo->query('SELECT inv_snapshot_heartbeat()')->fetchColumn()];
 }
 
-/** SLICE 4 — the watches: fire once per state change (back in stock, price below, cost below, MAP breach, lead time over, removed), queue the notice. */
+/**
+ * SLICE 4 (find.md) — the watches: inv_fire_watches() fires each once per state change (the member told through inv_notify() — in-app, email per
+ * their prefs, a text row when text_me —, a named agent dispatched); then `watch.fire` per fired watch (source cron, actor null). The text and the
+ * dispatch are sent by slice 8's outbox and dispatches passes.
+ */
 function worker_pass_watches(PDO $pdo, int $limit, DateTimeImmutable $now): array
 {
-    return ['fired' => 0, 'stub' => true];
+    require_once APP_ROOT . '/app/features/watches/queries.php';
+    $fired = fire_watches($pdo);
+    foreach ($fired as $f) {
+        log_activity($pdo, 'watch.fire', 'watch', $f['watch_id'], ['source' => 'cron', 'actor_member_id' => null, 'source_id' => $f['source_id'],
+            'after' => ['watch_id' => $f['watch_id'], 'kind' => $f['kind'], 'target' => $f['target'], 'state' => true, 'fire_count' => $f['fire_count'], 'notified' => $f['notified'],
+                        'texted' => $f['texted'], 'dispatched' => $f['dispatched']]]);
+    }
+    return ['fired' => count($fired)];
 }
 
 /** SLICE 8 — the outbox: email through MaluMail (malumail_send), texts to members through the kernel (kernel_send_text), retries with backoff. */

@@ -340,7 +340,20 @@ function inv_pull_log_changes(PDO $pdo, int $sourceId, int $pullId, string $pull
  * emitter (the match, the snapshot and the price sheet happen); never counts for removals. Not searchable / refused → ok false with the last
  * pull's matching listings. $persist false (an eval run): the connector is asked, nothing is written, no pull row.
  */
-function inv_source_search_live(PDO $pdo, int $sourceId, string $q, int $limit = 20, ?int $by = null, bool $persist = true): array
+function inv_source_search_live(PDO $pdo, int $sourceId, string $q, int $limit = 20, ?int $by = null, bool $persist = true, ?string $size = null): array
+{
+    $t0 = microtime(true);
+    $res = inv_source_search_live_run($pdo, $sourceId, $q, $limit, $by, $persist);
+    // logged by the function (find.md): every live ask, from a screen, the command bar or the bridge — the counts, never a listing
+    $pull = isset($res['pull_id']) ? $pdo->query('SELECT listings_seen, listings_new FROM source_pulls WHERE id = ' . (int) $res['pull_id'])->fetch() : null;
+    log_activity($pdo, 'source.search', 'source', $sourceId, ['source_id' => $sourceId, 'after' => ['pull_id' => $res['pull_id'] ?? null, 'query' => mb_substr($q, 0, 120), 'size' => $size,
+        'status' => $res['ok'] ? 'ok' : ($res['reason'] ?? 'failed'), 'found' => count($res['listings'] ?? []), 'listings_seen' => (int) ($pull['listings_seen'] ?? count($res['listings'] ?? [])),
+        'listings_new' => (int) ($pull['listings_new'] ?? 0), 'ms' => (int) round((microtime(true) - $t0) * 1000), 'eval' => !$persist]]);
+    return $res;
+}
+
+/** The live search's work (inv_source_search_live() logs around it). */
+function inv_source_search_live_run(PDO $pdo, int $sourceId, string $q, int $limit, ?int $by, bool $persist): array
 {
     $row = $pdo->query('SELECT * FROM sources WHERE id = ' . $sourceId)->fetch();
     if ($row === false) { return ['ok' => false, 'reason' => 'no such source', 'listings' => []]; }

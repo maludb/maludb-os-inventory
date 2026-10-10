@@ -74,6 +74,15 @@ function db_raise_text(Throwable $e): string
     return $at === false ? 'That could not be done.' : trim((string) (preg_split('/\R|CONTEXT:/', substr($text, $at + 6))[0] ?? ''));
 }
 
+/** The first row, or null. */
+function one_row(PDO $pdo, string $sql, array $args = []): ?array
+{
+    $st = $pdo->prepare($sql);
+    $st->execute($args);
+    $r = $st->fetch();
+    return $r === false ? null : $r;
+}
+
 /** The first column of the first row, or null. */
 function one_value(PDO $pdo, string $sql, array $args = []): mixed
 {

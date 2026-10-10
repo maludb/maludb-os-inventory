@@ -1,0 +1,38 @@
+<?php
+/** JSON mode (find.md "Proof — JSON mode"): watch_set and watch_clear under a signed action token; the refusals' shape; the expert sets its own watch and may not name an agent; the registry. */
+require __DIR__ . '/lib.php';
+$w = find_world();
+$H = ['X-Action-Token: ' . person_token(41)];
+echo "1. A person's action token\n";
+[$c, $b] = act_token('/watches/save.php', ['kind' => 'lead_time_over', 'variant' => $w['calking'], 'threshold' => '4'], $H);
+$id = (int) ($b['record_id'] ?? 0);
+ok($c === 200 && $b['ok'] === true && $id > 0 && str_starts_with($b['did'], 'Watching Lead time over 4') && $b['refresh'] === 'watchChanged' && str_ends_with($b['location'], '#watch-row-' . $id), 'watch_set: {ok, did, record_id, location (ending in the id), refresh}' . ($c === 200 ? '' : ' — ' . json_encode($b)));
+ok((int) q('SELECT variant_id FROM watches WHERE id = :i', ['i' => $id])[0]['variant_id'] === $w['calking'], '…on the Cal King (a SKU arrives resolved to its id by the registry — the handler reads ids)');
+ok(array_key_exists('current', $b) && $b['current'] === false, '…current false: inv_watch_state() reads the listing\'s own lead time, and Malouf\'s Shopify listing states none (the 5 days is the supplier\'s default) — recorded');
+$l = q("SELECT * FROM activity_log WHERE action = 'watch.set' ORDER BY id DESC LIMIT 1")[0];
+ok($l['source'] === 'assistant' && (int) $l['actor_member_id'] === 41, '…logged as Sam through his assistant');
+[$c, $b] = act_token('/watches/save.php', ['kind' => 'price_below', 'variant' => $w['calking']], $H);
+ok($c === 422 && ($b['error']['code'] ?? '') === 'invalid' && isset($b['error']['fields']['threshold']), 'a refusal: 422 {error: {code: invalid, fields}}');
+[$c, $b] = act_token('/watches/clear.php', ['watch' => $id], $H);
+ok($c === 200 && $b['ok'] === true && (int) $b['record_id'] === $id && $b['location'] === '/watches/?notice=cleared#watch-row-' . $id && $b['refresh'] === 'watchChanged', 'watch_clear: {ok, did, record_id, location, refresh}');
+[$c, $b] = act_token('/watches/clear.php', ['watch' => $id], $H);
+ok($c === 422 && ($b['error']['message'] ?? '') === 'That watch is already cleared.', '…twice: 422 in words');
+echo "2. The expert\n";
+kernel_state(function ($s) { $s['facts']['94'] = ['valid' => true, 'is_agent' => true, 'member_id' => 45, 'run_id' => 94, 'request_id' => 'req-run-94', 'trigger' => 'chat', 'endpoints' => [['name' => 'Records MCP']]]; return $s; });
+$rt = run_token(45, 94);
+[$c, $b] = act_token('/watches/save.php', ['kind' => 'back_in_stock', 'variant' => $w['fnd_king']], as_agent($rt));
+$eid = (int) ($b['record_id'] ?? 0);
+ok($c === 200 && $eid > 0 && (int) q('SELECT member_id FROM watches WHERE id = :i', ['i' => $eid])[0]['member_id'] === 45, 'the expert sets its own watch (member_id 45)');
+$l = q("SELECT * FROM activity_log WHERE action = 'watch.set' ORDER BY id DESC LIMIT 1")[0];
+ok($l['source'] === 'agent' && (int) $l['agent_run_id'] === 94 && $l['request_id'] === 'req-run-94', '…logged as the agent, run 94, the run\'s request id');
+[$c, $b] = act_token('/watches/save.php', ['kind' => 'back_in_stock', 'variant' => $w['twin'], 'agent' => '45'], as_agent($rt));
+ok($c === 403 && str_contains($b['error']['message'] ?? '', 'Naming an agent'), 'it may not name an agent (it holds user): 403 in words');
+[$c, $b] = act_token('/watches/save.php', ['kind' => 'cost_below', 'variant' => $w['twin'], 'threshold' => '300'], as_agent($rt));
+ok($c === 403 && ($b['error']['message'] ?? '') === 'You may not see cost or margin.', '…nor watch cost');
+kernel_state(function ($s) { unset($s['facts']); return $s; });
+echo "3. The registry\n";
+$reg = json_decode((string) file_get_contents(dirname(__DIR__, 3) . '/mcp/action_registry.json'), true);
+ok($reg['screens']['find']['built'] === true && $reg['screens']['watch-list']['built'] === true, 'the registry reads find and watch-list built');
+ok($reg['actions']['watch_set']['built'] === true && $reg['actions']['watch_clear']['built'] === true && $reg['actions']['watch_set']['approval'] === null && $reg['actions']['watch_clear']['approval'] === null, '…watch_set and watch_clear built, no approval category');
+ok($reg['actions']['watch_set']['endpoint'] === '/watches/save.php' && $reg['actions']['watch_clear']['endpoint'] === '/watches/clear.php', '…at their endpoints');
+finish();

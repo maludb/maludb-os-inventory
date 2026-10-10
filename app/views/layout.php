@@ -198,6 +198,19 @@ $groups    = nav_groups();
                 if (meta) { e.detail.headers['X-CSRF-Token'] = meta.content; }
             }
         });
+        // A watch form's threshold shows only for the kinds that have one (find.md) — disabled otherwise, so nothing is posted; prefilled when switched to.
+        (function () {
+            function applyWatch(root) { (root || document).querySelectorAll('form[data-watch-form]').forEach(function (f) {
+                var k = f.querySelector('[data-watch-kind]'), w = f.querySelector('[data-watch-threshold]'); if (!k || !w) return;
+                var opt = k.options[k.selectedIndex], need = opt ? opt.getAttribute('data-threshold') : '', inp = w.querySelector('input');
+                w.hidden = !need; inp.disabled = !need; inp.step = need === 'days' ? '1' : '0.01';
+                if (need && inp.value === '' && need === 'amount') { inp.value = inp.getAttribute('data-prefill') || ''; }
+            }); }
+            document.addEventListener('change', function (e) { if (e.target.matches && e.target.matches('[data-watch-kind]')) { applyWatch(e.target.form.parentNode); } });
+            document.body.addEventListener('htmx:afterSettle', function (e) { applyWatch(e.target); });
+            document.addEventListener('DOMContentLoaded', function () { applyWatch(document); });
+            applyWatch(document);
+        })();
         // The command bar shows Send only while in use.
         (function () { var f = document.getElementById('assistant-form'), i = document.getElementById('assistant-input'); if (!f || !i) return;
             i.addEventListener('input', function () { f.classList.toggle('in-use', i.value.trim() !== ''); }); })();

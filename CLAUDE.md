@@ -114,7 +114,7 @@ The handoff is a clean checkpoint with everything a worker needs in this reposit
    the shape of Consultant Tracking's `time-core.md` (screens, files, query-function signatures, handlers, manifest entries, log
    events, notifications, vocabulary, out of scope, proof, "Open questions" EMPTY). **The owner approves Phase 1 as a whole
    before any PHP.**
-4. **Phase 2** (`sso-shell`) — **BUILT and proven 2026-10-09** (Phase 1 approved the same day; 327 / 330 checks; the record in the spec's "Built and proven" and design §16), **slice 1** (the catalog — the CRUD pattern) — **BUILT and proven 2026-10-09** (310 checks; the record picker came with it; the record in `docs/build-specs/catalog.md`), **slice 2** (locations and stock) — **BUILT and proven 2026-10-09** (325 checks; `db/018` fixes `inv_transfer_receive()` for transfers of two lines or more; the record in `docs/build-specs/stock.md`), **slice 3** (sources, connectors, listings, matching — THE EXEMPLAR) — **BUILT and proven 2026-10-09** (290 checks; `db/019`: a probe or a search is not a pull; the worker's `pulls` pass live; the record in `docs/build-specs/sources.md`).
+4. **Phase 2** (`sso-shell`) — **BUILT and proven 2026-10-09** (Phase 1 approved the same day; 327 / 330 checks; the record in the spec's "Built and proven" and design §16), **slice 1** (the catalog — the CRUD pattern) — **BUILT and proven 2026-10-09** (310 checks; the record picker came with it; the record in `docs/build-specs/catalog.md`), **slice 2** (locations and stock) — **BUILT and proven 2026-10-09** (325 checks; `db/018` fixes `inv_transfer_receive()` for transfers of two lines or more; the record in `docs/build-specs/stock.md`), **slice 3** (sources, connectors, listings, matching — THE EXEMPLAR) — **BUILT and proven 2026-10-09** (290 checks; `db/019`: a probe or a search is not a pull; the worker's `pulls` pass live; the record in `docs/build-specs/sources.md`). **Slice 4** (Find, availability and watches) — **BUILT and proven 2026-10-10** (305 / 306 checks; the worker's `snapshots_heartbeat` and `watches` passes live; the bridge `html/internal/bridge.php`; the record in `docs/build-specs/find.md`) — **THE HANDOFF POINT IS REACHED: slices 5–9 are open to workers.**
 5. **Slice 3, sources, connectors, listings and matching — THE EXEMPLAR**, with **slice 4 (Find, availability and watches)**
    beside it: the novel surface (a source being read, an offer being remembered, a listing becoming ours, a salesperson asking
    "can we sell this") that every later slice composes; each with its proof suite green at 375 and 1280.
@@ -134,6 +134,20 @@ hires, the first sources from the templates, the first catalog, the end-to-end p
 interface, the matcher, the shared-schema decisions), §0.2 (the crawl policy), the slice's spec, and the exemplar's code before
 writing anything; replicate, never invent; a question goes in the spec's "Open questions" and the slice stops; a new
 connector is a class and a fixture, never a change to the worker or the matcher.
+
+**Kit lessons the exemplar slices learned (read before slice 5):**
+- `view()` keeps the template's path in `$template` — never name a data key `template` (the source form passes `tpl`).
+- `one_value()` answers null for a boolean `false` (it is `fetchColumn()`): read a boolean through `one_row()`.
+- A refusal that points at a record throws `DomainException('sentence|id')` inside `inv_guard()`: JSON callers get `record_id` in the error body.
+- `with_back()` keeps a fragment last (`/watches/?back=…#watch-row-7`); a record with no page of its own answers its list row in `record_url()`.
+- A partial that loads as a card scrolls into view uses `hx-trigger="intersect once"` — `revealed` never fires in this shell.
+- The SQL's `now()` decides what is due, stale or removed: proofs AGE rows (`age_source()`), they never set `INV_WORKER_NOW`.
+- Never put the string `php -S 127.0.0.1:860x` on a bash command line — `servers.sh stop` pkills by that pattern and kills the calling shell;
+  start extra servers from a script file.
+- Under `INV_APP=apache` the proof's :8601 is the PUBLIC vhost; the internal one (the kernel's actions server, the bridge) is :8607.
+- `inv_source_search_live()` logs `source.search` itself; `live_search_source()` (Find) and the bridge read its rows through `mcp_listing_variants`.
+- The compact availability partial IS the order form's picker (`/find/availability?variant=&compact=1&qty=&field=lines[N]`): radios valued
+  `stock:{location}`, `pickup:{location}`, `dropship:{listing_variant}`, `backorder` + `backorder_location`; the pick list is `/find/pick?q=`.
 
 ## Repository layout (as the siblings)
 `app/` (the kit: `bootstrap.php`, `db.php`, `auth.php`, `rights.php`, `activity.php`, `http.php`, `mail.php`, `attachments.php`,

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * Action `source_search` (log `source.search` per source asked: pull_id, query ≤ 120, size, found, ms, eval): ask the sources now — `q` 2–120, `size`,
+ * Action `source_search` (log `source.search` per source asked — written by inv_source_search_live() itself: pull_id, query ≤ 120, size, found, ms, eval): ask the sources now — `q` 2–120, `size`,
  * `source` (one); else every active source whose connector searches, not paused, not backing off, at most 5, in sequence, 30 s in all. Each asked
  * live through inv_source_search_live() (a `search` pull that writes listings like a pull); the answer {query, size, asked[], rows[]}. Under an
  * eval run nothing persists. orders.write (design A8).
@@ -36,13 +36,12 @@ foreach ($ids as $sid) {
     $name = (string) one_value($pdo, 'SELECT name FROM mcp_sources WHERE source_id = :s', ['s' => $sid]);
     if (microtime(true) - $started > 30) { $asked[] = ['source_id' => $sid, 'source' => $name, 'status' => 'timeout', 'pull_id' => null, 'listings_seen' => 0, 'listings_new' => 0, 'ms' => 0, 'error' => 'not reached in 30 s']; continue; }
     $t0 = microtime(true);
-    $r = inv_source_search_live($pdo, $sid, $q, 10, (int) current_member_id(), !$isEval);
+    $r = inv_source_search_live($pdo, $sid, $q, 10, (int) current_member_id(), !$isEval, $size);     // the function logs source.search
     $ms = (int) round((microtime(true) - $t0) * 1000);
     $new = ($r['pull_id'] ?? null) !== null ? (int) one_value($pdo, 'SELECT listings_new FROM source_pulls WHERE id = :p', ['p' => $r['pull_id']]) : 0;
     $asked[] = ['source_id' => $sid, 'source' => $name, 'status' => $r['ok'] ? 'ok' : ($r['reason'] ?? 'refused'), 'pull_id' => $r['pull_id'] ?? null, 'listings_seen' => count($r['listings'] ?? []),
                 'listings_new' => $new, 'ms' => $ms, 'error' => $r['ok'] ? null : ($r['reason'] ?? null)];
     $listingIds = array_merge($listingIds, $r['listing_ids'] ?? []);
-    source_log($pdo, 'source.search', 'source', $sid, $sid, ['pull_id' => $r['pull_id'] ?? null, 'query' => mb_substr($q, 0, 120), 'size' => $size, 'found' => count($r['listings'] ?? []), 'ms' => $ms, 'eval' => $isEval]);
 }
 $rows = [];
 if ($listingIds !== []) {

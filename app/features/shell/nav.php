@@ -197,7 +197,9 @@ function here_url(): string
 
 function with_back(string $url, string $here): string
 {
-    return $url . (str_contains($url, '?') ? '&' : '?') . 'back=' . rawurlencode($here);
+    $frag = '';
+    if (($hash = strpos($url, '#')) !== false) { $frag = substr($url, $hash); $url = substr($url, 0, $hash); }     // the way back goes before a fragment (/watches/#watch-row-7)
+    return $url . (str_contains($url, '?') ? '&' : '?') . 'back=' . rawurlencode($here) . $frag;
 }
 
 /** The path of the current request, for the sidebar's highlight. */
@@ -238,7 +240,7 @@ function record_url(?string $type, int|string|null $id): ?string
         'inventory_adjustment', 'adjustment' => '/adjustments/' . $id,
         'inventory_count', 'count' => '/counts/' . $id,
         'shipment' => '/shipments/' . $id,
-        'watch' => '/watches/' . $id,
+        'watch' => '/watches/#watch-row-' . $id,
         'proposal', 'buyer_proposal' => '/proposals/' . $id,
         'dispatch', 'agent_dispatch' => '/admin/dispatches',
         default => null,

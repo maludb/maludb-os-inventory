@@ -308,7 +308,52 @@ stock: 4 Queens at the Warehouse (1 allocated), 1 King floor model at the Showro
   plain chip, the watch form as a page.
 
 ## Built and proven
-(not yet)
+**2026-10-10 — BUILT and proven by the planning model** (`tests/phase3/slice4/run.sh` on the scratch database `inv_dev4` with the fixture server on
+8606: **305 checks green under php -S and 306 under a real Apache** — world 11, find 54, availability 40, atp and the pick list 19, live 33, watches 74,
+bridge 31 (32 under Apache: the public name's 404), json 14, browser 27 at 375 × 740, 1280 × 800 and JavaScript off; the registry — **56 screens and 65
+actions built**, 19 placeholders — and the approvals in step). Every file of "Files" is built; the worker's `snapshots_heartbeat` and `watches` passes
+are live. The earlier suites re-run green — slice 3 (290), slice 2 (325), slice 1 (310), Phase 2 (329; its placeholder count 19 and the bell's watch
+link with the way back before the fragment), Phase 0 (42 + 517 + 511), the Phase 1 claim checks (52) — and the installer's plan is clean (57 steps).
+
+**Found and fixed (not questions):**
+- **`inv_source_search_live()` did not log**: slice 3's action wrote `source.search` itself, so the Find card and the bridge would have asked a source
+  with no trail. The function now writes the row around its work (`after`: pull_id, query ≤ 120, size, status, found, listings_seen, listings_new, ms,
+  eval) and `/sources/search.php` no longer does — one row per ask whoever asks, saying `web`, `assistant`, `mcp` or `agent`.
+- **`variant_availability()` was slice 1's already** (`catalog/queries.php`, the same function): Find reads that one; no second definition.
+- **A JSON caller lost the record a refusal points at**: the guard's `sentence|id` shape put the id only in `X-Action-Data`. `inv_guard()` now answers
+  a JSON caller `{error: {code, message, record_id}}` — the duplicate watch names the existing one in the body (the kit's change; every slice gains it).
+- **`one_value()` reads a boolean `false` as "no row"** (`fetchColumn()`): a watch evaluated false came back `current: null`. The kit gains
+  `one_row()`; the save handler reads the state through it. A kit lesson: never read a boolean through `one_value()`.
+- **`with_back()` put `?back=` after a fragment**: a watch's place is `/watches/#watch-row-{id}` (it has no page of its own — `record_url()` now says
+  so), and the bell's link became `/watches/#watch-row-7?back=…`. `with_back()` now puts the way back before the fragment.
+- **A blocked source answered "backing off"**: the live function's reason for a walled source is its back-off; `live_search_source()` names it
+  `blocked` when `inv_source_health()` says so (the spec's `danger` chip), and a pause for breath stays `backing off`.
+
+- **Phase 0's home check flaked** (green on a rerun, here and in slice 3): `echo "$home" | grep -q` under `pipefail` fails when `grep -q` exits on
+  its match and `echo` takes SIGPIPE on a large page. The two lines read a here-string now; three runs in a row green.
+
+**Decisions taken while building (not questions):**
+- **The cards load on `intersect once`, not `revealed`**: htmx's `revealed` listens to the window's scroll and never fired for the cards below the
+  fold in this shell; an IntersectionObserver does. A phone shows one card (≈ 320 px) at a time, not three — the proof checks the card in view loaded,
+  the ones below not yet, and the last one loading when scrolled to.
+- **"Sell this" names the location without an `inv_availability()` per card**: one query (`best_stock_locations()`: the sellable location with the
+  most available per variant — a bundle's first component's) beside the one `inv_find()`; the rest of `recommended_fulfilment()` reads the row's best offer.
+- **The world is the spec's on the fixtures that exist**: the Shopify, feed and WooCommerce fixtures sell the Cloudrest Hybrid, so the spec's "Purple
+  hybrid" is the catalog's SMOKE Cloudrest Hybrid; Malouf is the Shopify fixture as a supplier (lead 5), Zinus the feed (lead 3), the Casper site the
+  Shopify fixture as a reference, the paused source the WooCommerce fixture (Meadowlark — asked with "meadowlark"), the blocked one the router's wall.
+  Every hybrid size is offered by someone, so the spec's "Twin nobody offers" is the **Foundation King** (nobody holds or offers it). Where the spec said
+  Zinus for 5 Queens, the fixtures say Malouf (Zinus is out of Queens); the ranking "the cheaper first" is proven on the Twin (Zinus 349.50 before
+  Malouf 699.00); a pre-order offer is Zinus's Queen set to `pre_order` for one check; the firing is proven by stock arriving, selling out and arriving
+  again (a ledger posting), and the price watch by the fixture's second version read by Malouf's next pull (999.00 → 949.00 under 950).
+- **The handler reads ids**: a SKU or GTIN arrives resolved by the registry (the spec's words); the proofs send ids.
+- **`lead_time_over` reads the listing's own lead time** (`inv_watch_state()`, db/009 — never modified): Malouf's Shopify listing states none, so a
+  watch for "over 4 days" on the Cal King is false though the supplier's default is 5. Recorded, not changed — the referee decides; a later schema may
+  read `inv_offers_for_variant()`'s lead time instead.
+- **The threshold field shows only for the kinds that have one** — a few lines in the shell's inline script (`layout.php`), with JavaScript off the
+  field shows and is left empty for the kinds that refuse it.
+- **The variant page's Watches card gains its Watch button** (slice 1's page; the inline form loads into it).
+- **Under Apache the proof's port 8601 is the PUBLIC vhost** (the rendered `*:80`): the bridge proof calls the internal vhost on 8607 there and checks
+  that the public name answers 404 under `/internal/`.
 
 ## Decisions taken while writing (2026-10-05)
 - The Find list is one `inv_find()` (limit 50); each card's availability is one `inv_availability()` loaded when the card is revealed, and reloaded on `offerChanged`.

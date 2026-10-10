@@ -120,6 +120,9 @@ function inv_guard(PDO $pdo, callable $step): mixed
             if (str_contains($m, '|')) {                      // "sentence|id": a refusal that points at a record (a known address → its owner)
                 [$m, $ref] = explode('|', $m, 2);
                 emit_action_status(false, ['error' => $m, 'record_id' => (int) $ref]);
+                if (wants_json()) {                           // a JSON caller reads the record the refusal points at in the body too
+                    json_error($m === 'Not found.' ? 'not_found' : 'invalid', $m, $m === 'Not found.' ? 404 : 422, ['record_id' => (int) $ref]);
+                }
             }
             refuse($m === 'Not found.' ? 404 : 422, $m);
         }

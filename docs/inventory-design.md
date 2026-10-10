@@ -757,6 +757,20 @@ Rules, not questions.
 
 ## 16. State
 
+**2026-10-10 — SLICE 4, FIND, AVAILABILITY AND WATCHES — BUILT and proven** by the planning model — **THE HANDOFF POINT: the exemplar built;
+slices 5–9 open to workers.** `tests/phase3/slice4/run.sh` 305 checks green under php -S and 306 under Apache, against the fixture server (Find by
+name, SKU, GTIN, MPN and brand with every chip, the 50 cap, the push URL, cost on a card only for the wall, "Sell this" with the recommended
+fulfilment; the availability partial in full and compact — the order form's picker — with ranking, stale, removed, the bundle and `sales_sees_cost`;
+the promise line and the pick list; "Ask the sources now" fanning out in the browser, each card one live search with `offerChanged`, paused and
+blocked sources in words, the host's one-second spacing; watches set, refused in words, listed, cleared and FIRED once per state change by the
+worker — in-app, email, a K6 text row, an agent's dispatch — and the heartbeat pass; the bridge's loopback + HMAC + ±30 s gate, its wall, the
+`mcp` / `agent` rows and an eval run that writes nothing; JSON mode; the browser at 375 and 1280 and without JavaScript); 56 screens and 65 actions
+built. **Found and fixed:** the live search now logs `source.search` itself (one row per ask, whoever asks); `inv_guard()` gives a JSON caller the
+`record_id` a refusal points at; the kit's `one_row()` (a boolean false read through `one_value()` is "no row"); `with_back()` puts the way back
+before a fragment; a walled source answers `blocked`, not "backing off". Recorded: `lead_time_over` reads the listing's own lead time, not the
+supplier's default. The record and the decisions: `docs/build-specs/find.md` "Built and proven". **Next: slices 5–9 by Sonnet 5.5 workers, one at a
+time on the exemplar's pattern, then Phase 4 and Phase 5.**
+
 **2026-10-09 — SLICE 3, SOURCES, CONNECTORS, LISTINGS AND MATCHING — THE EXEMPLAR — BUILT and proven** by the planning model:
 `tests/phase3/slice3/run.sh` 290 checks green under php -S and under Apache, against the fixture server (six sources made through the handlers and one
 from a template; credentials sealed, rotated and in no view, log or policy; probes ok / blocked / misconfigured with the ladder; the worker's pulls

@@ -55,6 +55,7 @@ function log_activity(PDO $pdo, string $action, ?string $entityType = null, int|
 /** 'web' for the UI; 'agent' under a run token; 'assistant' under a person's action token; 'cron' under CLI; 'portal' and 'feed' when a door says so. */
 function default_activity_source(): string
 {
+    if (isset($GLOBALS['__activity_source'])) { return (string) $GLOBALS['__activity_source']; }     // a door that names its caller (the bridge: 'mcp' or 'agent')
     if (is_action_authed()) {
         return current_agent_run_id() !== null ? 'agent' : 'assistant';
     }

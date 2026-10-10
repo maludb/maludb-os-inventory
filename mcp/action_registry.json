@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/inventory-action-manifest.md",
-    "generated_at": "2026-10-09T21:59:35+00:00",
+    "generated_at": "2026-10-10T12:00:48+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -600,8 +600,8 @@
                 "in_stock",
                 "ships_within"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "watch-list": {
             "screen": "watch-list",
@@ -613,8 +613,8 @@
                 "fired",
                 "member"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "customer-list": {
             "screen": "customer-list",
@@ -3405,7 +3405,7 @@
             "approval": null,
             "log_event": "watch.set",
             "who": "watches.own",
-            "built": false
+            "built": true
         },
         "watch_clear": {
             "action": "watch_clear",
@@ -3424,7 +3424,7 @@
             "approval": null,
             "log_event": "watch.clear",
             "who": "own or watches.all",
-            "built": false
+            "built": true
         },
         "customer_create": {
             "action": "customer_create",
