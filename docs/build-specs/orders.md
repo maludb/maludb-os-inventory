@@ -365,7 +365,48 @@ a second customer with no email, the Cook County tax rate as the default, the Bu
   console errors; JavaScript off: the pick list's links, one blank line at a time, the form guard absent and the save still landing.
 
 ## Built and proven
-(not yet)
+**2026-10-10 — BUILT and proven by a worker (Sonnet 5.5)** (`tests/phase3/slice5/run.sh` on the scratch database `inv_dev5`; :8606 is the fixture server while the
+world is built, then the fake MaluMail the order e-mails go to: **308 checks green under php -S and 308 under a real Apache** — world 6, customers 32, quote 51,
+confirm 31, money 22, send 43, ship 46, today 17, json 27, browser 33 at 375 × 740, 1280 × 800 and JavaScript off; the registry — **72 screens and 85 actions
+built** (the sixteen screens and twenty actions of this slice), 15 placeholders — and the approvals in step). Every file of "Files" is built; the worker's
+`links_expire` pass is live (one function for both doors). The earlier suites re-run green — slice 4 (305), slice 3 (290), slice 2 (325), slice 1 (310), Phase 2 (329; its placeholder count 15 and its /orders/ examples moved to /purchasing/ and /suppliers/), Phase 0 (42 + 517 + 511), the Phase 1 claim checks (52) — and the installer's plan is clean (57 steps).
+The spec's "Open questions" stayed empty: nothing stopped the slice. No migration was written.
+
+**Found and fixed (not questions):**
+- **A latent defect of slice 2: the location page's tabs were empty.** `view()` extracts its data with `EXTR_SKIP`, and `$data` is its own parameter — a view key named
+  `data` is silently dropped, so `/locations/{id}` showed no levels, movements, transfers or counts (the proof read JSON only). The key is `tabdata` now (locations, and
+  slice 5's own customer page and fulfilment page); one kit lesson more in CLAUDE.md.
+- **The sticky header never stuck**: the theme clips `.main-content` with `.nxl-container .nxl-content .main-content` (three classes); the lift written for the scan field
+  (`.main-content:has(.scan-sticky)`, two) loses to it. Slice 5's `.page-header-form` lift carries the three classes. (Slice 2's scan-field rule has the same shape and was not
+  touched — slice 2's own proof does not measure it.)
+- **`draft_quote()` passed NULL for `shipping_charge`** (NOT NULL with a default): the INSERT now names only the columns that carry a value, so a default stays a default and the
+  triggers fill the ship-to and the tax rate.
+- **The set's price went on the wrong component**: ordered by product name the foundation came first; the components are ordered dearest first (the mattress carries the set's
+  price, the rest 0.00).
+- **Fulfilment today's "my store"**: `inv_fulfilment_today()` filters by the LINE's location, so Sales' page opens on the location their own lines are filled from (not the order's
+  selling store).
+
+**Decisions taken while building (not questions):**
+- **The customer picker is the record picker** (plugin 0.8.0, which postdates the spec's "select2"): a `customer` source in `app/pickers.php`, wrapped by `app/views/shared/customer-select.php`;
+  its hidden input's `change` reloads the ship-to block. "+ New customer" is a `<details>` (works without JavaScript).
+- **A line with no fulfilment takes the recommended one** (`recommended_fulfilment()`, find.md) for the form and for an agent alike; a backorder with no location takes the first sellable one.
+  A bundle expands at save, each component with its own recommendation. With JavaScript off a typed SKU (`lines[n][variant_code]`) does the pick list's job, a `<noscript>` GET lookup
+  lists variants as links, and a row with a variant includes its picker server-side (`compact_picker_html()`, which html/find/availability.php now shares; the compact partial also
+  takes `choose=` to keep a radio checked on a reload).
+- **Lines of the edit form save on their own** through mini-forms that name their picker's radios under a row key (`l{id}[fulfilment]`, posted with `rowkey`; `orders_write_begin()` merges
+  the row); the lines region and the totals refresh on `orderChanged`. A header edit of a confirmed order is refused by the handler ("SO-… is confirmed — cancel a line or the order
+  instead") — the schema has no trigger for the header, only for the lines.
+- **`order_link_rotate` retires the fresh row it mints** (so no live link rests unseen, and the card says "stopped"); `order_send` mints a link only inside the transaction that sends.
+  The raw token is in the e-mail alone: no row, no log row, no page carries one (the proof greps the whole activity log for 48 hex).
+- **`order_close` refuses a balance due; a refund may not exceed `amount_paid`** (inside the payment's transaction); a payment on a quote is allowed; `notify` needs a confirmed order.
+- **The door** reads the base tables as the writer; the per-IP limit is proven by `door_rate_ok()` against 300 logged rows of a documentation address, the per-link one by 61 real views.
+  A drop-ship line's "expected <date>" is shown once its purchase order is no longer a draft or cancelled.
+- **The fixtures' figures, not the spec's**: the Cal King's Malouf offer is cost 1299.00 (the listing states a price, not a cost; lead 5 — the supplier's) and the King's Zinus offer
+  649.00 at 3 days; the SQL's refusal of a back order with no stock reads "Not enough on hand: -1 would leave -1 at location N (negative stock is not allowed there)" — the proof
+  asserts that, not "Only 0 available"; Sales does not see the offer's cost (the wall), Nora does; the spec's "121-character note" is a 201-character line note (limit 200).
+- **`no key`** is proven against a second `php -S` on :8604 started with `MALUMAIL_API_KEY` blank (the application reads its environment once per process).
+- **Also built**: `order_notify` and the cancel/rotate/notify forms are `<details>` on the order page; the payment screen's kind chooser picks between `payments/save.php` and
+  `payments/refund.php`; `assets/js/orders.js` (the picker's glue, ≈ 90 lines) and its layout line; `.page-header-form` in the CSS.
 
 ## Decisions taken while writing (2026-10-05)
 - A quote IS the "unconfirmed order"; lines change only while a quote (the trigger); on the edit form a line is saved, re-fulfilled or cancelled on its own; a quote's

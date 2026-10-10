@@ -24,6 +24,6 @@ if (wants_json()) {
     respond_screen(['location' => present_location($l), 'levels' => array_map('present_level', $data['levels']), 'totals' => $data['totals'], 'movements' => array_map('present_movement', $data['movements']),
         'transfers' => array_map('present_transfer', $data['transfers']), 'counts' => array_map('present_count', $data['counts']), 'holds' => location_holds($pdo, $lid)]);
 }
-render_screen($l['name'], view('locations/view.php', ['l' => $l, 'tab' => $tab, 'tabs' => $tabs, 'data' => $data, 'mayWrite' => has_right('settings.manage'), 'mayAdjust' => has_right('stock.adjust'),
+render_screen($l['name'], view('locations/view.php', ['l' => $l, 'tab' => $tab, 'tabs' => $tabs, 'tabdata' => $data, 'mayWrite' => has_right('settings.manage'), 'mayAdjust' => has_right('stock.adjust'),
     'seesCost' => sees_cost(), 'tz' => member_timezone(), 'here' => here_url(), 'notice' => inv_notice($_GET['notice'] ?? null, STOCK_NOTICES)]),
     ['activeNav' => 'location-list', 'screen' => 'location-view', 'entity' => 'location', 'recordId' => (string) $lid]);

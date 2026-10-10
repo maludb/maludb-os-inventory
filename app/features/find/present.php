@@ -161,3 +161,19 @@ function field_slug(string $prefix): string
 {
     return trim((string) preg_replace('/[\[\]]+/', '-', $prefix), '-');
 }
+
+/**
+ * The compact picker for one line as HTML (find.md; the order form's picker per line): the radios named by $field, the recommended one checked unless $choose (a value such as stock:12) is
+ * among them, the promise line beneath. $store preselects a back order's location. Null when the variant is not there. html/find/availability.php and the order screens (server-side include) share it.
+ */
+function compact_picker_html(PDO $pdo, int $vid, int $qty, string $field, ?string $choose = null, ?int $store = null): ?string
+{
+    $a = variant_availability($pdo, $vid);
+    if ($a === []) { return null; }
+    $locations = sellable_locations($pdo);
+    $choices = isset($a['components']) ? [] : picker_choices($a, $qty, $locations);
+    $checked = isset($a['components']) ? '' : recommended_value(recommended_fulfilment($a, $qty), $choices);
+    foreach ($choices as $c) { if ($choose !== null && $choose !== '' && $c['value'] === $choose) { $checked = $choose; } }
+    return view('find/partials/availability-compact.php', ['a' => $a, 'vid' => $vid, 'qty' => $qty, 'field' => $field, 'slug' => field_slug($field), 'choices' => $choices, 'checked' => $checked, 'locations' => $locations,
+        'store' => $store, 'atp' => isset($a['components']) ? null : variant_atp($pdo, $vid, $qty), 'seesCost' => sees_cost()]);
+}

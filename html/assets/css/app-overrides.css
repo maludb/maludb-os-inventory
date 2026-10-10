@@ -157,3 +157,10 @@ details.card[open] > summary::after { content: "\25B4"; }
 .queue-actions .queue-pick > :first-child { flex: 1 1 auto; min-width: 0; }
 .source-sub legend { float: none; }
 .credential-field[hidden], .source-sub[hidden] { display: none !important; }
+
+/* Slice 5 — orders: the quote's pinned form header, the lines as cards, the customer's door. */
+.page-header-form { position: sticky; top: 80px; z-index: 4; background: var(--bs-body-bg, #fff); }          /* under the fixed 80 px header, like the scan field */
+.nxl-container .nxl-content .main-content:has(.page-header-form) { overflow: visible; }      /* the theme clips .main-content (3 classes): the lift needs as many */
+.order-line-row .list-group-item, [id$="-pick"] .list-group-item { text-align: left; }
+.public-order { max-width: 760px; margin: 0 auto; padding: 16px; }
+.public-order table { width: 100%; }

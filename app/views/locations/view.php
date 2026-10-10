@@ -1,4 +1,4 @@
-<?php /** One location (screen `location-view`). Data: l, tab, tabs, data (levels, totals, movements, transfers, counts, trail), mayWrite, mayAdjust, seesCost, tz, here, notice */
+<?php /** One location (screen `location-view`). Data: l, tab, tabs, tabdata (levels, totals, movements, transfers, counts, trail), mayWrite, mayAdjust, seesCost, tz, here, notice */
 $id = (int) $l['location_id'];
 $tabUrl = static fn (string $t): string => '/locations/' . $id . ($t === 'levels' ? '' : '?tab=' . $t);
 $actions = '';
@@ -22,24 +22,24 @@ if ($mayWrite) {
         <?php foreach ($tabs as $k => $label): ?><?= hx_link($tabUrl($k), e($label), 'btn btn-touch ' . ($tab === $k ? 'btn-primary' : 'btn-light'), 'id="location-view-tab-' . $k . '"') ?><?php endforeach; ?>
     </div>
     <?php if ($tab === 'levels'): ?>
-        <?= view('stock/partials/levels-table.php', ['rows' => $data['levels'], 'totals' => $data['totals'], 'showLocation' => false, 'here' => $here, 'footer' => true]) ?>
+        <?= view('stock/partials/levels-table.php', ['rows' => $tabdata['levels'], 'totals' => $tabdata['totals'], 'showLocation' => false, 'here' => $here, 'footer' => true]) ?>
     <?php elseif ($tab === 'movements'): ?>
-        <?= view('stock/partials/movements-table.php', ['rows' => $data['movements'], 'here' => $here, 'tz' => $tz, 'mayReverse' => $mayAdjust, 'seesCost' => $seesCost, 'seesReceiptCost' => sees_receipt_cost(), 'empty' => 'Nothing has moved here yet.']) ?>
+        <?= view('stock/partials/movements-table.php', ['rows' => $tabdata['movements'], 'here' => $here, 'tz' => $tz, 'mayReverse' => $mayAdjust, 'seesCost' => $seesCost, 'seesReceiptCost' => sees_receipt_cost(), 'empty' => 'Nothing has moved here yet.']) ?>
         <div class="mt-2"><?= hx_link('/stock/movements?location=' . $id, 'Every movement here', 'fs-12 fw-semibold', 'id="location-view-all-movements"') ?></div>
     <?php elseif ($tab === 'transfers'): ?>
         <div class="card" id="location-view-transfers"><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12"><thead class="thead-light"><tr><th>Number</th><th>Status</th><th>From → to</th><th class="text-end">Units</th></tr></thead><tbody>
-            <?php if ($data['transfers'] === []): ?><tr><td colspan="4" class="text-center text-muted py-4">No open transfer from or to here.</td></tr><?php endif; ?>
-            <?php foreach ($data['transfers'] as $t): ?><tr id="location-view-transfer-<?= (int) $t['transfer_id'] ?>"><td><?= hx_link(with_back('/transfers/' . (int) $t['transfer_id'], $here), e($t['number']), 'fw-semibold') ?></td><td><?= doc_status_chip($t['status']) ?></td><td><?= e($t['from_location']) ?> → <?= e($t['to_location']) ?></td><td class="text-end"><?= (int) $t['units'] ?></td></tr><?php endforeach; ?>
+            <?php if ($tabdata['transfers'] === []): ?><tr><td colspan="4" class="text-center text-muted py-4">No open transfer from or to here.</td></tr><?php endif; ?>
+            <?php foreach ($tabdata['transfers'] as $t): ?><tr id="location-view-transfer-<?= (int) $t['transfer_id'] ?>"><td><?= hx_link(with_back('/transfers/' . (int) $t['transfer_id'], $here), e($t['number']), 'fw-semibold') ?></td><td><?= doc_status_chip($t['status']) ?></td><td><?= e($t['from_location']) ?> → <?= e($t['to_location']) ?></td><td class="text-end"><?= (int) $t['units'] ?></td></tr><?php endforeach; ?>
         </tbody></table></div></div></div>
     <?php elseif ($tab === 'counts'): ?>
         <div class="card" id="location-view-counts"><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12"><thead class="thead-light"><tr><th>Number</th><th>Status</th><th>Started</th><th class="text-end">Lines</th><th class="text-end">Differing</th></tr></thead><tbody>
-            <?php if ($data['counts'] === []): ?><tr><td colspan="5" class="text-center text-muted py-4">No counts here yet.</td></tr><?php endif; ?>
-            <?php foreach ($data['counts'] as $c): ?><tr id="location-view-count-<?= (int) $c['count_id'] ?>"><td><?= hx_link(with_back('/counts/' . (int) $c['count_id'], $here), e($c['number']), 'fw-semibold') ?></td><td><?= doc_status_chip($c['status']) ?></td><td><?= e(format_ts($c['started_at'], $tz, 'M j, Y')) ?></td><td class="text-end"><?= (int) $c['line_count'] ?></td><td class="text-end"><?= (int) $c['lines_differing'] ?></td></tr><?php endforeach; ?>
+            <?php if ($tabdata['counts'] === []): ?><tr><td colspan="5" class="text-center text-muted py-4">No counts here yet.</td></tr><?php endif; ?>
+            <?php foreach ($tabdata['counts'] as $c): ?><tr id="location-view-count-<?= (int) $c['count_id'] ?>"><td><?= hx_link(with_back('/counts/' . (int) $c['count_id'], $here), e($c['number']), 'fw-semibold') ?></td><td><?= doc_status_chip($c['status']) ?></td><td><?= e(format_ts($c['started_at'], $tz, 'M j, Y')) ?></td><td class="text-end"><?= (int) $c['line_count'] ?></td><td class="text-end"><?= (int) $c['lines_differing'] ?></td></tr><?php endforeach; ?>
         </tbody></table></div></div></div>
     <?php else: ?>
         <div class="card" id="location-view-trail"><div class="card-body p-0"><div class="table-responsive"><table class="table mb-0 fs-12"><tbody>
-            <?php if ($data['trail'] === []): ?><tr><td class="text-muted py-3 text-center">Nothing yet.</td></tr><?php endif; ?>
-            <?php foreach ($data['trail'] as $r): ?><tr id="location-view-trail-row-<?= (int) $r['activity_id'] ?>"><td class="text-nowrap"><?= e(format_ts($r['occurred_at'], $tz, 'M j, g:i A')) ?></td><td><?= e(activity_sentence($r)) ?></td></tr><?php endforeach; ?>
+            <?php if ($tabdata['trail'] === []): ?><tr><td class="text-muted py-3 text-center">Nothing yet.</td></tr><?php endif; ?>
+            <?php foreach ($tabdata['trail'] as $r): ?><tr id="location-view-trail-row-<?= (int) $r['activity_id'] ?>"><td class="text-nowrap"><?= e(format_ts($r['occurred_at'], $tz, 'M j, g:i A')) ?></td><td><?= e(activity_sentence($r)) ?></td></tr><?php endforeach; ?>
         </tbody></table></div></div></div>
     <?php endif; ?>
 </div>

@@ -757,6 +757,22 @@ Rules, not questions.
 
 ## 16. State
 
+**2026-10-10 — SLICE 5, CUSTOMERS AND SALES ORDERS — BUILT and proven** by a worker (Sonnet 5.5), the first after the handoff. `tests/phase3/slice5/run.sh` 308 checks green
+under php -S and 308 under Apache (the fixture server builds the world, then hands :8606 to the fake MaluMail): customers as cards and a form (the view nulls email and phone for a
+Viewer; the log says "email changed", never the address); the order form on slice 4's picker — the record picker for the customer, a pick list per line, the compact availability partial's
+radios per line, a set expanded into its components, a line with no fulfilment given the recommended one, the header discount only on a one-line quote, a new customer made with the quote;
+the edit form's lines saved on their own and the lines region and totals refreshed on `orderChanged`; confirm (what it will do line by line, the cost only behind the wall, "cannot cover"
+with Make it a backorder; the SQL allocates and drafts one purchase order per supplier; no e-mail); payments and refunds recorded, never charged (a refund never exceeds what was paid);
+send (one MaluMail call inside the transaction that mints the link — a refusal rolls it back: 422 for a suppressed or rejected address, 503 for a transport error or a missing key —,
+the raw token in the e-mail alone and in no row or log), notices without a link, rotation that keeps no token; ship (a stock line issues a `sale` movement at its location and releases
+its allocation; a back order with no stock is refused by the ledger), deliver (the suppliers' tracking makes a `dropship` shipment; delivering it receives the PO line and sets the cost),
+close (refused with a balance due; the link's 180 days start), cancel (allocations released, the draft POs cancelled by the SQL, the Buyer told of a sent PO and of an `ordered`
+line); fulfilment today and the shipments list; the customer's door `/o/<token>` (the base tables as the writer, one dead page, 429 over 60 views an hour per link, `noindex`, nothing of
+a cost, a source, a supplier, a phone or the salesperson). The worker's `links_expire` pass is live. The registry: 72 screens and 85 actions built (15 placeholders). Found and fixed:
+slice 2's location page showed empty tabs (`view()` drops a data key named `data`), the theme's three-class clip kept the pinned header from sticking, `draft_quote()` passed NULL for a
+defaulted column, a set's price went on its foundation. No migration. The spec's "Built and proven" has the record; the earlier suites are green (slice 4 305, slice 3 290, slice 2 325,
+slice 1 310, Phase 2, Phase 0, Phase 1 52); the installer's plan is clean (57 steps) — **next slice 6, purchasing and the supplier's door.**
+
 **2026-10-10 — SLICE 4, FIND, AVAILABILITY AND WATCHES — BUILT and proven** by the planning model — **THE HANDOFF POINT: the exemplar built;
 slices 5–9 open to workers.** `tests/phase3/slice4/run.sh` 305 checks green under php -S and 306 under Apache, against the fixture server (Find by
 name, SKU, GTIN, MPN and brand with every chip, the 50 cap, the push URL, cost on a card only for the wall, "Sell this" with the recommended

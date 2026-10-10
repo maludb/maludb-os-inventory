@@ -1,0 +1,2 @@
+<?php /** The ONE customer picker: the record picker over the live customers (app/pickers.php `customer`), under the old select's name and id. Data: id (default order-form-field-customer), name (default customer), value, invalid, extra */
+echo picker_field(['id' => $id ?? 'order-form-field-customer', 'name' => $name ?? 'customer', 'source' => 'customer', 'value' => $value ?? null, 'placeholder' => 'Choose a customer', 'invalid' => !empty($invalid), 'extra' => $extra ?? '']);

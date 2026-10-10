@@ -113,10 +113,10 @@ function worker_pass_dispatches(PDO $pdo, int $limit, DateTimeImmutable $now): a
     return ['dispatched' => 0, 'retried' => 0, 'stub' => true];
 }
 
-/** SLICES 5 and 6 — the doors' links: a customer's order link dies 180 days after the order closes, a supplier's 90 days after the purchase order closes (settings). */
+/** SLICE 5 (orders.md) — the doors' links (the customer's and the supplier's, one function): a customer's order link dies 180 days after the order closes, a supplier's 90 days after the purchase order closes (settings). */
 function worker_pass_links_expire(PDO $pdo, int $limit, DateTimeImmutable $now): array
 {
-    return ['expired' => 0, 'stub' => true];
+    return ['expired' => (int) $pdo->query('SELECT inv_expire_links()')->fetchColumn()];        // one function for both doors (slice 5 fills it; slice 6 adds nothing)
 }
 
 /** SLICE 9 — the feed's key_usage rows older than the retention (settings) are pruned. */

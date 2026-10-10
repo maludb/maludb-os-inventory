@@ -1,6 +1,6 @@
 {
     "generated_from": "docs/inventory-action-manifest.md",
-    "generated_at": "2026-10-10T12:00:48+00:00",
+    "generated_at": "2026-10-10T13:06:23+00:00",
     "screens": {
         "home": {
             "screen": "home",
@@ -626,8 +626,8 @@
                 "source",
                 "archived"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "customer-add": {
             "screen": "customer-add",
@@ -635,7 +635,7 @@
             "section": "Customers and sales orders (slice 5)",
             "when": "to add a customer: name, email, phone, a second phone, billing and shipping address, how they came (walk-in, phone, web, referral), tax rate, email opt-in, notes",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "customer-view": {
@@ -646,7 +646,7 @@
             "params": [
                 "tab"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "customer-edit": {
@@ -655,7 +655,7 @@
             "section": "Customers and sales orders (slice 5)",
             "when": "to change a customer's details, addresses, source, tax rate, opt-in",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "order-list": {
@@ -672,8 +672,8 @@
                 "from",
                 "to"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "order-add": {
             "screen": "order-add",
@@ -688,7 +688,7 @@
                 "listing_variant",
                 "location"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "order-view": {
@@ -699,7 +699,7 @@
             "params": [
                 "tab"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "order-edit": {
@@ -708,7 +708,7 @@
             "section": "Customers and sales orders (slice 5)",
             "when": "to change a quote's or an unconfirmed order's customer, lines, fulfilment, delivery, ship-to, promised date, tax, notes",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "order-confirm": {
@@ -717,7 +717,7 @@
             "section": "Customers and sales orders (slice 5)",
             "when": "the confirmation: what allocates where, which drop-ship purchase orders are drafted per supplier, what cannot be covered and must become a backorder; Confirm",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "order-payment": {
@@ -728,7 +728,7 @@
             "params": [
                 "kind"
             ],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "order-ship": {
@@ -737,7 +737,7 @@
             "section": "Customers and sales orders (slice 5)",
             "when": "to ship: pick the lines, the kind (own delivery, parcel, LTL, pickup), carrier and tracking; a stock line issues; a drop-ship line's tracking comes from the supplier",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "order-send": {
@@ -746,7 +746,7 @@
             "section": "Customers and sales orders (slice 5)",
             "when": "the confirmation email as the customer will see it, with the order link; Send",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "fulfilment-today": {
@@ -758,8 +758,8 @@
                 "date",
                 "location"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "shipment-list": {
             "screen": "shipment-list",
@@ -772,8 +772,8 @@
                 "to",
                 "undelivered"
             ],
-            "built": false,
-            "stub": true
+            "built": true,
+            "stub": false
         },
         "shipment-view": {
             "screen": "shipment-view",
@@ -781,7 +781,7 @@
             "section": "Customers and sales orders (slice 5)",
             "when": "one shipment: its lines, tracking, Deliver",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "purchase-order-list": {
@@ -1147,7 +1147,7 @@
             "section": "The two doors (no session; not actions)",
             "when": "the customer's order: number and date, the lines at retail, delivery or pickup with the promised date, payment status and the balance due, tracking links, the business's name and contact, \"message us\"; read-only, `noindex`, rate-limited; opening it is logged `order.customer_view` with `source = portal`; the link dies 180 days after the order closes; no cost, no source, no supplier anywhere on it",
             "params": [],
-            "built": false,
+            "built": true,
             "stub": false
         },
         "supplier-door": {
@@ -3503,7 +3503,7 @@
             "approval": null,
             "log_event": "customer.create",
             "who": "customers.write",
-            "built": false
+            "built": true
         },
         "customer_update": {
             "action": "customer_update",
@@ -3588,7 +3588,7 @@
             "approval": null,
             "log_event": "customer.update",
             "who": "customers.write",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "customer_archive": {
@@ -3614,7 +3614,7 @@
             "approval": null,
             "log_event": "customer.archive",
             "who": "customers.write",
-            "built": false
+            "built": true
         },
         "customer_delete": {
             "action": "customer_delete",
@@ -3633,7 +3633,7 @@
             "approval": "deletion",
             "log_event": "customer.delete",
             "who": "records.delete",
-            "built": false
+            "built": true
         },
         "quote_create": {
             "action": "quote_create",
@@ -3760,7 +3760,7 @@
             "approval": null,
             "log_event": "order.quote",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "order_update": {
             "action": "order_update",
@@ -3893,7 +3893,7 @@
             "approval": null,
             "log_event": "order.update",
             "who": "orders.write",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "order_line_add": {
@@ -3961,7 +3961,7 @@
             "approval": null,
             "log_event": "order.line_add",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "order_line_update": {
             "action": "order_line_update",
@@ -4034,7 +4034,7 @@
             "approval": null,
             "log_event": "order.line_update",
             "who": "orders.write",
-            "built": false,
+            "built": true,
             "partial": true
         },
         "order_line_fulfilment_set": {
@@ -4072,7 +4072,7 @@
             "approval": null,
             "log_event": "order.line_fulfilment_set",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "order_line_cancel": {
             "action": "order_line_cancel",
@@ -4091,7 +4091,7 @@
             "approval": null,
             "log_event": "order.line_cancel",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "order_confirm": {
             "action": "order_confirm",
@@ -4110,7 +4110,7 @@
             "approval": "other",
             "log_event": "order.confirm",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "order_send": {
             "action": "order_send",
@@ -4135,7 +4135,7 @@
             "approval": "external_send",
             "log_event": "order.send",
             "who": "orders.send",
-            "built": false
+            "built": true
         },
         "order_notify": {
             "action": "order_notify",
@@ -4172,7 +4172,7 @@
             "approval": "external_send",
             "log_event": "order.notify",
             "who": "orders.send",
-            "built": false
+            "built": true
         },
         "payment_record": {
             "action": "payment_record",
@@ -4227,7 +4227,7 @@
             "approval": "other",
             "log_event": "order.payment",
             "who": "payments.record",
-            "built": false
+            "built": true
         },
         "refund_record": {
             "action": "refund_record",
@@ -4270,7 +4270,7 @@
             "approval": "other",
             "log_event": "order.refund",
             "who": "payments.record",
-            "built": false
+            "built": true
         },
         "order_ship": {
             "action": "order_ship",
@@ -4325,7 +4325,7 @@
             "approval": null,
             "log_event": "order.ship",
             "who": "stock.ship",
-            "built": false
+            "built": true
         },
         "order_deliver": {
             "action": "order_deliver",
@@ -4350,7 +4350,7 @@
             "approval": null,
             "log_event": "order.deliver",
             "who": "stock.ship",
-            "built": false
+            "built": true
         },
         "order_close": {
             "action": "order_close",
@@ -4369,7 +4369,7 @@
             "approval": null,
             "log_event": "order.close",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "order_cancel": {
             "action": "order_cancel",
@@ -4394,7 +4394,7 @@
             "approval": "deletion",
             "log_event": "order.cancel",
             "who": "orders.write",
-            "built": false
+            "built": true
         },
         "order_link_rotate": {
             "action": "order_link_rotate",
@@ -4413,7 +4413,7 @@
             "approval": null,
             "log_event": "order.link_rotate",
             "who": "orders.send",
-            "built": false
+            "built": true
         },
         "supplier_create": {
             "action": "supplier_create",

@@ -9,6 +9,7 @@ declare(strict_types=1);
  *   supplier   the active suppliers (a brand's dealer program; slice 6's forms)       slice 1
  *   variant    the active variants — SKU, product, size (a bundle's component)        slice 1   param single=1: single products' variants only
  *   product    the products (a variant's product, a filter)                           slice 1
+ *   customer   the live customers (an order's customer)                               slice 5
  *
  * Every `gate` is the authorization the screens that use the field apply (null = allowed, else the refusal's words); every row comes from
  * the mcp_* views. `search` reuses the feature's own query function and only filters and slices what it returns; `label` names one record
@@ -73,6 +74,23 @@ return [
             require_once __DIR__ . '/features/catalog/queries.php';
             $p = is_int($id) ? find_product($pdo, $id) : null;
             return $p === null ? null : $p['name'];
+        },
+    ],
+    'customer' => [
+        'title' => 'Customers', 'noun' => 'customer', 'params' => [],
+        'gate' => static fn (array $p): ?string => has_right('orders.write') || has_right('customers.write') ? null : 'You may not ' . RIGHT_WORDS['orders.write'] . '.',
+        'search' => static function (PDO $pdo, string $q, array $params, int $page): array {
+            require_once __DIR__ . '/features/customers/queries.php';
+            $f = ['q' => $q];
+            $rows = array_map(static fn (array $c): array => ['id' => (int) $c['customer_id'], 'label' => $c['name'], 'detail' => trim((string) ($c['email'] ?? '') . ((string) ($c['phone'] ?? '') !== '' ? ' · ' . $c['phone'] : ''), ' ·')],
+                find_customers($pdo, $f, 25, ($page - 1) * 25));
+            $total = count_customers($pdo, $f);
+            return ['rows' => $rows, 'total' => $total, 'page' => $page, 'page_size' => 25, 'pages' => max(1, (int) ceil($total / 25))];
+        },
+        'label' => static function (PDO $pdo, int|string $id): ?string {
+            require_once __DIR__ . '/features/customers/queries.php';
+            $c = is_int($id) ? find_customer($pdo, $id) : null;
+            return $c === null || $c['archived_at'] !== null ? null : $c['name'];
         },
     ],
 ];
